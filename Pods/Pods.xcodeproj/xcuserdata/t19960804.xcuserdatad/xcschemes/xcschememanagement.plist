@@ -4,28 +4,28 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>Pods-GuessNumber.xcscheme</key>
+		<key>CountdownLabel.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
-		<key>Pods-GuessNumberTests.xcscheme</key>
+		<key>Pods-GuessNumber.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
 			<integer>1</integer>
 		</dict>
-		<key>Pods-GuessNumberUITests.xcscheme</key>
+		<key>Pods-GuessNumberTests.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
 			<integer>2</integer>
 		</dict>
-		<key>SwifterSwift.xcscheme</key>
+		<key>Pods-GuessNumberUITests.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>

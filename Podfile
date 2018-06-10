@@ -4,8 +4,8 @@
 target 'GuessNumber' do
   # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
   use_frameworks!
-	pod 'SwifterSwift'
-
+	
+	pod 'CountdownLabel'
   # Pods for GuessNumber
 
   target 'GuessNumberTests' do
