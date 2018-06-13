@@ -202,6 +202,14 @@
                                     <action selector="startBtn:" destination="NHK-Dl-kV5" eventType="touchUpInside" id="fKP-bd-CyV"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GzG-AZ-Rvc">
+                                <rect key="frame" x="355" y="44" width="32" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" image="pause2"/>
+                                <connections>
+                                    <action selector="pauseBtn:" destination="NHK-Dl-kV5" eventType="touchUpInside" id="Glw-iL-4C9"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.46202266219999999" green="0.83828371759999998" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <viewLayoutGuide key="safeArea" id="W5U-a3-eOG"/>
@@ -222,4 +230,7 @@
             <point key="canvasLocation" x="900.00000000000011" y="30.978260869565219"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="pause2" width="32" height="32"/>
+    </resources>
 </document>
