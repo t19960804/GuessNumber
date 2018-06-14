@@ -12,6 +12,7 @@ import CountdownLabel
 class MainPage: UIViewController {
     var seconds  = 3
     var timer = Timer()
+    var countDowntimer = Timer()
     /////////////////////////////
     var numberArray : [Int] = [1,2,3,4]
     var randomArray : [Int] = []
@@ -22,28 +23,16 @@ class MainPage: UIViewController {
     var btn = UIButton()
     var pauseView = UIView()
     var countDownLabel = UILabel()
+    var textFieldsArray = [UITextField]()
+
     @IBOutlet weak var rightCount: UILabel!
     @IBOutlet weak var wrongCount: UILabel!
     @IBOutlet weak var inputNo1: UITextField!
     @IBOutlet weak var inputNo2: UITextField!
     @IBOutlet weak var inputNo3: UITextField!
     @IBOutlet weak var inputNo4: UITextField!
-    @IBOutlet weak var startBtn: UIButton!
-    var textFieldsArray = [UITextField]()
-    /////
-    @IBAction func startBtn(_ sender: UIButton) {
-       
-        
-            //開始計時
-            timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(UpdateTimer), userInfo: nil, repeats: true)
-        
-            
-       
-            //計時停止
-            //timer.invalidate()
-        
-        
-    }
+    @IBOutlet weak var timerLabel: UILabel!
+    
     @IBAction func checkBtn(_ sender: UIButton) {
         
         //如果inputArray是空的則不用清空,直接append
@@ -71,7 +60,8 @@ class MainPage: UIViewController {
     }
     
     @IBAction func pauseBtn(_ sender: UIButton) {
-        
+        //遊戲計時停止
+        timer.invalidate()
         let frame = CGRect(x:0,y:20,width:self.view.frame.width,height:self.view.frame.height)
         pauseView = UIView(frame: frame)
         pauseView.backgroundColor = UIColor.black
@@ -96,7 +86,7 @@ class MainPage: UIViewController {
         ////////////////////////////////
         
     }
-    @IBOutlet weak var timerLabel: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         noRepeatNumbers()
@@ -104,8 +94,11 @@ class MainPage: UIViewController {
         textFieldsArray.append(inputNo2)
         textFieldsArray.append(inputNo3)
         textFieldsArray.append(inputNo4)
-        
-        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardNotification(notification:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
+
+    }
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
     //計時器累加並顯示
     @objc func UpdateTimer() {
@@ -160,18 +153,33 @@ class MainPage: UIViewController {
     {
         for i in 0...textFieldsArray.count - 1
         {
+            if (textFieldsArray[i].text != "")
+            {
             //加入使用者輸入數字
             inputArray.append(Int(textFieldsArray[i].text!)!)
-            
+            }
+            else{
+                
+                break
+            }
             
         }
     }
     //檢查陣列裡每個index
     func loopCheck()
     {
-        for i in 0...inputArray.count - 1
+        if (inputArray.count == 4)
         {
-            checkEachNumber(Index: i)
+            for i in 0...inputArray.count - 1
+            {
+                
+                checkEachNumber(Index: i)
+            }
+        }
+        else
+        {
+            textNilHint()
+            
         }
     }
     //重新產生亂數,並且清空textField / randomArray / inputArray
@@ -190,7 +198,8 @@ class MainPage: UIViewController {
         timerLabel.text = "0.0"
         counter = 0
         timer.invalidate()
-        
+        countDownLabelSetting()
+        runCountDownTimer()
         
     }
     func simpleHint() {
@@ -224,15 +233,71 @@ class MainPage: UIViewController {
             animated: true,
             completion: nil)
     }
+    func  textNilHint()
+    {
+        self.timer.invalidate()
+        // 建立一個提示框
+        let alertController = UIAlertController(
+            title: "請輸入數字!!!",
+            message: "尚有數字未填",
+            preferredStyle: .alert)
+        
+        // 建立[確認]按鈕
+        let okAction = UIAlertAction(
+            title: "知道了",
+            style: .default,
+            handler: {
+                (action: UIAlertAction!) -> Void in
+                
+                self.runCountDownTimer()
+        })
+        alertController.addAction(okAction)
+        
+        
+        // 顯示提示框
+        self.present(
+            alertController,
+            animated: true,
+            completion: nil)
+    }
     //點擊"繼續"按鈕後事件
     @objc func playButton()
     {
         btn.removeFromSuperview()
         pauseView.removeFromSuperview()
+        countDownLabelSetting()
+        runCountDownTimer()
+        
+
+    }
+    func runGameTimer()
+    {
+        //開始計時
+        timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(UpdateTimer), userInfo: nil, repeats: true)
+    }
+    func runCountDownTimer() {
+        countDowntimer = Timer.scheduledTimer(timeInterval: 1, target: self,   selector: (#selector(self.countDown)), userInfo: nil, repeats: true)
+       
+        
+    }
+    @objc func countDown() {
+        seconds -= 1     //This will decrement(count down)the seconds.
+        countDownLabel.text = "\(seconds)" //This will update the label.
+        if (seconds == 0)
+        {
+            countDowntimer.invalidate()
+            countDownLabel.removeFromSuperview()
+            runGameTimer()
+            seconds = 3
+            
+        }
+    }
+    func countDownLabelSetting()
+    {
         let countDownFrame = CGRect(x:0,
-                                      y:0,
-                                      width:self.view.frame.width,
-                                      height:self.view.frame.height)
+                                    y:0,
+                                    width:self.view.frame.width,
+                                    height:self.view.frame.height)
         countDownLabel.frame = countDownFrame
         countDownLabel.textAlignment = .center
         
@@ -240,20 +305,25 @@ class MainPage: UIViewController {
         countDownLabel.font = countDownLabel.font.withSize(250.0)
         countDownLabel.text = "3"
         self.view.addSubview(countDownLabel)
-        runTimer()
-
     }
-    func runTimer() {
-        timer = Timer.scheduledTimer(timeInterval: 1, target: self,   selector: (#selector(self.updateTimer)), userInfo: nil, repeats: true)
-    }
-    @objc func updateTimer() {
-        seconds -= 1     //This will decrement(count down)the seconds.
-        countDownLabel.text = "\(seconds)" //This will update the label.
-        if (seconds == 0)
-        {
-            timer.invalidate()
-            countDownLabel.removeFromSuperview()
-
+    @objc func keyboardNotification(notification: NSNotification) {
+        if let userInfo = notification.userInfo {
+            let keyboardFrame: CGRect = (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+            let duration: Double = userInfo[UIKeyboardAnimationDurationUserInfoKey] as! Double
+            
+            UIView.animate(withDuration: duration, animations: { () -> Void in
+                var frame = self.view.frame
+                frame.origin.y = keyboardFrame.minY - self.view.frame.height
+                self.view.frame = frame
+            })
         }
     }
+
+    override func viewDidAppear(_ animated: Bool) {
+        
+        countDownLabelSetting()
+        runCountDownTimer()
+        
+    }
+   
 }

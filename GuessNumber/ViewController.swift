@@ -10,14 +10,19 @@ import UIKit
 import CountdownLabel
 
 class ViewController: UIViewController {
-
+    var mainPageController = MainPage()
     @IBAction func getStart(_ sender: UIButton) {
     }
     
     @IBAction func exitApp(_ sender: UIButton) {
         UIControl().sendAction(#selector(URLSessionTask.suspend), to: UIApplication.shared, for: nil)
+        //執行CountDownTimer
     }
     override func viewDidLoad() {
         super.viewDidLoad()
+    }
+    override func viewDidDisappear(_ animated: Bool) {
+        //mainPageController.runCountDownTimer()
+        print("disappear")
     }
 }
