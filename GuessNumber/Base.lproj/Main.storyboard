@@ -23,19 +23,31 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Guess Number" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fdd-pt-Hts">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Guess Number" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fdd-pt-Hts">
                                 <rect key="frame" x="56" y="121" width="302.66666666666669" height="50"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" name="Jua-Regular" family="Jua" pointSize="50"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lWe-cD-052">
-                                <rect key="frame" x="137" y="640" width="140" height="37"/>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MHn-RM-xQO">
+                                <rect key="frame" x="150" y="501" width="115" height="37"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.83741801979999997" green="0.83743780850000005" blue="0.83742713930000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <fontDescription key="fontDescription" name="Jua-Regular" family="Jua" pointSize="25"/>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <state key="normal" title="Exit"/>
+                                <state key="normal" title="困難模式"/>
+                                <connections>
+                                    <segue destination="Bed-78-Fgx" kind="show" id="2se-kQ-kZO"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lWe-cD-052">
+                                <rect key="frame" x="150" y="575" width="115" height="37"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.83741801979999997" green="0.83743780850000005" blue="0.83742713930000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" name="Jua-Regular" family="Jua" pointSize="25"/>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal" title="離開"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
                                         <real key="value" value="10"/>
@@ -45,11 +57,23 @@
                                     <action selector="exitApp:" destination="BYZ-38-t0r" eventType="touchUpInside" id="aTt-HC-910"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0ZQ-HJ-B39">
-                                <rect key="frame" x="137" y="572" width="140" height="37"/>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LEw-FK-lk5">
+                                <rect key="frame" x="150" y="645" width="115" height="37"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.83741801979999997" green="0.83743780850000005" blue="0.83742713930000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <fontDescription key="fontDescription" name="Jua-Regular" family="Jua" pointSize="25"/>
-                                <state key="normal" title="Get Start">
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal" title="規則說明"/>
+                                <connections>
+                                    <action selector="regulationBtn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="myq-V0-MsY"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0ZQ-HJ-B39">
+                                <rect key="frame" x="150" y="423" width="115" height="37"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.83741801979999997" green="0.83743780850000005" blue="0.83742713930000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" name="Jua-Regular" family="Jua" pointSize="25"/>
+                                <state key="normal" title="簡單模式">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <userDefinedRuntimeAttributes>
@@ -67,17 +91,14 @@
                             </button>
                         </subviews>
                         <color key="backgroundColor" red="0.46202266219999999" green="0.83828371759999998" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <constraints>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="0ZQ-HJ-B39" secondAttribute="trailing" constant="137" id="5xF-Ve-cFo"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="fdd-pt-Hts" secondAttribute="trailing" constant="55.329999999999998" id="9nz-uA-gaD"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="0ZQ-HJ-B39" secondAttribute="bottom" constant="127" id="L0K-6o-7aY"/>
-                            <constraint firstItem="0ZQ-HJ-B39" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="137" id="WDA-FV-LzJ"/>
-                            <constraint firstItem="fdd-pt-Hts" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="101" id="bdZ-x6-iep"/>
-                            <constraint firstItem="0ZQ-HJ-B39" firstAttribute="top" secondItem="fdd-pt-Hts" secondAttribute="bottom" constant="401" id="gI7-Zj-gMY"/>
-                            <constraint firstItem="fdd-pt-Hts" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="56" id="p8z-mg-bWh"/>
-                        </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
+                    <connections>
+                        <outlet property="easyModeBtn" destination="0ZQ-HJ-B39" id="iAI-3r-cOc"/>
+                        <outlet property="exitBtn" destination="lWe-cD-052" id="Dq7-rh-ENh"/>
+                        <outlet property="hardModeBtn" destination="MHn-RM-xQO" id="B5G-Ay-f6v"/>
+                        <outlet property="regulationBtn" destination="LEw-FK-lk5" id="hgl-4h-OzJ"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
@@ -235,7 +256,161 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Qz9-zf-wdC" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="900.00000000000011" y="30.978260869565219"/>
+            <point key="canvasLocation" x="1016" y="-351"/>
+        </scene>
+        <!--Main Page-->
+        <scene sceneID="SHV-3g-uLU">
+            <objects>
+                <viewController id="Bed-78-Fgx" customClass="MainPage" customModule="GuessNumber" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Z8n-Fo-oza">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nAe-eZ-fkJ">
+                                <rect key="frame" x="65" y="158" width="43" height="71"/>
+                                <fontDescription key="fontDescription" name="Jua-Regular" family="Jua" pointSize="70"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="A" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hTP-IJ-fVD">
+                                <rect key="frame" x="114" y="157.66666666666666" width="49" height="70.333333333333343"/>
+                                <fontDescription key="fontDescription" name="Jua-Regular" family="Jua" pointSize="70"/>
+                                <color key="textColor" red="0.35573141149999998" green="0.76665843830000002" blue="0.49403868870000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CY6-U2-s1f">
+                                <rect key="frame" x="261" y="157" width="43" height="71"/>
+                                <fontDescription key="fontDescription" name="Jua-Regular" family="Jua" pointSize="70"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="B" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="COW-iD-jYL">
+                                <rect key="frame" x="308" y="156" width="39" height="71"/>
+                                <fontDescription key="fontDescription" name="Jua-Regular" family="Jua" pointSize="70"/>
+                                <color key="textColor" red="0.81185921100000003" green="0.22799623120000001" blue="0.13648138339999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0.0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Q3E-1j-qCg">
+                                <rect key="frame" x="164" y="383" width="86" height="40"/>
+                                <fontDescription key="fontDescription" name="Jua-Regular" family="Jua" pointSize="40"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" alpha="0.44999998807907104" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Timer" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="G6Y-df-bWy">
+                                <rect key="frame" x="157" y="327" width="100" height="40"/>
+                                <fontDescription key="fontDescription" name="Jua-Regular" family="Jua" pointSize="40"/>
+                                <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="60" translatesAutoresizingMaskIntoConstraints="NO" id="u5H-xL-JZU">
+                                <rect key="frame" x="47" y="495" width="320" height="30"/>
+                                <subviews>
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="jdc-pG-Khq">
+                                        <rect key="frame" x="0.0" y="0.0" width="35" height="30"/>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" name="Jua-Regular" family="Jua" pointSize="17"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="6SW-42-GYW">
+                                        <rect key="frame" x="95" y="0.0" width="35" height="30"/>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" name="Jua-Regular" family="Jua" pointSize="17"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="H2x-CP-4Sj">
+                                        <rect key="frame" x="190" y="0.0" width="35" height="30"/>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" name="Jua-Regular" family="Jua" pointSize="17"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ljk-A5-yKI">
+                                        <rect key="frame" x="285" y="0.0" width="35" height="30"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="35" id="ePR-by-Bg9"/>
+                                        </constraints>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" name="Jua-Regular" family="Jua" pointSize="17"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                </subviews>
+                            </stackView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="I40-6e-xYX">
+                                <rect key="frame" x="355" y="44" width="32" height="32"/>
+                                <state key="normal" image="pause2"/>
+                                <connections>
+                                    <action selector="pauseBtn:" destination="Bed-78-Fgx" eventType="touchUpInside" id="P1T-fZ-ZnX"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nim-eR-Z5I">
+                                <rect key="frame" x="164" y="626" width="85" height="37"/>
+                                <color key="backgroundColor" red="0.83741801979999997" green="0.83743780850000005" blue="0.83742713930000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" name="Jua-Regular" family="Jua" pointSize="25"/>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal" title="Check"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="checkBtn:" destination="Bed-78-Fgx" eventType="touchUpInside" id="VhN-uS-n2o"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" red="0.98328930139541626" green="0.66400965035942416" blue="0.59733745062300148" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                        <constraints>
+                            <constraint firstItem="gV2-kH-g4F" firstAttribute="trailing" secondItem="COW-iD-jYL" secondAttribute="trailing" constant="67" id="0AY-Xp-273"/>
+                            <constraint firstItem="nAe-eZ-fkJ" firstAttribute="leading" secondItem="gV2-kH-g4F" secondAttribute="leading" constant="65" id="1VO-cJ-JbW"/>
+                            <constraint firstItem="CY6-U2-s1f" firstAttribute="top" secondItem="gV2-kH-g4F" secondAttribute="top" constant="137" id="1Vs-9R-xzh"/>
+                            <constraint firstItem="CY6-U2-s1f" firstAttribute="leading" secondItem="hTP-IJ-fVD" secondAttribute="trailing" constant="98" id="1mV-xS-Mzq"/>
+                            <constraint firstItem="u5H-xL-JZU" firstAttribute="top" secondItem="CY6-U2-s1f" secondAttribute="bottom" constant="267" id="4f1-Un-rxt"/>
+                            <constraint firstItem="G6Y-df-bWy" firstAttribute="top" secondItem="hTP-IJ-fVD" secondAttribute="bottom" constant="99" id="7Gm-w5-Oto"/>
+                            <constraint firstItem="u5H-xL-JZU" firstAttribute="top" secondItem="Q3E-1j-qCg" secondAttribute="bottom" constant="72" id="7dg-og-lsy"/>
+                            <constraint firstItem="u5H-xL-JZU" firstAttribute="top" secondItem="Q3E-1j-qCg" secondAttribute="bottom" constant="72" id="8gc-Zf-cK2"/>
+                            <constraint firstItem="Q3E-1j-qCg" firstAttribute="top" secondItem="G6Y-df-bWy" secondAttribute="bottom" constant="16" id="Bhm-k1-3qd"/>
+                            <constraint firstItem="nAe-eZ-fkJ" firstAttribute="top" secondItem="gV2-kH-g4F" secondAttribute="top" constant="138" id="DRi-2k-lF1"/>
+                            <constraint firstItem="hTP-IJ-fVD" firstAttribute="top" secondItem="gV2-kH-g4F" secondAttribute="top" constant="137.66999999999999" id="Dg1-vh-w3y"/>
+                            <constraint firstItem="u5H-xL-JZU" firstAttribute="leading" secondItem="gV2-kH-g4F" secondAttribute="leading" constant="47" id="E9O-ft-NSD"/>
+                            <constraint firstItem="u5H-xL-JZU" firstAttribute="top" secondItem="I40-6e-xYX" secondAttribute="bottom" constant="419" id="Evs-3u-NAY"/>
+                            <constraint firstItem="I40-6e-xYX" firstAttribute="leading" secondItem="gV2-kH-g4F" secondAttribute="leading" constant="355" id="FxQ-Qy-AUk"/>
+                            <constraint firstItem="Q3E-1j-qCg" firstAttribute="leading" secondItem="gV2-kH-g4F" secondAttribute="leading" constant="164" id="IYn-gR-O1u"/>
+                            <constraint firstItem="COW-iD-jYL" firstAttribute="top" secondItem="gV2-kH-g4F" secondAttribute="top" constant="136" id="JE2-b0-K82"/>
+                            <constraint firstItem="gV2-kH-g4F" firstAttribute="trailing" secondItem="I40-6e-xYX" secondAttribute="trailing" constant="27" id="JHf-Nf-erD"/>
+                            <constraint firstItem="COW-iD-jYL" firstAttribute="leading" secondItem="CY6-U2-s1f" secondAttribute="trailing" constant="4" id="KZW-cQ-cFS"/>
+                            <constraint firstItem="u5H-xL-JZU" firstAttribute="top" secondItem="nAe-eZ-fkJ" secondAttribute="bottom" constant="266" id="NPH-aU-Ejs"/>
+                            <constraint firstItem="gV2-kH-g4F" firstAttribute="trailing" secondItem="u5H-xL-JZU" secondAttribute="trailing" constant="47" id="OWd-AD-0JB"/>
+                            <constraint firstItem="nim-eR-Z5I" firstAttribute="top" secondItem="u5H-xL-JZU" secondAttribute="bottom" constant="101" id="Sef-Hr-I5F"/>
+                            <constraint firstItem="G6Y-df-bWy" firstAttribute="top" secondItem="hTP-IJ-fVD" secondAttribute="bottom" constant="99" id="Tna-D4-wVq"/>
+                            <constraint firstItem="gV2-kH-g4F" firstAttribute="trailing" secondItem="G6Y-df-bWy" secondAttribute="trailing" constant="157" id="aoC-nv-Et7"/>
+                            <constraint firstItem="gV2-kH-g4F" firstAttribute="trailing" secondItem="nim-eR-Z5I" secondAttribute="trailing" constant="165" id="eEU-87-eLI"/>
+                            <constraint firstItem="gV2-kH-g4F" firstAttribute="bottom" secondItem="nim-eR-Z5I" secondAttribute="bottom" constant="73" id="fwb-0c-65b"/>
+                            <constraint firstItem="gV2-kH-g4F" firstAttribute="trailing" secondItem="Q3E-1j-qCg" secondAttribute="trailing" constant="164" id="glS-1B-oNX"/>
+                            <constraint firstItem="nim-eR-Z5I" firstAttribute="top" secondItem="u5H-xL-JZU" secondAttribute="bottom" constant="101" id="hkr-LY-fjC"/>
+                            <constraint firstItem="hTP-IJ-fVD" firstAttribute="leading" secondItem="nAe-eZ-fkJ" secondAttribute="trailing" constant="6" id="kva-xt-nHf"/>
+                            <constraint firstItem="I40-6e-xYX" firstAttribute="top" secondItem="gV2-kH-g4F" secondAttribute="top" constant="24" id="ky2-Qd-Jal"/>
+                            <constraint firstItem="hTP-IJ-fVD" firstAttribute="leading" secondItem="nAe-eZ-fkJ" secondAttribute="trailing" constant="6" id="lrg-Wb-C6y"/>
+                            <constraint firstItem="nim-eR-Z5I" firstAttribute="leading" secondItem="gV2-kH-g4F" secondAttribute="leading" constant="164" id="q1r-wH-Vf6"/>
+                            <constraint firstItem="G6Y-df-bWy" firstAttribute="leading" secondItem="gV2-kH-g4F" secondAttribute="leading" constant="157" id="r6R-Vp-BeV"/>
+                            <constraint firstItem="Q3E-1j-qCg" firstAttribute="top" secondItem="G6Y-df-bWy" secondAttribute="bottom" constant="16" id="sgu-sI-1Ea"/>
+                            <constraint firstItem="u5H-xL-JZU" firstAttribute="top" secondItem="COW-iD-jYL" secondAttribute="bottom" constant="268" id="tb9-Zp-6Ei"/>
+                            <constraint firstItem="CY6-U2-s1f" firstAttribute="leading" secondItem="hTP-IJ-fVD" secondAttribute="trailing" constant="98" id="u8f-AM-3dv"/>
+                            <constraint firstItem="COW-iD-jYL" firstAttribute="leading" secondItem="CY6-U2-s1f" secondAttribute="trailing" constant="4" id="wNB-P5-Vw0"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="gV2-kH-g4F"/>
+                    </view>
+                    <connections>
+                        <outlet property="inputNo1" destination="jdc-pG-Khq" id="S8H-0p-EZX"/>
+                        <outlet property="inputNo2" destination="6SW-42-GYW" id="yOs-pz-ULm"/>
+                        <outlet property="inputNo3" destination="H2x-CP-4Sj" id="srq-kl-4Aa"/>
+                        <outlet property="inputNo4" destination="ljk-A5-yKI" id="AAp-Vf-ndi"/>
+                        <outlet property="rightCount" destination="nAe-eZ-fkJ" id="VOD-po-W1V"/>
+                        <outlet property="timerLabel" destination="Q3E-1j-qCg" id="5mO-jZ-Jeh"/>
+                        <outlet property="wrongCount" destination="CY6-U2-s1f" id="4xw-6P-Lul"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="xwi-W7-xXa" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1016" y="324"/>
         </scene>
     </scenes>
     <resources>
