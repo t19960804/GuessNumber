@@ -17,6 +17,7 @@
 		0B9B4F491EB738FE9050B1A1 /* Pods_GuessNumberUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5952DC36965FF1EB0D8C37EA /* Pods_GuessNumberUITests.framework */; };
 		0BE6280420CB7B4D00EA4726 /* Jua-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0BE6280320CB7B4D00EA4726 /* Jua-Regular.ttf */; };
 		0BE6280620CB8BF900EA4726 /* MainPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE6280520CB8BF900EA4726 /* MainPage.swift */; };
+		0BE6280820D4A39100EA4726 /* HardModeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE6280720D4A39100EA4726 /* HardModeController.swift */; };
 		DD63528E43A2DCB53CA449A1 /* Pods_GuessNumberTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 64B4D23D09646D82AE431002 /* Pods_GuessNumberTests.framework */; };
 		EE6F3BC8895835AEA776FCE1 /* Pods_GuessNumber.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB83CBD0F62AC43F7CFB5691 /* Pods_GuessNumber.framework */; };
 /* End PBXBuildFile section */
@@ -55,6 +56,7 @@
 		0BB302F220C291570029039C /* SwifterSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SwifterSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0BE6280320CB7B4D00EA4726 /* Jua-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Jua-Regular.ttf"; path = "../../Jua-Regular.ttf"; sourceTree = "<group>"; };
 		0BE6280520CB8BF900EA4726 /* MainPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainPage.swift; sourceTree = "<group>"; };
+		0BE6280720D4A39100EA4726 /* HardModeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HardModeController.swift; sourceTree = "<group>"; };
 		10FC6DFD4ECAC2EF22602498 /* Pods-GuessNumberTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GuessNumberTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GuessNumberTests/Pods-GuessNumberTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5952DC36965FF1EB0D8C37EA /* Pods_GuessNumberUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GuessNumberUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		64B4D23D09646D82AE431002 /* Pods_GuessNumberTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GuessNumberTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -127,6 +129,7 @@
 				0B13CEF820C2876500A5F70D /* LaunchScreen.storyboard */,
 				0B13CEFB20C2876500A5F70D /* Info.plist */,
 				0BE6280520CB8BF900EA4726 /* MainPage.swift */,
+				0BE6280720D4A39100EA4726 /* HardModeController.swift */,
 			);
 			path = GuessNumber;
 			sourceTree = "<group>";
@@ -387,6 +390,7 @@
 				0B13CEF220C2876300A5F70D /* ViewController.swift in Sources */,
 				0B13CEF020C2876300A5F70D /* AppDelegate.swift in Sources */,
 				0BE6280620CB8BF900EA4726 /* MainPage.swift in Sources */,
+				0BE6280820D4A39100EA4726 /* HardModeController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

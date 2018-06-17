@@ -1,15 +1,15 @@
 //
-//  MainPage.swift
+//  HardModeController.swift
 //  GuessNumber
 //
-//  Created by t19960804 on 2018/6/9.
+//  Created by t19960804 on 2018/6/16.
 //  Copyright © 2018年 t19960804. All rights reserved.
 //
 
 import UIKit
 import GameKit
-import CountdownLabel
-class MainPage: UIViewController {
+class HardModeController: UIViewController {
+
     var seconds  = 3
     var timer = Timer()
     var countDowntimer = Timer()
@@ -44,7 +44,7 @@ class MainPage: UIViewController {
             inputArrayAppend()
             loopCheck()
             
-
+            
         }
         else
             
@@ -56,7 +56,7 @@ class MainPage: UIViewController {
             loopCheck()
             
         }
-       
+        
     }
     
     @IBAction func pauseBtn(_ sender: UIButton) {
@@ -71,13 +71,13 @@ class MainPage: UIViewController {
         }
         else{
             createPauseViewAndButton(X: 0, Y: 20, Width: self.view.frame.width, Height: self.view.frame.height)
-
+            
         }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        noRepeatNumbers()
+        RepeatNumbers()
         textFieldsArray.append(inputNo1)
         textFieldsArray.append(inputNo2)
         textFieldsArray.append(inputNo3)
@@ -111,18 +111,18 @@ class MainPage: UIViewController {
         
     }
     //產生不重複亂數
-    func noRepeatNumbers()
+    func RepeatNumbers()
     {
         
         for i in  0...numberArray.count - 1
-            {
-                let randomNumber = GKRandomSource.sharedRandom().nextInt(upperBound: numberArray.count)
-                randomArray.append(numberArray[randomNumber])
-                numberArray.remove(at: randomNumber)
-                print("random:",randomArray[i])
-                
-            }
+        {
+            let randomNumber = GKRandomSource.sharedRandom().nextInt(upperBound: numberArray.count)
+            randomArray.append(numberArray[randomNumber])
+            
+            print("random:",randomArray[i])
+            
         }
+    }
     func checkEachNumber(Index index : Int )
     {
         //兩個陣列裡對應到的index相比較
@@ -131,9 +131,9 @@ class MainPage: UIViewController {
             right += 1
             rightCount.text = String(right)
             wrongCount.text = String(wrong)
-           if right == 4
-           {
-                    simpleHint()
+            if right == 4
+            {
+                simpleHint()
             }
             
         }
@@ -152,8 +152,8 @@ class MainPage: UIViewController {
         {
             if (textFieldsArray[i].text != "")
             {
-            //加入使用者輸入數字
-            inputArray.append(Int(textFieldsArray[i].text!)!)
+                //加入使用者輸入數字
+                inputArray.append(Int(textFieldsArray[i].text!)!)
             }
             else{
                 
@@ -187,7 +187,7 @@ class MainPage: UIViewController {
         rightCount.text = "0"
         wrongCount.text = "0"
         numberArray = [1,2,3,4]
-        noRepeatNumbers()
+        RepeatNumbers()
         for i in 0...textFieldsArray.count - 1
         {
             textFieldsArray[i].text = ""
@@ -265,7 +265,7 @@ class MainPage: UIViewController {
         countDownLabelSetting()
         runCountDownTimer()
         
-
+        
     }
     func runGameTimer()
     {
@@ -274,7 +274,7 @@ class MainPage: UIViewController {
     }
     func runCountDownTimer() {
         countDowntimer = Timer.scheduledTimer(timeInterval: 1, target: self,   selector: (#selector(self.countDown)), userInfo: nil, repeats: true)
-       
+        
         
     }
     @objc func countDown() {
@@ -326,10 +326,10 @@ class MainPage: UIViewController {
         ////////////////////////////////
         let btnImage = UIImage(named: "playbutton.png")
         
-//        let btnFrame = CGRect(x:0  ,
-//                              y:0  ,
-//                              width:(btnImage?.size.width)!,
-//                              height:(btnImage?.size.height)!)
+        //        let btnFrame = CGRect(x:0  ,
+        //                              y:0  ,
+        //                              width:(btnImage?.size.width)!,
+        //                              height:(btnImage?.size.height)!)
         
         let btnFrame = CGRect(x:0  ,
                               y:0  ,
@@ -356,7 +356,7 @@ class MainPage: UIViewController {
             print("面向设备保持垂直，Home键位于右部")
         case .landscapeRight:
             print("面向设备保持水平，Home键位于左侧")
-       
+            
         default:
             print("方向未知")
         }
@@ -367,5 +367,5 @@ class MainPage: UIViewController {
         runCountDownTimer()
         
     }
-   
+
 }
