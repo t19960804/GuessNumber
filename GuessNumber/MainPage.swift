@@ -20,11 +20,14 @@ class MainPage: UIViewController {
     var right : Int = 0
     var wrong : Int = 0
     var counter  = Float()
+    var minuteCount = 0
     var btn = UIButton()
     var pauseView = UIView()
     var countDownLabel = UILabel()
     var textFieldsArray = [UITextField]()
     let device = UIDevice.current
+    var keyBoardNeedLayout: Bool = true
+
     @IBOutlet weak var rightCount: UILabel!
     @IBOutlet weak var wrongCount: UILabel!
     @IBOutlet weak var inputNo1: UITextField!
@@ -82,7 +85,7 @@ class MainPage: UIViewController {
         textFieldsArray.append(inputNo2)
         textFieldsArray.append(inputNo3)
         textFieldsArray.append(inputNo4)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardNotification(notification:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
+        
         //感知设备方向 - 开启监听设备方向
         UIDevice.current.beginGeneratingDeviceOrientationNotifications()
         
@@ -99,8 +102,15 @@ class MainPage: UIViewController {
     }
     //計時器累加並顯示
     @objc func UpdateTimer() {
+        
         counter = counter + 0.1
-        timerLabel.text = String(format: "%.1f", counter)
+        timerLabel.text = "\(minuteCount)分 \(String(format: "%.1f", counter))秒"
+        if counter >= 9.9
+        {
+            minuteCount = minuteCount + 1
+            counter = 0.0
+            timerLabel.text = "\(minuteCount)分 \(String(format: "%.1f", counter))秒"
+        }
     }
     //點擊背景可收回鍵盤
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -134,6 +144,7 @@ class MainPage: UIViewController {
            if right == 4
            {
                     simpleHint()
+                    timer.invalidate()
             }
             
         }
@@ -203,7 +214,7 @@ class MainPage: UIViewController {
         // 建立一個提示框
         let alertController = UIAlertController(
             title: "挑戰成功!!!",
-            message: "時間:\((timerLabel.text)!)秒",
+            message: "時間:\((timerLabel.text)!)",
             preferredStyle: .alert)
         
         // 建立[確認]按鈕
@@ -303,18 +314,7 @@ class MainPage: UIViewController {
         countDownLabel.text = "3"
         self.view.addSubview(countDownLabel)
     }
-    @objc func keyboardNotification(notification: NSNotification) {
-        if let userInfo = notification.userInfo {
-            let keyboardFrame: CGRect = (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
-            let duration: Double = userInfo[UIKeyboardAnimationDurationUserInfoKey] as! Double
-            
-            UIView.animate(withDuration: duration, animations: { () -> Void in
-                var frame = self.view.frame
-                frame.origin.y = keyboardFrame.minY - self.view.frame.height
-                self.view.frame = frame
-            })
-        }
-    }
+    
     func createPauseViewAndButton(X x :CGFloat,Y y :CGFloat,Width width :CGFloat,Height height :CGFloat)
     {
         let frame = CGRect(x:x,y:y,width:width,height:height)
@@ -365,7 +365,57 @@ class MainPage: UIViewController {
         
         countDownLabelSetting()
         runCountDownTimer()
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(notification:)), name:NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(notification:)), name:NSNotification.Name.UIKeyboardWillHide, object: nil)
+
         
     }
-   
+    @objc func keyboardWillShow(notification: NSNotification) {
+        print("show")
+        if let userInfo = notification.userInfo,
+            let value = userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue,
+            let duration = userInfo[UIKeyboardAnimationDurationUserInfoKey] as? Double,
+            let curve = userInfo[UIKeyboardAnimationCurveUserInfoKey] as? UInt {
+            
+            let frame = value.cgRectValue
+            let intersection = frame.intersection(self.view.frame)
+            
+            let deltaY = intersection.height
+            
+            if keyBoardNeedLayout {
+                UIView.animate(withDuration: duration, delay: 0.0,
+                               options: UIViewAnimationOptions(rawValue: curve),
+                               animations: {
+                                self.view.frame = CGRect(x:0,y:-deltaY / 2,width:self.view.bounds.width,height:self.view.bounds.height)
+                                self.keyBoardNeedLayout = false
+                                self.view.layoutIfNeeded()
+                }, completion: nil)
+            }
+            
+            
+        }
+    }
+    @objc func keyboardWillHide(notification: NSNotification) {
+        print("hide")
+        if let userInfo = notification.userInfo,
+            let value = userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue,
+            let duration = userInfo[UIKeyboardAnimationDurationUserInfoKey] as? Double,
+            let curve = userInfo[UIKeyboardAnimationCurveUserInfoKey] as? UInt {
+            
+            let frame = value.cgRectValue
+            let intersection = frame.intersection(self.view.frame)
+            
+            let deltaY = intersection.height
+            
+            UIView.animate(withDuration: duration, delay: 0.0,
+                           options: UIViewAnimationOptions(rawValue: curve),
+                           animations: {
+                            self.view.frame = CGRect(x:0,y:deltaY / 2,width:self.view.bounds.width,height:self.view.bounds.height)
+                            self.keyBoardNeedLayout = true
+                            self.view.layoutIfNeeded()
+            }, completion: nil)
+            
+        }
+    }
+    
 }
