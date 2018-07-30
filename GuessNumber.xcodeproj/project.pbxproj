@@ -14,6 +14,10 @@
 		0B13CEFA20C2876500A5F70D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0B13CEF820C2876500A5F70D /* LaunchScreen.storyboard */; };
 		0B13CF0520C2876500A5F70D /* GuessNumberTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B13CF0420C2876500A5F70D /* GuessNumberTests.swift */; };
 		0B13CF1020C2876500A5F70D /* GuessNumberUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B13CF0F20C2876500A5F70D /* GuessNumberUITests.swift */; };
+		0B356FE6210D9DD100906892 /* LogInPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B356FE5210D9DD100906892 /* LogInPage.swift */; };
+		0B356FEA210DA30200906892 /* RegisterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B356FE9210DA30200906892 /* RegisterController.swift */; };
+		0B356FEC210DB33A00906892 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0B356FEB210DB33900906892 /* GoogleService-Info.plist */; };
+		0B356FEE210EC54000906892 /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B356FED210EC54000906892 /* UserModel.swift */; };
 		0B9B4F491EB738FE9050B1A1 /* Pods_GuessNumberUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5952DC36965FF1EB0D8C37EA /* Pods_GuessNumberUITests.framework */; };
 		0BE6280420CB7B4D00EA4726 /* Jua-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0BE6280320CB7B4D00EA4726 /* Jua-Regular.ttf */; };
 		0BE6280620CB8BF900EA4726 /* MainPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE6280520CB8BF900EA4726 /* MainPage.swift */; };
@@ -53,6 +57,10 @@
 		0B13CF0B20C2876500A5F70D /* GuessNumberUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GuessNumberUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0B13CF0F20C2876500A5F70D /* GuessNumberUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuessNumberUITests.swift; sourceTree = "<group>"; };
 		0B13CF1120C2876500A5F70D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0B356FE5210D9DD100906892 /* LogInPage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogInPage.swift; sourceTree = "<group>"; };
+		0B356FE9210DA30200906892 /* RegisterController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterController.swift; sourceTree = "<group>"; };
+		0B356FEB210DB33900906892 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		0B356FED210EC54000906892 /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		0BB302F220C291570029039C /* SwifterSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SwifterSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0BE6280320CB7B4D00EA4726 /* Jua-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Jua-Regular.ttf"; path = "../../Jua-Regular.ttf"; sourceTree = "<group>"; };
 		0BE6280520CB8BF900EA4726 /* MainPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainPage.swift; sourceTree = "<group>"; };
@@ -96,6 +104,34 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0B047055210D794A002B5931 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				0B356FED210EC54000906892 /* UserModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		0B047056210D7955002B5931 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				0B356FE5210D9DD100906892 /* LogInPage.swift */,
+				0BE6280720D4A39100EA4726 /* HardModeController.swift */,
+				0BE6280520CB8BF900EA4726 /* MainPage.swift */,
+				0B13CEF120C2876300A5F70D /* ViewController.swift */,
+				0B356FE9210DA30200906892 /* RegisterController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		0B047057210D795F002B5931 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				0B13CEF320C2876300A5F70D /* Main.storyboard */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		0B13CEE320C2876300A5F70D = {
 			isa = PBXGroup;
 			children = (
@@ -121,15 +157,15 @@
 		0B13CEEE20C2876300A5F70D /* GuessNumber */ = {
 			isa = PBXGroup;
 			children = (
+				0B047057210D795F002B5931 /* View */,
+				0B047056210D7955002B5931 /* Controller */,
+				0B047055210D794A002B5931 /* Model */,
 				0BE6280320CB7B4D00EA4726 /* Jua-Regular.ttf */,
 				0B13CEEF20C2876300A5F70D /* AppDelegate.swift */,
-				0B13CEF120C2876300A5F70D /* ViewController.swift */,
-				0B13CEF320C2876300A5F70D /* Main.storyboard */,
 				0B13CEF620C2876500A5F70D /* Assets.xcassets */,
 				0B13CEF820C2876500A5F70D /* LaunchScreen.storyboard */,
 				0B13CEFB20C2876500A5F70D /* Info.plist */,
-				0BE6280520CB8BF900EA4726 /* MainPage.swift */,
-				0BE6280720D4A39100EA4726 /* HardModeController.swift */,
+				0B356FEB210DB33900906892 /* GoogleService-Info.plist */,
 			);
 			path = GuessNumber;
 			sourceTree = "<group>";
@@ -286,6 +322,7 @@
 			files = (
 				0B13CEFA20C2876500A5F70D /* LaunchScreen.storyboard in Resources */,
 				0B13CEF720C2876500A5F70D /* Assets.xcassets in Resources */,
+				0B356FEC210DB33A00906892 /* GoogleService-Info.plist in Resources */,
 				0BE6280420CB7B4D00EA4726 /* Jua-Regular.ttf in Resources */,
 				0B13CEF520C2876300A5F70D /* Main.storyboard in Resources */,
 			);
@@ -333,11 +370,23 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-GuessNumber/Pods-GuessNumber-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/ChameleonFramework/ChameleonFramework.framework",
 				"${BUILT_PRODUCTS_DIR}/CountdownLabel/CountdownLabel.framework",
+				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
+				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
+				"${BUILT_PRODUCTS_DIR}/SVProgressHUD/SVProgressHUD.framework",
+				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
+				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ChameleonFramework.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CountdownLabel.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SVProgressHUD.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -387,7 +436,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0B356FE6210D9DD100906892 /* LogInPage.swift in Sources */,
+				0B356FEE210EC54000906892 /* UserModel.swift in Sources */,
 				0B13CEF220C2876300A5F70D /* ViewController.swift in Sources */,
+				0B356FEA210DA30200906892 /* RegisterController.swift in Sources */,
 				0B13CEF020C2876300A5F70D /* AppDelegate.swift in Sources */,
 				0BE6280620CB8BF900EA4726 /* MainPage.swift in Sources */,
 				0BE6280820D4A39100EA4726 /* HardModeController.swift in Sources */,
@@ -570,10 +622,10 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = mySwift.GuessNumber;
+				PRODUCT_BUNDLE_IDENTIFIER = andyLee.GuessNumber;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -588,10 +640,10 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = mySwift.GuessNumber;
+				PRODUCT_BUNDLE_IDENTIFIER = andyLee.GuessNumber;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

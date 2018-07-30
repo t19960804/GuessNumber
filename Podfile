@@ -6,6 +6,11 @@ target 'GuessNumber' do
   use_frameworks!
 	
 	pod 'CountdownLabel'
+	pod 'Firebase'
+	pod'Firebase/Auth'
+	pod'Firebase/Database'
+	pod 'SVProgressHUD'
+	pod'ChameleonFramework'
   # Pods for GuessNumber
 
   target 'GuessNumberTests' do
