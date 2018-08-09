@@ -20,7 +20,7 @@
 		0B356FEE210EC54000906892 /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B356FED210EC54000906892 /* UserModel.swift */; };
 		0B9B4F491EB738FE9050B1A1 /* Pods_GuessNumberUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5952DC36965FF1EB0D8C37EA /* Pods_GuessNumberUITests.framework */; };
 		0BE6280420CB7B4D00EA4726 /* Jua-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0BE6280320CB7B4D00EA4726 /* Jua-Regular.ttf */; };
-		0BE6280620CB8BF900EA4726 /* MainPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE6280520CB8BF900EA4726 /* MainPage.swift */; };
+		0BE6280620CB8BF900EA4726 /* EasyModeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE6280520CB8BF900EA4726 /* EasyModeController.swift */; };
 		0BE6280820D4A39100EA4726 /* HardModeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE6280720D4A39100EA4726 /* HardModeController.swift */; };
 		DD63528E43A2DCB53CA449A1 /* Pods_GuessNumberTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 64B4D23D09646D82AE431002 /* Pods_GuessNumberTests.framework */; };
 		EE6F3BC8895835AEA776FCE1 /* Pods_GuessNumber.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB83CBD0F62AC43F7CFB5691 /* Pods_GuessNumber.framework */; };
@@ -63,7 +63,7 @@
 		0B356FED210EC54000906892 /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		0BB302F220C291570029039C /* SwifterSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SwifterSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0BE6280320CB7B4D00EA4726 /* Jua-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "Jua-Regular.ttf"; path = "../../Jua-Regular.ttf"; sourceTree = "<group>"; };
-		0BE6280520CB8BF900EA4726 /* MainPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainPage.swift; sourceTree = "<group>"; };
+		0BE6280520CB8BF900EA4726 /* EasyModeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EasyModeController.swift; sourceTree = "<group>"; };
 		0BE6280720D4A39100EA4726 /* HardModeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HardModeController.swift; sourceTree = "<group>"; };
 		10FC6DFD4ECAC2EF22602498 /* Pods-GuessNumberTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GuessNumberTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GuessNumberTests/Pods-GuessNumberTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5952DC36965FF1EB0D8C37EA /* Pods_GuessNumberUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GuessNumberUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -117,7 +117,7 @@
 			children = (
 				0B356FE5210D9DD100906892 /* LogInPage.swift */,
 				0BE6280720D4A39100EA4726 /* HardModeController.swift */,
-				0BE6280520CB8BF900EA4726 /* MainPage.swift */,
+				0BE6280520CB8BF900EA4726 /* EasyModeController.swift */,
 				0B13CEF120C2876300A5F70D /* ViewController.swift */,
 				0B356FE9210DA30200906892 /* RegisterController.swift */,
 			);
@@ -375,6 +375,7 @@
 				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
 				"${BUILT_PRODUCTS_DIR}/SVProgressHUD/SVProgressHUD.framework",
+				"${BUILT_PRODUCTS_DIR}/TextFieldEffects/TextFieldEffects.framework",
 				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
 				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 			);
@@ -385,6 +386,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SVProgressHUD.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TextFieldEffects.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
 			);
@@ -441,7 +443,7 @@
 				0B13CEF220C2876300A5F70D /* ViewController.swift in Sources */,
 				0B356FEA210DA30200906892 /* RegisterController.swift in Sources */,
 				0B13CEF020C2876300A5F70D /* AppDelegate.swift in Sources */,
-				0BE6280620CB8BF900EA4726 /* MainPage.swift in Sources */,
+				0BE6280620CB8BF900EA4726 /* EasyModeController.swift in Sources */,
 				0BE6280820D4A39100EA4726 /* HardModeController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -529,7 +531,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Cheng Sian Li (CH2Q45S7FJ)";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -589,7 +591,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Cheng Sian Li (CH2Q45S7FJ)";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
@@ -616,14 +618,18 @@
 			baseConfigurationReference = C13B4B15E29AD2D28D8E97A7 /* Pods-GuessNumber.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Cheng Sian Li (CH2Q45S7FJ)";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = CH2Q45S7FJ;
 				INFOPLIST_FILE = GuessNumber/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = andyLee.GuessNumber;
+				PRODUCT_BUNDLE_IDENTIFIER = com.andyLee.GuessNumber;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "fcacc5f7-b1e6-4cfc-bf54-1eba5b850150";
+				PROVISIONING_PROFILE_SPECIFIER = GuessNumber_AppStore;
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -634,14 +640,18 @@
 			baseConfigurationReference = CB7AF70022F5DFB5E379FB41 /* Pods-GuessNumber.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Cheng Sian Li (CH2Q45S7FJ)";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = CH2Q45S7FJ;
 				INFOPLIST_FILE = GuessNumber/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = andyLee.GuessNumber;
+				PRODUCT_BUNDLE_IDENTIFIER = com.andyLee.GuessNumber;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "fcacc5f7-b1e6-4cfc-bf54-1eba5b850150";
+				PROVISIONING_PROFILE_SPECIFIER = GuessNumber_AppStore;
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};

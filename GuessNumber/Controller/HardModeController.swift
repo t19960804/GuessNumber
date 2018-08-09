@@ -34,7 +34,8 @@ class HardModeController: UIViewController {
     @IBOutlet weak var inputNo3: UITextField!
     @IBOutlet weak var inputNo4: UITextField!
     @IBOutlet weak var timerLabel: UILabel!
-    
+    @IBOutlet weak var pauseBtnOutlet: UIButton!
+    @IBOutlet weak var checkBtnOutlet: UIButton!
     @IBAction func checkBtn(_ sender: UIButton) {
         
         //如果inputArray是空的則不用清空,直接append
@@ -281,6 +282,7 @@ class HardModeController: UIViewController {
         btn.removeFromSuperview()
         pauseView.removeFromSuperview()
         countDownLabelSetting()
+        componentUnable()
         runCountDownTimer()
         
         
@@ -300,6 +302,7 @@ class HardModeController: UIViewController {
         countDownLabel.text = "\(seconds)" //This will update the label.
         if (seconds == 0)
         {
+            componentEnable()
             countDowntimer.invalidate()
             countDownLabel.removeFromSuperview()
             runGameTimer()
@@ -332,12 +335,7 @@ class HardModeController: UIViewController {
         self.view.addSubview(pauseView)
         ////////////////////////////////
         let btnImage = UIImage(named: "playbutton.png")
-        
-        //        let btnFrame = CGRect(x:0  ,
-        //                              y:0  ,
-        //                              width:(btnImage?.size.width)!,
-        //                              height:(btnImage?.size.height)!)
-        
+       
         let btnFrame = CGRect(x:0  ,
                               y:0  ,
                               width:self.view.frame.width,
@@ -371,6 +369,7 @@ class HardModeController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         
         countDownLabelSetting()
+        componentUnable()
         runCountDownTimer()
         
     }
@@ -421,6 +420,25 @@ class HardModeController: UIViewController {
             
         }
     }
-    
+    func componentUnable()
+    {
+        inputNo1.isEnabled = false
+        inputNo2.isEnabled = false
+        inputNo3.isEnabled = false
+        inputNo4.isEnabled = false
+        
+        pauseBtnOutlet.isEnabled = false
+        checkBtnOutlet.isEnabled = false
+    }
+    func componentEnable()
+    {
+        inputNo1.isEnabled = true
+        inputNo2.isEnabled = true
+        inputNo3.isEnabled = true
+        inputNo4.isEnabled = true
+        
+        pauseBtnOutlet.isEnabled = true
+        checkBtnOutlet.isEnabled = true
+    }
    
 }

@@ -21,20 +21,34 @@ class RegisterController: UIViewController {
         SVProgressHUD.show()
         if userNameTextField.text == "" || passwordTextField.text == ""
         {
-            showAlert()
+            SVProgressHUD.dismiss()
+            showAlert(title: "尚有欄位未填", message: "請繼續輸入")
+
         }
         else
         {
-            Auth.auth().createUser(withEmail: userNameTextField.text!, password: passwordTextField.text!) { (result, error) in
-                if error == nil
-                {
-                    SVProgressHUD.dismiss()
-                    self.performSegue(withIdentifier: "RegisterToViewController", sender: self)
-                    print("Register Success")
-                }
-                else
-                {
-                    print(error!)
+            if (passwordTextField.text?.count)! < 6
+            {
+                SVProgressHUD.dismiss()
+                showAlert(title: "密碼不足六位數", message: "請繼續輸入")
+                
+                
+            }
+            else
+            {
+                Auth.auth().createUser(withEmail: userNameTextField.text!, password: passwordTextField.text!) { (result, error) in
+                    if error == nil
+                    {
+                        SVProgressHUD.dismiss()
+                        self.performSegue(withIdentifier: "RegisterToViewController", sender: self)
+                        print("Register Success")
+                    }
+                    else
+                    {
+                        SVProgressHUD.dismiss()
+                        self.showAlert(title: "帳號格式錯誤", message: "請重新輸入")
+                        
+                    }
                 }
             }
         }
@@ -49,12 +63,12 @@ class RegisterController: UIViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
-    func showAlert()
+    func showAlert(title: String, message: String)
     {
         // 建立一個提示框
         let alertController = UIAlertController(
-            title: "輸入錯誤!!!",
-            message: "尚有欄位未填",
+            title: "\(title)",
+            message: "\(message)",
             preferredStyle: .alert)
         
         // 建立[確認]按鈕

@@ -14,11 +14,11 @@ class ViewController: UIViewController {
     @IBOutlet weak var hardModeBtn: UIButton!
     @IBOutlet weak var exitBtn: UIButton!
     @IBOutlet weak var regulationBtn: UIButton!
-    var mainPageController = MainPage()
+    var easyModelController = EasyModeController()
     var pauseView = UIView()
     var cancelBtn = UIButton()
     var regulation = UILabel()
-    
+    var userNameFromLogIn = String()
     
     @IBAction func exitApp(_ sender: UIButton) {
         showAlert()
@@ -56,7 +56,8 @@ class ViewController: UIViewController {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("width:\(self.view.frame.width)  height:\(self.view.frame.height)")
+        //print("width:\(self.view.frame.width)  height:\(self.view.frame.height)")
+        print("userName:\(userNameFromLogIn)")
     }
     override func viewDidDisappear(_ animated: Bool) {
         //mainPageController.runCountDownTimer()

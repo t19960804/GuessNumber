@@ -10,7 +10,7 @@ import UIKit
 import GameKit
 import CountdownLabel
 import Firebase
-class MainPage: UIViewController {
+class EasyModeController: UIViewController {
     var seconds  = 3
     var timer = Timer()
     var countDowntimer = Timer()
@@ -27,7 +27,9 @@ class MainPage: UIViewController {
     var countDownLabel = UILabel()
     var textFieldsArray = [UITextField]()
     var keyBoardNeedLayout: Bool = true
+    var userName = String()
     let device = UIDevice.current
+    let email = (Auth.auth().currentUser?.email)!
     /////////////////////////////
     @IBOutlet weak var rightCount: UILabel!
     @IBOutlet weak var wrongCount: UILabel!
@@ -36,7 +38,8 @@ class MainPage: UIViewController {
     @IBOutlet weak var inputNo3: UITextField!
     @IBOutlet weak var inputNo4: UITextField!
     @IBOutlet weak var timerLabel: UILabel!
-    
+    @IBOutlet weak var pauseBtnOutlet: UIButton!
+    @IBOutlet weak var checkBtnOutlet: UIButton!
     @IBAction func checkBtn(_ sender: UIButton) {
         
         //如果inputArray是空的則不用清空,直接append
@@ -76,10 +79,15 @@ class MainPage: UIViewController {
 
         }
     }
-    
+    @IBAction func scoreBoardBtn(_ sender: UIButton) {
+        getDataFromFireBase()
+        
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
+
         noRepeatNumbers()
+        
         textFieldsArray.append(inputNo1)
         textFieldsArray.append(inputNo2)
         textFieldsArray.append(inputNo3)
@@ -91,7 +99,6 @@ class MainPage: UIViewController {
         //添加通知，监听设备方向改变
         NotificationCenter.default.addObserver(self, selector: #selector(self.receivedRotation),
                                                name: NSNotification.Name.UIDeviceOrientationDidChange, object: nil)
-        
         //关闭设备监听
         //UIDevice.currentDevice().endGeneratingDeviceOrientationNotifications()
         
@@ -223,7 +230,7 @@ class MainPage: UIViewController {
             handler: {
                 (action: UIAlertAction!) -> Void in
                 self.dismiss(animated: true, completion: nil)
-                self.addDataToFireBase(UserName: (Auth.auth().currentUser?.email)!, Score: (self.timerLabel.text)!)
+                self.addDataToFireBase(Email: self.email, Score: (self.timerLabel.text)!)
         })
         alertController.addAction(okAction)
         // 建立[重新開始]按鈕
@@ -233,7 +240,7 @@ class MainPage: UIViewController {
             handler: {
                 (action: UIAlertAction!) -> Void in
                 self.resumeGame()
-                self.addDataToFireBase(UserName: (Auth.auth().currentUser?.email)!, Score: (self.timerLabel.text)!)
+                self.addDataToFireBase(Email: self.email, Score: (self.timerLabel.text)!)
         })
         alertController.addAction(cancelAction)
         
@@ -276,6 +283,8 @@ class MainPage: UIViewController {
         btn.removeFromSuperview()
         pauseView.removeFromSuperview()
         countDownLabelSetting()
+        //元件無法使用
+        componentUnable()
         runCountDownTimer()
         
 
@@ -291,12 +300,14 @@ class MainPage: UIViewController {
         
     }
     @objc func countDown() {
+        
         seconds -= 1     //This will decrement(count down)the seconds.
         countDownLabel.text = "\(seconds)" //This will update the label.
         if (seconds == 0)
         {
             countDowntimer.invalidate()
             countDownLabel.removeFromSuperview()
+            componentEnable()
             runGameTimer()
             seconds = 3
             
@@ -366,7 +377,10 @@ class MainPage: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         
         countDownLabelSetting()
+        componentUnable()
         runCountDownTimer()
+        
+        ////////////////////////
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(notification:)), name:NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(notification:)), name:NSNotification.Name.UIKeyboardWillHide, object: nil)
 
@@ -419,12 +433,12 @@ class MainPage: UIViewController {
             
         }
     }
-    func addDataToFireBase(UserName: String,Score: String)
+    func addDataToFireBase(Email: String,Score: String)
     {
         //將UserName做切割存進FireBase
-        let seperateUserName = UserName.components(separatedBy: "@")
+        let seperateUserName = Email.components(separatedBy: "@")
         let reference = Database.database().reference().child("\(seperateUserName[0])")
-        let dictionary = ["Score" : "\(Score)"]
+        let dictionary = ["Score" : Score]
         reference.childByAutoId().setValue(dictionary){
         (error,reference) in
             if error == nil
@@ -436,8 +450,53 @@ class MainPage: UIViewController {
                 print(error!)
             }
         }
-        
-        
+        //print("\(seperateUserName[0])")
     }
-    
+    func getDataFromFireBase()
+    {
+        let userNameFromEmail = email.components(separatedBy: "@")
+        let reference = Database.database().reference().child("\(userNameFromEmail[0])")
+        reference.observe(.value) { (snapshot) in
+            //snapshot是取得資料庫後回傳的資料
+//            let snapshotValue = snapshot.value as? Dictionary<String,String>
+//            let userScore = snapshotValue!["Score"]!
+//            print("getScore:\(userScore)")
+//            print("ooo")
+            if let snapshotValue = snapshot.value as? Dictionary<String,String>
+            {
+                print("success")
+            }
+            else
+            {
+                
+                print(Error.self)
+            }
+
+        }
+        
+        
+        //print("UserName",userNameFromEmail[0])
+    }
+    func componentUnable()
+    {
+        inputNo1.isEnabled = false
+        inputNo2.isEnabled = false
+        inputNo3.isEnabled = false
+        inputNo4.isEnabled = false
+        
+        pauseBtnOutlet.isEnabled = false
+        checkBtnOutlet.isEnabled = false
+
+    }
+    func componentEnable()
+    {
+        inputNo1.isEnabled = true
+        inputNo2.isEnabled = true
+        inputNo3.isEnabled = true
+        inputNo4.isEnabled = true
+        
+        pauseBtnOutlet.isEnabled = true
+        checkBtnOutlet.isEnabled = true
+
+    }
 }
