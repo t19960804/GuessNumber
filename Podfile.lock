@@ -1,7 +1,4 @@
 PODS:
-  - ChameleonFramework (2.1.0):
-    - ChameleonFramework/Default (= 2.1.0)
-  - ChameleonFramework/Default (2.1.0)
   - CountdownLabel (3.0.0)
   - Firebase (5.1.0):
     - Firebase/Core (= 5.1.0)
@@ -41,21 +38,23 @@ PODS:
     - nanopb/encode (= 0.3.8)
   - nanopb/decode (0.3.8)
   - nanopb/encode (0.3.8)
+  - Realm (3.6.0):
+    - Realm/Headers (= 3.6.0)
+  - Realm/Headers (3.6.0)
+  - RealmSwift (3.6.0):
+    - Realm (= 3.6.0)
   - SVProgressHUD (2.2.5)
-  - TextFieldEffects (1.4.0)
 
 DEPENDENCIES:
-  - ChameleonFramework
   - CountdownLabel
   - Firebase
   - Firebase/Auth
   - Firebase/Database
+  - RealmSwift
   - SVProgressHUD
-  - TextFieldEffects
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
-    - ChameleonFramework
     - CountdownLabel
     - Firebase
     - FirebaseAnalytics
@@ -67,11 +66,11 @@ SPEC REPOS:
     - GTMSessionFetcher
     - leveldb-library
     - nanopb
+    - Realm
+    - RealmSwift
     - SVProgressHUD
-    - TextFieldEffects
 
 SPEC CHECKSUMS:
-  ChameleonFramework: d21a3cc247abfe5e37609a283a8238b03575cf64
   CountdownLabel: 4534a68892b1deb73fda18702dfdc2c8444cec08
   Firebase: e08fb0795f35707aeb1d8a715c731c45bdf6fd56
   FirebaseAnalytics: b3628aea54c50464c32c393fb2ea032566e7ecc2
@@ -83,9 +82,10 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: 5fa5b80fd20e439ef5f545fb2cb3ca6c6714caa2
   leveldb-library: 08cba283675b7ed2d99629a4bc5fd052cd2bb6a5
   nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
+  Realm: 08b464b462d4f31bbd4ba5f5a1c8722ef0a700b7
+  RealmSwift: 973e1499c44ab571f894c2c908e2db450be280c3
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
-  TextFieldEffects: 4ee41b5216e674d55fb6ac25107bf1af7629176f
 
-PODFILE CHECKSUM: 5ccab37a0666c957b5d5ab22ba4608394242d790
+PODFILE CHECKSUM: b13361c2e6384571c53d65c6becd71402ec67992
 
 COCOAPODS: 1.5.3

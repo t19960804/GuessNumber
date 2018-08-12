@@ -9,7 +9,8 @@
 import UIKit
 import CountdownLabel
 import Firebase
-class ViewController: UIViewController {
+import RealmSwift
+class ViewController: UIViewController{
     @IBOutlet weak var easyModeBtn: UIButton!
     @IBOutlet weak var hardModeBtn: UIButton!
     @IBOutlet weak var exitBtn: UIButton!
@@ -19,6 +20,9 @@ class ViewController: UIViewController {
     var cancelBtn = UIButton()
     var regulation = UILabel()
     var userNameFromLogIn = String()
+    let realm = try! Realm()
+    var allUserFromRealm: Results<User>?
+    var realUser = User()
     
     @IBAction func exitApp(_ sender: UIButton) {
         showAlert()
@@ -56,8 +60,9 @@ class ViewController: UIViewController {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        //print("width:\(self.view.frame.width)  height:\(self.view.frame.height)")
         print("userName:\(userNameFromLogIn)")
+        loadUser(userName: userNameFromLogIn)
+        
     }
     override func viewDidDisappear(_ animated: Bool) {
         //mainPageController.runCountDownTimer()
@@ -109,4 +114,37 @@ class ViewController: UIViewController {
             completion: nil)
         
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "gotoEasyMode"
+        {
+            let destination = segue.destination as! EasyModeController
+            destination.userName = userNameFromLogIn
+            destination.currentUser = loadUser(userName: userNameFromLogIn)
+        }
+        else
+        {
+            let destination = segue.destination as! HardModeController
+            destination.userName = userNameFromLogIn
+            destination.currentUser = loadUser(userName: userNameFromLogIn)
+        }
+    }
+    func loadUser(userName: String) -> User
+    {
+        //將所有儲存在Realm的資料撈出來比對
+        allUserFromRealm = realm.objects(User.self)
+        for user in allUserFromRealm!
+        {
+            if userName == user.userName
+            {
+                realUser = user
+                
+                
+            }
+            
+            
+        }
+        return realUser
+    }
+    
 }

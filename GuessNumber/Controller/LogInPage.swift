@@ -1,17 +1,11 @@
-//
-//  LogInPage.swift
-//  GuessNumber
-//
-//  Created by t19960804 on 2018/7/29.
-//  Copyright © 2018年 t19960804. All rights reserved.
-//
 
 import UIKit
 import Firebase
 import SVProgressHUD
-class LogInPage: UIViewController {
-    @IBOutlet weak var userNameTextField: UITextField!
 
+class LogInPage: UIViewController {
+    var user = User()
+    @IBOutlet weak var userNameTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
 
     
@@ -38,6 +32,7 @@ class LogInPage: UIViewController {
                     {
                         SVProgressHUD.dismiss()
                         self.performSegue(withIdentifier: "LogInToViewController", sender: self)
+
                         print("LogIn Success")
                     }
                     else
@@ -51,15 +46,13 @@ class LogInPage: UIViewController {
         
         
         
-    }
-    @IBAction func registerBtn(_ sender: UIButton) {
-       print("2")
         
     }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        userNameTextField.text = "h@h.com"
-        passwordTextField.text = "hhhhhh"
+        userNameTextField.text = "a@a.com"
+        passwordTextField.text = "aaaaaa"
     }
 
     override func didReceiveMemoryWarning() {
@@ -95,7 +88,9 @@ class LogInPage: UIViewController {
         if segue.identifier == "LogInToViewController"
         {
         let destination = segue.destination as! ViewController
+        
         destination.userNameFromLogIn = userNameTextField.text!
+            //destination.user =
         }
     }
 }

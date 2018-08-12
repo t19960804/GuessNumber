@@ -9,8 +9,11 @@
 import UIKit
 import Firebase
 import SVProgressHUD
+import RealmSwift
 
 class RegisterController: UIViewController {
+    let realm = try! Realm()
+    var user = User()
     @IBOutlet weak var userNameTextField: UITextField!
     
     @IBOutlet weak var passwordTextField: UITextField!
@@ -41,6 +44,7 @@ class RegisterController: UIViewController {
                     {
                         SVProgressHUD.dismiss()
                         self.performSegue(withIdentifier: "RegisterToViewController", sender: self)
+                        self.addUser(userName: self.userNameTextField.text!)
                         print("Register Success")
                     }
                     else
@@ -87,6 +91,28 @@ class RegisterController: UIViewController {
         
     }
 
-   
+    func addUser(userName: String)
+   {
+    
+        let user = User()
+        user.userName = userName
+        do{
+            try realm.write {
+                realm.add(user)
+            }
+        }catch{
+            print("Add User Fail")
+        }
+    
+    }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "RegisterToViewController"
+        {
+            let destination = segue.destination as! ViewController
+            
+            destination.userNameFromLogIn = userNameTextField.text!
+            
+        }
+    }
 
 }

@@ -107,7 +107,6 @@
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
                                                 <connections>
-                                                    <action selector="registerBtn:" destination="erB-t5-Y3C" eventType="touchUpInside" id="Q9r-X8-DLX"/>
                                                     <segue destination="c0j-Mu-rd5" kind="show" identifier="LogInToRegister" id="msg-Zu-2aL"/>
                                                 </connections>
                                             </button>
@@ -245,7 +244,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="25" translatesAutoresizingMaskIntoConstraints="NO" id="Raj-S8-O0n">
-                                <rect key="frame" x="134.66666666666666" y="419" width="144.99999999999997" height="223"/>
+                                <rect key="frame" x="134.66666666666666" y="463" width="144.99999999999997" height="223"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="0ZQ-HJ-B39">
                                         <rect key="frame" x="0.0" y="0.0" width="145" height="37"/>
@@ -262,7 +261,7 @@
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                         <connections>
-                                            <segue destination="NHK-Dl-kV5" kind="show" id="zW9-D6-zdZ"/>
+                                            <segue destination="NHK-Dl-kV5" kind="show" identifier="gotoEasyMode" id="zW9-D6-zdZ"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MHn-RM-xQO">
@@ -271,7 +270,7 @@
                                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <state key="normal" title="困難模式"/>
                                         <connections>
-                                            <segue destination="ycx-cW-Q7W" kind="show" id="3xH-cs-T6D"/>
+                                            <segue destination="ycx-cW-Q7W" kind="show" identifier="gotoHardMode" id="3xH-cs-T6D"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LEw-FK-lk5">
@@ -303,7 +302,7 @@
                                 </constraints>
                             </stackView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="newIcon2" translatesAutoresizingMaskIntoConstraints="NO" id="b4Z-Tp-1B6">
-                                <rect key="frame" x="53.666666666666657" y="40" width="307" height="352"/>
+                                <rect key="frame" x="53.666666666666657" y="40" width="307" height="396"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="307" id="NWG-qr-egZ"/>
                                 </constraints>
@@ -454,10 +453,10 @@
                                     <constraint firstAttribute="width" constant="315" id="O8K-8f-aL4"/>
                                 </constraints>
                             </stackView>
-                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ehj-ce-bvc">
-                                <rect key="frame" x="20" y="41" width="98" height="41"/>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ehj-ce-bvc">
+                                <rect key="frame" x="18" y="41" width="102" height="42"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
                                 <state key="normal" title="過往紀錄"/>
                                 <connections>
                                     <action selector="scoreBoardBtn:" destination="NHK-Dl-kV5" eventType="touchUpInside" id="R2K-E0-EKS"/>
@@ -617,6 +616,15 @@
                                     <constraint firstAttribute="height" constant="34.670000000000002" id="vRW-JP-Usr"/>
                                 </constraints>
                             </stackView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XpS-Fg-d9l">
+                                <rect key="frame" x="20" y="45" width="102" height="42"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                                <state key="normal" title="過往紀錄"/>
+                                <connections>
+                                    <action selector="scoreBoardBtn:" destination="ycx-cW-Q7W" eventType="touchUpInside" id="ClE-vi-2xA"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.98328930140000004" green="0.61250558070000005" blue="0.52285008479999995" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <constraints>
@@ -655,6 +663,6 @@
         <image name="pause2" width="32" height="32"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="r10-wE-GO8"/>
+        <segue reference="UnN-yi-tKu"/>
     </inferredMetricsTieBreakers>
 </document>

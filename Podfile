@@ -10,8 +10,10 @@ target 'GuessNumber' do
 	pod'Firebase/Auth'
 	pod'Firebase/Database'
 	pod 'SVProgressHUD'
-	pod'ChameleonFramework'
-	pod 'TextFieldEffects'
+	pod 'RealmSwift'
+	
+
+
   # Pods for GuessNumber
 
   target 'GuessNumberTests' do

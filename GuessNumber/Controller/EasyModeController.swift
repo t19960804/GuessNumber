@@ -10,6 +10,8 @@ import UIKit
 import GameKit
 import CountdownLabel
 import Firebase
+import RealmSwift
+
 class EasyModeController: UIViewController {
     var seconds  = 3
     var timer = Timer()
@@ -30,6 +32,9 @@ class EasyModeController: UIViewController {
     var userName = String()
     let device = UIDevice.current
     let email = (Auth.auth().currentUser?.email)!
+    let realm = try! Realm()
+    var currentUser = User()
+    var allScore: Results<Score>?
     /////////////////////////////
     @IBOutlet weak var rightCount: UILabel!
     @IBOutlet weak var wrongCount: UILabel!
@@ -80,12 +85,11 @@ class EasyModeController: UIViewController {
         }
     }
     @IBAction func scoreBoardBtn(_ sender: UIButton) {
-        getDataFromFireBase()
-        
+        loadScore()
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        loadScore()
         noRepeatNumbers()
         
         textFieldsArray.append(inputNo1)
@@ -99,25 +103,13 @@ class EasyModeController: UIViewController {
         //添加通知，监听设备方向改变
         NotificationCenter.default.addObserver(self, selector: #selector(self.receivedRotation),
                                                name: NSNotification.Name.UIDeviceOrientationDidChange, object: nil)
-        //关闭设备监听
-        //UIDevice.currentDevice().endGeneratingDeviceOrientationNotifications()
+        
         
     }
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
-    //計時器累加並顯示
-    @objc func UpdateTimer() {
-        
-        counter = counter + 0.1
-        timerLabel.text = "\(minuteCount)分 \(String(format: "%.1f", counter))秒"
-        if counter >= 59.9
-        {
-            minuteCount = minuteCount + 1
-            counter = 0.0
-            timerLabel.text = "\(minuteCount)分 \(String(format: "%.1f", counter))秒"
-        }
-    }
+    
     //點擊背景可收回鍵盤
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
@@ -126,6 +118,7 @@ class EasyModeController: UIViewController {
         super.didReceiveMemoryWarning()
         
     }
+    //MARK: 遊戲規則處理
     //產生不重複亂數
     func noRepeatNumbers()
     {
@@ -213,9 +206,11 @@ class EasyModeController: UIViewController {
         counter = 0
         timer.invalidate()
         countDownLabelSetting()
+        componentIsEnabled(parameter: false)
         runCountDownTimer()
         
     }
+    // MARK: 系統提示
     func simpleHint() {
         // 建立一個提示框
         let alertController = UIAlertController(
@@ -231,6 +226,7 @@ class EasyModeController: UIViewController {
                 (action: UIAlertAction!) -> Void in
                 self.dismiss(animated: true, completion: nil)
                 self.addDataToFireBase(Email: self.email, Score: (self.timerLabel.text)!)
+                self.addScore(gameScore: (self.timerLabel.text)!)
         })
         alertController.addAction(okAction)
         // 建立[重新開始]按鈕
@@ -241,6 +237,7 @@ class EasyModeController: UIViewController {
                 (action: UIAlertAction!) -> Void in
                 self.resumeGame()
                 self.addDataToFireBase(Email: self.email, Score: (self.timerLabel.text)!)
+                self.addScore(gameScore: (self.timerLabel.text)!)
         })
         alertController.addAction(cancelAction)
         
@@ -284,11 +281,12 @@ class EasyModeController: UIViewController {
         pauseView.removeFromSuperview()
         countDownLabelSetting()
         //元件無法使用
-        componentUnable()
+        componentIsEnabled(parameter: false)
         runCountDownTimer()
         
 
     }
+    // MARK: 計時處理
     func runGameTimer()
     {
         //開始計時
@@ -307,10 +305,22 @@ class EasyModeController: UIViewController {
         {
             countDowntimer.invalidate()
             countDownLabel.removeFromSuperview()
-            componentEnable()
+            componentIsEnabled(parameter: true)
             runGameTimer()
             seconds = 3
             
+        }
+    }
+    //計時器累加並顯示
+    @objc func UpdateTimer() {
+        
+        counter = counter + 0.1
+        timerLabel.text = "\(minuteCount)分 \(String(format: "%.1f", counter))秒"
+        if counter >= 59.9
+        {
+            minuteCount = minuteCount + 1
+            counter = 0.0
+            timerLabel.text = "\(minuteCount)分 \(String(format: "%.1f", counter))秒"
         }
     }
     func countDownLabelSetting()
@@ -377,7 +387,7 @@ class EasyModeController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         
         countDownLabelSetting()
-        componentUnable()
+        componentIsEnabled(parameter: false)
         runCountDownTimer()
         
         ////////////////////////
@@ -412,7 +422,7 @@ class EasyModeController: UIViewController {
         }
     }
     @objc func keyboardWillHide(notification: NSNotification) {
-        print("hide")
+        
         if let userInfo = notification.userInfo,
             let value = userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue,
             let duration = userInfo[UIKeyboardAnimationDurationUserInfoKey] as? Double,
@@ -450,53 +460,45 @@ class EasyModeController: UIViewController {
                 print(error!)
             }
         }
-        //print("\(seperateUserName[0])")
+        
     }
-    func getDataFromFireBase()
+    
+    // MARK: 元件失效
+    func componentIsEnabled(parameter: Bool)
     {
-        let userNameFromEmail = email.components(separatedBy: "@")
-        let reference = Database.database().reference().child("\(userNameFromEmail[0])")
-        reference.observe(.value) { (snapshot) in
-            //snapshot是取得資料庫後回傳的資料
-//            let snapshotValue = snapshot.value as? Dictionary<String,String>
-//            let userScore = snapshotValue!["Score"]!
-//            print("getScore:\(userScore)")
-//            print("ooo")
-            if let snapshotValue = snapshot.value as? Dictionary<String,String>
-            {
-                print("success")
-            }
-            else
-            {
-                
-                print(Error.self)
-            }
+        inputNo1.isEnabled = parameter
+        inputNo2.isEnabled = parameter
+        inputNo3.isEnabled = parameter
+        inputNo4.isEnabled = parameter
+        
+        pauseBtnOutlet.isEnabled = parameter
+        checkBtnOutlet.isEnabled = parameter
 
+    }
+    
+    //MArk: Realm相關操作
+    func addScore(gameScore: String)
+    {
+        let newScore = Score()
+        newScore.score  = gameScore
+        newScore.mode = "簡單模式"
+        do{
+            try realm.write {
+                realm.add(newScore)
+                currentUser.scores.append(newScore)
+                print("Add Data Success")
+            }
+        }catch{
+            print("Add Data Fail:\(error)")
         }
-        
-        
-        //print("UserName",userNameFromEmail[0])
+       
     }
-    func componentUnable()
-    {
-        inputNo1.isEnabled = false
-        inputNo2.isEnabled = false
-        inputNo3.isEnabled = false
-        inputNo4.isEnabled = false
-        
-        pauseBtnOutlet.isEnabled = false
-        checkBtnOutlet.isEnabled = false
-
+    func loadScore(){
+        allScore = currentUser.scores.filter("mode CONTAINS[cd] %@", "簡單模式").sorted(byKeyPath: "score", ascending: true)
+        for eachScore in allScore!
+        {
+            print("\(eachScore.mode):\(eachScore.score)")
+        }
     }
-    func componentEnable()
-    {
-        inputNo1.isEnabled = true
-        inputNo2.isEnabled = true
-        inputNo3.isEnabled = true
-        inputNo4.isEnabled = true
-        
-        pauseBtnOutlet.isEnabled = true
-        checkBtnOutlet.isEnabled = true
-
-    }
+    
 }

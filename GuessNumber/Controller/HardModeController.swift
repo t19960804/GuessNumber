@@ -8,6 +8,7 @@
 
 import UIKit
 import GameKit
+import RealmSwift
 class HardModeController: UIViewController {
 
     var seconds  = 3
@@ -27,6 +28,11 @@ class HardModeController: UIViewController {
     var textFieldsArray = [UITextField]()
     let device = UIDevice.current
     var keyBoardNeedLayout: Bool = true
+    var userName =  String()
+    var currentUser = User()
+    let realm = try! Realm()
+    var allScore: Results<Score>?
+    /////////////////////////////
     @IBOutlet weak var rightCount: UILabel!
     @IBOutlet weak var wrongCount: UILabel!
     @IBOutlet weak var inputNo1: UITextField!
@@ -61,6 +67,9 @@ class HardModeController: UIViewController {
         }
         
     }
+    @IBAction func scoreBoardBtn(_ sender: UIButton) {
+        loadScore()
+    }
     
     @IBAction func pauseBtn(_ sender: UIButton) {
         //遊戲計時停止
@@ -68,9 +77,6 @@ class HardModeController: UIViewController {
         if device.orientation.isLandscape{
             
             createPauseViewAndButton(X: 0, Y: 0, Width: self.view.frame.width, Height: self.view.frame.height)
-            //print("width:\(self.view.frame.width) height:\(self.view.frame.height)")
-            print("self.x:\(self.view.center.x) self.y:\(self.view.center.y)")
-            print("x:\(btn.center.x) y:\(btn.center.y)")
         }
         else{
             createPauseViewAndButton(X: 0, Y: 20, Width: self.view.frame.width, Height: self.view.frame.height)
@@ -80,6 +86,7 @@ class HardModeController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        loadScore()
         RepeatNumbers()
         textFieldsArray.append(inputNo1)
         textFieldsArray.append(inputNo2)
@@ -101,32 +108,26 @@ class HardModeController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(self.receivedRotation),
                                                name: NSNotification.Name.UIDeviceOrientationDidChange, object: nil)
         
-        //关闭设备监听
-        //UIDevice.currentDevice().endGeneratingDeviceOrientationNotifications()
+        //顯示接到的User
+        print("test:\(currentUser.userName)")
         
     }
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
-    @objc func UpdateTimer() {
+    override func viewDidAppear(_ animated: Bool) {
         
-        counter = counter + 0.1
-        timerLabel.text = "\(minuteCount)分 \(String(format: "%.1f", counter))秒"
-        if counter >= 59.9
-        {
-            minuteCount = minuteCount + 1
-            counter = 0.0
-            timerLabel.text = "\(minuteCount)分 \(String(format: "%.1f", counter))秒"
-        }
-    }
-    //點擊背景可收回鍵盤
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
+        countDownLabelSetting()
+        componentIsEnabled(parameter: false)
+        runCountDownTimer()
+        
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         
     }
+   
+    // MARK: 遊戲規則處理
     //產生不重複亂數
     func RepeatNumbers()
     {
@@ -215,9 +216,11 @@ class HardModeController: UIViewController {
         counter = 0
         timer.invalidate()
         countDownLabelSetting()
+        componentIsEnabled(parameter: false)
         runCountDownTimer()
         
     }
+    // MARK: 系統提示
     func simpleHint() {
         // 建立一個提示框
         let alertController = UIAlertController(
@@ -232,6 +235,7 @@ class HardModeController: UIViewController {
             handler: {
                 (action: UIAlertAction!) -> Void in
                 self.dismiss(animated: true, completion: nil)
+                self.addScore(gameScore: self.timerLabel.text!)
         })
         alertController.addAction(okAction)
         // 建立[取消]按鈕
@@ -240,7 +244,9 @@ class HardModeController: UIViewController {
             style: .cancel,
             handler: {
                 (action: UIAlertAction!) -> Void in
-                self.resumeGame()})
+                self.resumeGame()
+                self.addScore(gameScore: self.timerLabel.text!)
+        })
         alertController.addAction(cancelAction)
         
         // 顯示提示框
@@ -282,10 +288,22 @@ class HardModeController: UIViewController {
         btn.removeFromSuperview()
         pauseView.removeFromSuperview()
         countDownLabelSetting()
-        componentUnable()
+        componentIsEnabled(parameter: false)
         runCountDownTimer()
         
         
+    }
+    // MARK: 計時處理
+    @objc func UpdateTimer() {
+        
+        counter = counter + 0.1
+        timerLabel.text = "\(minuteCount)分 \(String(format: "%.1f", counter))秒"
+        if counter >= 59.9
+        {
+            minuteCount = minuteCount + 1
+            counter = 0.0
+            timerLabel.text = "\(minuteCount)分 \(String(format: "%.1f", counter))秒"
+        }
     }
     func runGameTimer()
     {
@@ -302,7 +320,7 @@ class HardModeController: UIViewController {
         countDownLabel.text = "\(seconds)" //This will update the label.
         if (seconds == 0)
         {
-            componentEnable()
+            componentIsEnabled(parameter: true)
             countDowntimer.invalidate()
             countDownLabel.removeFromSuperview()
             runGameTimer()
@@ -310,6 +328,7 @@ class HardModeController: UIViewController {
             
         }
     }
+    // MARK: 手動加入UIFrame
     func countDownLabelSetting()
     {
         let countDownFrame = CGRect(x:0,
@@ -366,13 +385,8 @@ class HardModeController: UIViewController {
             print("方向未知")
         }
     }
-    override func viewDidAppear(_ animated: Bool) {
-        
-        countDownLabelSetting()
-        componentUnable()
-        runCountDownTimer()
-        
-    }
+    
+    // MARK: 鍵盤事件處理
     @objc func keyboardWillShow(notification: NSNotification) {
         print("show")
         if let userInfo = notification.userInfo,
@@ -420,25 +434,45 @@ class HardModeController: UIViewController {
             
         }
     }
-    func componentUnable()
-    {
-        inputNo1.isEnabled = false
-        inputNo2.isEnabled = false
-        inputNo3.isEnabled = false
-        inputNo4.isEnabled = false
-        
-        pauseBtnOutlet.isEnabled = false
-        checkBtnOutlet.isEnabled = false
+    //點擊背景可收回鍵盤
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
     }
-    func componentEnable()
+    // MARK: 元件失效
+    func componentIsEnabled(parameter: Bool)
     {
-        inputNo1.isEnabled = true
-        inputNo2.isEnabled = true
-        inputNo3.isEnabled = true
-        inputNo4.isEnabled = true
+        inputNo1.isEnabled = parameter
+        inputNo2.isEnabled = parameter
+        inputNo3.isEnabled = parameter
+        inputNo4.isEnabled = parameter
         
-        pauseBtnOutlet.isEnabled = true
-        checkBtnOutlet.isEnabled = true
+        pauseBtnOutlet.isEnabled = parameter
+        checkBtnOutlet.isEnabled = parameter
+        
     }
-   
+    //MArk: Realm相關操作
+    func addScore(gameScore: String)
+    {
+        let newScore = Score()
+        newScore.score  = gameScore
+        newScore.mode = "困難模式"
+        do{
+            try realm.write {
+                realm.add(newScore)
+                currentUser.scores.append(newScore)
+                print("Add Data Success")
+            }
+        }catch{
+            print("Add Data Fail:\(error)")
+        }
+        
+    }
+    func loadScore(){
+        //allScore = currentUser.scores.sorted(byKeyPath: "score", ascending: true)
+        allScore = currentUser.scores.filter("mode CONTAINS[cd] %@", "困難模式").sorted(byKeyPath: "score", ascending: true)
+        for eachScore in allScore!
+        {
+            print("\(eachScore.mode):\(eachScore.score)")
+        }
+    }
 }
