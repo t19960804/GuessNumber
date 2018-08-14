@@ -18,14 +18,21 @@ class HardModeController: UIViewController {
     var numberArray : [Int] = [1,2,3,4]
     var randomArray : [Int] = []
     var inputArray : [Int] = []
+    var textFieldsArray = [UITextField]()
     var right : Int = 0
     var wrong : Int = 0
+    var showScore: String = ""
     var counter  = Float()
     var minuteCount = 0
-    var btn = UIButton()
+    /////////////////////////////
+    var pauseView_pauseBtn = UIButton()
+    var pauseView_cancelBtn = UIButton()
+    var pauseView_scoreLabel = UILabel()
+    var pauseView_timeLabel = UILabel()
     var pauseView = UIView()
+    /////////////////////////////
     var countDownLabel = UILabel()
-    var textFieldsArray = [UITextField]()
+    
     let device = UIDevice.current
     var keyBoardNeedLayout: Bool = true
     var userName =  String()
@@ -69,6 +76,7 @@ class HardModeController: UIViewController {
     }
     @IBAction func scoreBoardBtn(_ sender: UIButton) {
         loadScore()
+        createPauseViewAndScoreLabel()
     }
     
     @IBAction func pauseBtn(_ sender: UIButton) {
@@ -86,13 +94,17 @@ class HardModeController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        loadScore()
+        
         RepeatNumbers()
         textFieldsArray.append(inputNo1)
         textFieldsArray.append(inputNo2)
         textFieldsArray.append(inputNo3)
         textFieldsArray.append(inputNo4)
-
+        inputNo1.delegate = self
+        inputNo2.delegate = self
+        inputNo3.delegate = self
+        inputNo4.delegate = self
+        
         //当键盘弹起的时候会向系统发出一个通知，
         //这个时候需要注册一个监听器响应该通知self
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(notification:)), name:NSNotification.Name.UIKeyboardWillShow, object: nil)
@@ -100,16 +112,9 @@ class HardModeController: UIViewController {
         //这个时候需要注册另外一个监听器响应该通知
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(notification:)), name:NSNotification.Name.UIKeyboardWillHide, object: nil)
         
+        
+        
        
-        //感知设备方向 - 开启监听设备方向
-        UIDevice.current.beginGeneratingDeviceOrientationNotifications()
-        
-        //添加通知，监听设备方向改变
-        NotificationCenter.default.addObserver(self, selector: #selector(self.receivedRotation),
-                                               name: NSNotification.Name.UIDeviceOrientationDidChange, object: nil)
-        
-        //顯示接到的User
-        print("test:\(currentUser.userName)")
         
     }
     deinit {
@@ -234,8 +239,9 @@ class HardModeController: UIViewController {
             style: .default,
             handler: {
                 (action: UIAlertAction!) -> Void in
-                self.dismiss(animated: true, completion: nil)
                 self.addScore(gameScore: self.timerLabel.text!)
+                self.dismiss(animated: true, completion: nil)
+                
         })
         alertController.addAction(okAction)
         // 建立[取消]按鈕
@@ -244,8 +250,9 @@ class HardModeController: UIViewController {
             style: .cancel,
             handler: {
                 (action: UIAlertAction!) -> Void in
-                self.resumeGame()
                 self.addScore(gameScore: self.timerLabel.text!)
+                self.resumeGame()
+                
         })
         alertController.addAction(cancelAction)
         
@@ -285,7 +292,7 @@ class HardModeController: UIViewController {
     //點擊"繼續"按鈕後事件
     @objc func playButton()
     {
-        btn.removeFromSuperview()
+        pauseView_pauseBtn.removeFromSuperview()
         pauseView.removeFromSuperview()
         countDownLabelSetting()
         componentIsEnabled(parameter: false)
@@ -296,12 +303,19 @@ class HardModeController: UIViewController {
     // MARK: 計時處理
     @objc func UpdateTimer() {
         
-        counter = counter + 0.1
-        timerLabel.text = "\(minuteCount)分 \(String(format: "%.1f", counter))秒"
-        if counter >= 59.9
+        counter = counter + 00.1
+        if counter <= 9.9
+        {
+            timerLabel.text = "\(minuteCount)分 0\(String(format: "%.1f", counter))秒"
+        }
+        else if counter >= 59.9
         {
             minuteCount = minuteCount + 1
-            counter = 0.0
+            counter = 00.0
+            timerLabel.text = "\(minuteCount)分 \(String(format: "%.1f", counter))秒"
+        }
+        else
+        {
             timerLabel.text = "\(minuteCount)分 \(String(format: "%.1f", counter))秒"
         }
     }
@@ -343,9 +357,7 @@ class HardModeController: UIViewController {
         countDownLabel.text = "3"
         self.view.addSubview(countDownLabel)
     }
-    
-    func createPauseViewAndButton(X x :CGFloat,Y y :CGFloat,Width width :CGFloat,Height height :CGFloat)
-    {
+    func createPauseView(X x :CGFloat,Y y :CGFloat,Width width :CGFloat,Height height :CGFloat){
         let frame = CGRect(x:x,y:y,width:width,height:height)
         pauseView = UIView(frame: frame)
         pauseView.backgroundColor = UIColor.black
@@ -353,6 +365,10 @@ class HardModeController: UIViewController {
         ////////////////////////////////
         self.view.addSubview(pauseView)
         ////////////////////////////////
+    }
+    func createPauseViewAndButton(X x :CGFloat,Y y :CGFloat,Width width :CGFloat,Height height :CGFloat)
+    {
+        createPauseView(X: 0, Y: 20, Width: self.view.frame.width, Height: self.view.frame.height)
         let btnImage = UIImage(named: "playbutton.png")
        
         let btnFrame = CGRect(x:0  ,
@@ -360,30 +376,53 @@ class HardModeController: UIViewController {
                               width:self.view.frame.width,
                               height:self.view.frame.height)
         
-        btn = UIButton(type: .custom)
-        btn.setImage(btnImage, for: .normal)
-        btn.frame = btnFrame
-        btn.addTarget(self, action: #selector(self.playButton), for: .touchUpInside)
+        pauseView_pauseBtn = UIButton(type: .custom)
+        pauseView_pauseBtn.setImage(btnImage, for: .normal)
+        pauseView_pauseBtn.frame = btnFrame
+        pauseView_pauseBtn.addTarget(self, action: #selector(self.playButton), for: .touchUpInside)
         ////////////////////////////////
-        pauseView.addSubview(btn)
+        pauseView.addSubview(pauseView_pauseBtn)
         ////////////////////////////////
     }
-    //通知监听触发的方法
-    @objc func receivedRotation(){
-        //let device = UIDevice.current
-        switch device.orientation{
-        case .portrait:
-            print("面向设备保持垂直，Home键位于下部")
-        case .portraitUpsideDown:
-            print("面向设备保持垂直，Home键位于上部")
-        case .landscapeLeft:
-            print("面向设备保持垂直，Home键位于右部")
-        case .landscapeRight:
-            print("面向设备保持水平，Home键位于左侧")
-            
-        default:
-            print("方向未知")
-        }
+    func createPauseViewAndScoreLabel()
+    {
+        createPauseView(X: 0, Y: 20, Width: self.view.frame.width, Height: self.view.frame.height)
+        /////////////////////////////////
+        let cancelBtnImage = UIImage(named: "cancel.png")
+        let cancelBtnframe = CGRect(x:self.view.frame.width - 60,
+                                    y:40,
+                                    width:(cancelBtnImage?.size.width)!,
+                                    height:(cancelBtnImage?.size.height)!)
+        pauseView_cancelBtn = UIButton(type: .custom)
+        pauseView_cancelBtn.setImage(cancelBtnImage, for: .normal)
+        pauseView_cancelBtn.frame = cancelBtnframe
+        pauseView_cancelBtn.addTarget(self, action: #selector(self.cancelScoreBoard), for: .touchUpInside)
+        pauseView.addSubview(pauseView_cancelBtn)
+        /////////////////////////////////
+        let timerLabelFrame = CGRect(x: self.view.frame.width / 2 - 125, y: 70, width: 250, height: 100)
+        pauseView_timeLabel.text = "最佳時間"
+        pauseView_timeLabel.textColor = UIColor.white
+        pauseView_timeLabel.textAlignment = .center
+        pauseView_timeLabel.font = pauseView_timeLabel.font.withSize(40.0)
+        pauseView_timeLabel.frame = timerLabelFrame
+        pauseView.addSubview(pauseView_timeLabel)
+        /////////////////////////////////
+        pauseView_scoreLabel.text = showScore
+        pauseView_scoreLabel.font = pauseView_scoreLabel.font.withSize(25.0)
+        //不限制行數
+        pauseView_scoreLabel.numberOfLines = 0
+
+        pauseView_scoreLabel.textAlignment = .center
+        pauseView_scoreLabel.textColor = UIColor.white
+        //regulation.backgroundColor = UIColor.red
+        let regulationFrame = CGRect(x: 60, y: 70, width: self.view.frame.width - 120, height: self.view.frame.height - 140)
+        pauseView_scoreLabel.frame = regulationFrame
+        pauseView.addSubview(pauseView_scoreLabel)
+        
+    }
+    @objc func cancelScoreBoard()
+    {
+        pauseView.removeFromSuperview()
     }
     
     // MARK: 鍵盤事件處理
@@ -413,7 +452,7 @@ class HardModeController: UIViewController {
         }
     }
     @objc func keyboardWillHide(notification: NSNotification) {
-        print("hide")
+       
         if let userInfo = notification.userInfo,
             let value = userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue,
             let duration = userInfo[UIKeyboardAnimationDurationUserInfoKey] as? Double,
@@ -468,11 +507,23 @@ class HardModeController: UIViewController {
         
     }
     func loadScore(){
-        //allScore = currentUser.scores.sorted(byKeyPath: "score", ascending: true)
+        showScore = ""
         allScore = currentUser.scores.filter("mode CONTAINS[cd] %@", "困難模式").sorted(byKeyPath: "score", ascending: true)
-        for eachScore in allScore!
+        for (index,eachScore) in allScore!.enumerated()
         {
-            print("\(eachScore.mode):\(eachScore.score)")
+            showScore = showScore + "第\(index+1)名 時間:\(eachScore.score)\n\n"
+            if index == 4
+            {
+                break
+            }
+            
         }
+    }
+}
+extension HardModeController: UITextFieldDelegate{
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        let allowedCharacters = CharacterSet.decimalDigits
+        let characterSet = CharacterSet(charactersIn: string)
+        return allowedCharacters.isSuperset(of: characterSet)
     }
 }

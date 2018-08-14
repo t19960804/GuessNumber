@@ -13,6 +13,7 @@ import RealmSwift
 
 class RegisterController: UIViewController {
     let realm = try! Realm()
+    let userNameWasUsed = "The email address is already in use by another account."
     var user = User()
     @IBOutlet weak var userNameTextField: UITextField!
     
@@ -28,17 +29,17 @@ class RegisterController: UIViewController {
             showAlert(title: "尚有欄位未填", message: "請繼續輸入")
 
         }
+        else if (passwordTextField.text?.count)! < 6
+        {
+            
+            
+            SVProgressHUD.dismiss()
+            showAlert(title: "密碼不足六位數", message: "請繼續輸入")
+                
+        }
+            
         else
         {
-            if (passwordTextField.text?.count)! < 6
-            {
-                SVProgressHUD.dismiss()
-                showAlert(title: "密碼不足六位數", message: "請繼續輸入")
-                
-                
-            }
-            else
-            {
                 Auth.auth().createUser(withEmail: userNameTextField.text!, password: passwordTextField.text!) { (result, error) in
                     if error == nil
                     {
@@ -47,15 +48,21 @@ class RegisterController: UIViewController {
                         self.addUser(userName: self.userNameTextField.text!)
                         print("Register Success")
                     }
-                    else
+                    else if error!.localizedDescription == self.userNameWasUsed
                     {
+                        print("Register error:\(error!)\n")
                         SVProgressHUD.dismiss()
-                        self.showAlert(title: "帳號格式錯誤", message: "請重新輸入")
+                        self.showAlert(title: "帳號已被使用", message: "請重新輸入")
                         
                     }
+                    else{
+                        print("Format Error:\(error!)")
+                        SVProgressHUD.dismiss()
+                        self.showAlert(title: "帳號格式錯誤", message: "請重新輸入")
+                    }
                 }
-            }
         }
+        
     }
     override func viewDidLoad() {
         super.viewDidLoad()

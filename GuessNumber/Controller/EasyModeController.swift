@@ -20,14 +20,20 @@ class EasyModeController: UIViewController {
     var numberArray : [Int] = [1,2,3,4]
     var randomArray : [Int] = []
     var inputArray : [Int] = []
+    var textFieldsArray = [UITextField]()
     var right : Int = 0
     var wrong : Int = 0
+    var showScore: String = ""
     var counter  = Float()
     var minuteCount = 0
-    var btn = UIButton()
+    /////////////////////////////
+    var pauseView_pauseBtn = UIButton()
+    var pauseView_cancelBtn = UIButton()
+    var pauseView_scoreLabel = UILabel()
+    var pauseView_timeLabel = UILabel()
     var pauseView = UIView()
+    /////////////////////////////
     var countDownLabel = UILabel()
-    var textFieldsArray = [UITextField]()
     var keyBoardNeedLayout: Bool = true
     var userName = String()
     let device = UIDevice.current
@@ -86,23 +92,24 @@ class EasyModeController: UIViewController {
     }
     @IBAction func scoreBoardBtn(_ sender: UIButton) {
         loadScore()
+        createPauseViewAndScoreLabel()
+        
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        loadScore()
+        
         noRepeatNumbers()
         
         textFieldsArray.append(inputNo1)
         textFieldsArray.append(inputNo2)
         textFieldsArray.append(inputNo3)
         textFieldsArray.append(inputNo4)
+        inputNo1.delegate = self
+        inputNo2.delegate = self
+        inputNo3.delegate = self
+        inputNo4.delegate = self
         
-        //感知设备方向 - 开启监听设备方向
-        UIDevice.current.beginGeneratingDeviceOrientationNotifications()
         
-        //添加通知，监听设备方向改变
-        NotificationCenter.default.addObserver(self, selector: #selector(self.receivedRotation),
-                                               name: NSNotification.Name.UIDeviceOrientationDidChange, object: nil)
         
         
     }
@@ -203,7 +210,7 @@ class EasyModeController: UIViewController {
             textFieldsArray[i].text = ""
         }
         timerLabel.text = "0.0"
-        counter = 0
+        counter = 00.0
         timer.invalidate()
         countDownLabelSetting()
         componentIsEnabled(parameter: false)
@@ -224,9 +231,11 @@ class EasyModeController: UIViewController {
             style: .default,
             handler: {
                 (action: UIAlertAction!) -> Void in
-                self.dismiss(animated: true, completion: nil)
-                self.addDataToFireBase(Email: self.email, Score: (self.timerLabel.text)!)
                 self.addScore(gameScore: (self.timerLabel.text)!)
+                self.dismiss(animated: true, completion: nil)
+                
+                
+                
         })
         alertController.addAction(okAction)
         // 建立[重新開始]按鈕
@@ -235,9 +244,10 @@ class EasyModeController: UIViewController {
             style: .cancel,
             handler: {
                 (action: UIAlertAction!) -> Void in
-                self.resumeGame()
-                self.addDataToFireBase(Email: self.email, Score: (self.timerLabel.text)!)
                 self.addScore(gameScore: (self.timerLabel.text)!)
+                self.resumeGame()
+
+                
         })
         alertController.addAction(cancelAction)
         
@@ -277,7 +287,7 @@ class EasyModeController: UIViewController {
     //點擊"繼續"按鈕後事件
     @objc func playButton()
     {
-        btn.removeFromSuperview()
+        pauseView_pauseBtn.removeFromSuperview()
         pauseView.removeFromSuperview()
         countDownLabelSetting()
         //元件無法使用
@@ -314,14 +324,22 @@ class EasyModeController: UIViewController {
     //計時器累加並顯示
     @objc func UpdateTimer() {
         
-        counter = counter + 0.1
-        timerLabel.text = "\(minuteCount)分 \(String(format: "%.1f", counter))秒"
-        if counter >= 59.9
+        counter = counter + 00.1
+        if counter <= 9.9
+        {
+            timerLabel.text = "\(minuteCount)分 0\(String(format: "%.1f", counter))秒"
+        }
+        else if counter >= 59.9
         {
             minuteCount = minuteCount + 1
-            counter = 0.0
+            counter = 00.0
             timerLabel.text = "\(minuteCount)分 \(String(format: "%.1f", counter))秒"
         }
+        else
+        {
+            timerLabel.text = "\(minuteCount)分 \(String(format: "%.1f", counter))秒"
+        }
+        
     }
     func countDownLabelSetting()
     {
@@ -337,9 +355,8 @@ class EasyModeController: UIViewController {
         countDownLabel.text = "3"
         self.view.addSubview(countDownLabel)
     }
-    
-    func createPauseViewAndButton(X x :CGFloat,Y y :CGFloat,Width width :CGFloat,Height height :CGFloat)
-    {
+    //MARK: 自訂元件
+    func createPauseView(X x :CGFloat,Y y :CGFloat,Width width :CGFloat,Height height :CGFloat){
         let frame = CGRect(x:x,y:y,width:width,height:height)
         pauseView = UIView(frame: frame)
         pauseView.backgroundColor = UIColor.black
@@ -347,43 +364,67 @@ class EasyModeController: UIViewController {
         ////////////////////////////////
         self.view.addSubview(pauseView)
         ////////////////////////////////
+    }
+    func createPauseViewAndButton(X x :CGFloat,Y y :CGFloat,Width width :CGFloat,Height height :CGFloat)
+    {
+        createPauseView(X: x, Y: y, Width: width, Height: height)
         let btnImage = UIImage(named: "playbutton.png")
         
-//        let btnFrame = CGRect(x:0  ,
-//                              y:0  ,
-//                              width:(btnImage?.size.width)!,
-//                              height:(btnImage?.size.height)!)
+
         
         let btnFrame = CGRect(x:0  ,
                               y:0  ,
                               width:self.view.frame.width,
                               height:self.view.frame.height)
         
-        btn = UIButton(type: .custom)
-        btn.setImage(btnImage, for: .normal)
-        btn.frame = btnFrame
-        btn.addTarget(self, action: #selector(self.playButton), for: .touchUpInside)
+        pauseView_pauseBtn = UIButton(type: .custom)
+        pauseView_pauseBtn.setImage(btnImage, for: .normal)
+        pauseView_pauseBtn.frame = btnFrame
+        pauseView_pauseBtn.addTarget(self, action: #selector(self.playButton), for: .touchUpInside)
         ////////////////////////////////
-        pauseView.addSubview(btn)
+        pauseView.addSubview(pauseView_pauseBtn)
         ////////////////////////////////
     }
-    //通知监听触发的方法
-    @objc func receivedRotation(){
-        //let device = UIDevice.current
-        switch device.orientation{
-        case .portrait:
-            print("面向设备保持垂直，Home键位于下部")
-        case .portraitUpsideDown:
-            print("面向设备保持垂直，Home键位于上部")
-        case .landscapeLeft:
-            print("面向设备保持垂直，Home键位于右部")
-        case .landscapeRight:
-            print("面向设备保持水平，Home键位于左侧")
-       
-        default:
-            print("方向未知")
-        }
+    func createPauseViewAndScoreLabel()
+    {
+        createPauseView(X: 0, Y: 20, Width: self.view.frame.width, Height: self.view.frame.height)
+        /////////////////////////////////
+        let cancelBtnImage = UIImage(named: "cancel.png")
+        let cancelBtnframe = CGRect(x:self.view.frame.width - 60,
+                                    y:40,
+                                    width:(cancelBtnImage?.size.width)!,
+                                    height:(cancelBtnImage?.size.height)!)
+        pauseView_cancelBtn = UIButton(type: .custom)
+        pauseView_cancelBtn.setImage(cancelBtnImage, for: .normal)
+        pauseView_cancelBtn.frame = cancelBtnframe
+        pauseView_cancelBtn.addTarget(self, action: #selector(self.cancelScoreBoard), for: .touchUpInside)
+        pauseView.addSubview(pauseView_cancelBtn)
+        /////////////////////////////////
+        let timerLabelFrame = CGRect(x: self.view.frame.width / 2 - 125, y: 70, width: 250, height: 100)
+        pauseView_timeLabel.text = "最佳時間"
+        pauseView_timeLabel.textColor = UIColor.white
+        pauseView_timeLabel.textAlignment = .center
+        pauseView_timeLabel.font = pauseView_timeLabel.font.withSize(40.0)
+        pauseView_timeLabel.frame = timerLabelFrame
+        pauseView.addSubview(pauseView_timeLabel)
+        /////////////////////////////////
+        let regulationFrame = CGRect(x: 60, y: 70, width: self.view.frame.width - 120, height: self.view.frame.height - 140)
+        pauseView_scoreLabel.text = showScore
+        pauseView_scoreLabel.font = pauseView_scoreLabel.font.withSize(25.0)
+        //不限制行數
+        pauseView_scoreLabel.numberOfLines = 0
+        pauseView_scoreLabel.textAlignment = .center
+        pauseView_scoreLabel.textColor = UIColor.white
+        pauseView_scoreLabel.frame = regulationFrame
+        pauseView.addSubview(pauseView_scoreLabel)
+        
     }
+    @objc func cancelScoreBoard()
+    {
+        //cancelBtn.removeFromSuperview()
+        pauseView.removeFromSuperview()
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         
         countDownLabelSetting()
@@ -443,25 +484,7 @@ class EasyModeController: UIViewController {
             
         }
     }
-    func addDataToFireBase(Email: String,Score: String)
-    {
-        //將UserName做切割存進FireBase
-        let seperateUserName = Email.components(separatedBy: "@")
-        let reference = Database.database().reference().child("\(seperateUserName[0])")
-        let dictionary = ["Score" : Score]
-        reference.childByAutoId().setValue(dictionary){
-        (error,reference) in
-            if error == nil
-            {
-                print("Insert Score Success")
-            }
-            else
-            {
-                print(error!)
-            }
-        }
-        
-    }
+    
     
     // MARK: 元件失效
     func componentIsEnabled(parameter: Bool)
@@ -476,7 +499,7 @@ class EasyModeController: UIViewController {
 
     }
     
-    //MArk: Realm相關操作
+    //MARK: Realm相關操作
     func addScore(gameScore: String)
     {
         let newScore = Score()
@@ -493,12 +516,28 @@ class EasyModeController: UIViewController {
         }
        
     }
-    func loadScore(){
+    
+    func loadScore()
+    {
+        showScore = ""
         allScore = currentUser.scores.filter("mode CONTAINS[cd] %@", "簡單模式").sorted(byKeyPath: "score", ascending: true)
-        for eachScore in allScore!
-        {
-            print("\(eachScore.mode):\(eachScore.score)")
+        
+        for (index,eachScore) in allScore!.enumerated(){
+            showScore = showScore + "第\(index+1)名 時間:\(eachScore.score)\n\n"
+            if index == 4
+            {
+                break
+            }
+            
         }
     }
     
+    
+}
+extension EasyModeController: UITextFieldDelegate{
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        let allowedCharacters = CharacterSet.decimalDigits
+        let characterSet = CharacterSet(charactersIn: string)
+        return allowedCharacters.isSuperset(of: characterSet)
+    }
 }

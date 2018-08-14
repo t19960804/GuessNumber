@@ -17,16 +17,17 @@ class LogInPage: UIViewController {
             SVProgressHUD.dismiss()
             showAlert(title: "尚有欄位未填", message: "請繼續輸入")
         }
-        else
+        else if (passwordTextField.text?.count)! < 6
         {
-            if (passwordTextField.text?.count)! < 6
-            {
+            
+            
                 SVProgressHUD.dismiss()
                 showAlert(title: "密碼不足六位數", message: "請繼續輸入")
                 
-            }
-            else
-            {
+            
+        }
+        else
+        {
                 Auth.auth().signIn(withEmail: userNameTextField.text!, password: passwordTextField.text!) { (result, error) in
                     if error == nil
                     {
@@ -38,11 +39,12 @@ class LogInPage: UIViewController {
                     else
                     {
                         SVProgressHUD.dismiss()
+                        print("error:\(error!)\n")
                         self.showAlert(title: "帳號密碼有誤", message: "請重新輸入")
                     }
                 }
-            }
         }
+        
         
         
         
@@ -90,7 +92,7 @@ class LogInPage: UIViewController {
         let destination = segue.destination as! ViewController
         
         destination.userNameFromLogIn = userNameTextField.text!
-            //destination.user =
+        
         }
     }
 }

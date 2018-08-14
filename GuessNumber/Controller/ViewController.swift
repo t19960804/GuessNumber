@@ -61,13 +61,10 @@ class ViewController: UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         print("userName:\(userNameFromLogIn)")
-        loadUser(userName: userNameFromLogIn)
+        
         
     }
-    override func viewDidDisappear(_ animated: Bool) {
-        //mainPageController.runCountDownTimer()
-        print("disappear")
-    }
+    
    
     @objc func cancelRegulation()
     {
@@ -91,7 +88,7 @@ class ViewController: UIViewController{
                 (action: UIAlertAction!) -> Void in
                 do{
                     try? Auth.auth().signOut()
-                    self.dismiss(animated: true, completion: nil)
+                    self.view.window?.rootViewController?.dismiss(animated: true, completion: nil)
                     print("LogOut Success")
                 }
                 catch
