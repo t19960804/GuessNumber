@@ -486,6 +486,7 @@
                         <outlet property="inputNo4" destination="Aub-mb-hEu" id="jp9-lc-vOV"/>
                         <outlet property="pauseBtnOutlet" destination="GzG-AZ-Rvc" id="Vnm-9q-ud0"/>
                         <outlet property="rightCount" destination="M3X-JE-GPN" id="SYi-JW-ukD"/>
+                        <outlet property="scoreBoardBtnOutlet" destination="ehj-ce-bvc" id="0pC-Wl-HqC"/>
                         <outlet property="timerLabel" destination="eck-uo-xSG" id="ubd-5l-GEm"/>
                         <outlet property="wrongCount" destination="3RC-jT-WlL" id="JQ3-C7-zoL"/>
                     </connections>
@@ -649,6 +650,7 @@
                         <outlet property="inputNo4" destination="5iM-b0-YI7" id="5xo-BB-Ywe"/>
                         <outlet property="pauseBtnOutlet" destination="e0V-s3-FgB" id="0il-9X-PDi"/>
                         <outlet property="rightCount" destination="rQF-Z3-peB" id="jZx-sw-VGq"/>
+                        <outlet property="scoreBoardBtnOutlet" destination="XpS-Fg-d9l" id="eQi-1R-15w"/>
                         <outlet property="timerLabel" destination="juF-ch-nV2" id="AwV-ik-EQv"/>
                         <outlet property="wrongCount" destination="Tbt-GG-bxr" id="uKg-6Z-ZsD"/>
                     </connections>

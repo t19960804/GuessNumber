@@ -51,6 +51,8 @@ class EasyModeController: UIViewController {
     @IBOutlet weak var timerLabel: UILabel!
     @IBOutlet weak var pauseBtnOutlet: UIButton!
     @IBOutlet weak var checkBtnOutlet: UIButton!
+    @IBOutlet weak var scoreBoardBtnOutlet: UIButton!
+    
     @IBAction func checkBtn(_ sender: UIButton) {
         
         //如果inputArray是空的則不用清空,直接append
@@ -91,6 +93,7 @@ class EasyModeController: UIViewController {
         }
     }
     @IBAction func scoreBoardBtn(_ sender: UIButton) {
+        timer.invalidate()
         loadScore()
         createPauseViewAndScoreLabel()
         
@@ -212,9 +215,8 @@ class EasyModeController: UIViewController {
         timerLabel.text = "0.0"
         counter = 00.0
         timer.invalidate()
-        countDownLabelSetting()
+        countDownLabelSetAndRun()
         componentIsEnabled(parameter: false)
-        runCountDownTimer()
         
     }
     // MARK: 系統提示
@@ -289,10 +291,9 @@ class EasyModeController: UIViewController {
     {
         pauseView_pauseBtn.removeFromSuperview()
         pauseView.removeFromSuperview()
-        countDownLabelSetting()
+        countDownLabelSetAndRun()
         //元件無法使用
         componentIsEnabled(parameter: false)
-        runCountDownTimer()
         
 
     }
@@ -341,7 +342,7 @@ class EasyModeController: UIViewController {
         }
         
     }
-    func countDownLabelSetting()
+    func countDownLabelSetAndRun()
     {
         let countDownFrame = CGRect(x:0,
                                     y:0,
@@ -354,6 +355,9 @@ class EasyModeController: UIViewController {
         countDownLabel.font = countDownLabel.font.withSize(250.0)
         countDownLabel.text = "3"
         self.view.addSubview(countDownLabel)
+        ////////////////////////////////
+
+        runCountDownTimer()
     }
     //MARK: 自訂元件
     func createPauseView(X x :CGFloat,Y y :CGFloat,Width width :CGFloat,Height height :CGFloat){
@@ -421,15 +425,14 @@ class EasyModeController: UIViewController {
     }
     @objc func cancelScoreBoard()
     {
-        //cancelBtn.removeFromSuperview()
         pauseView.removeFromSuperview()
+        countDownLabelSetAndRun()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         
-        countDownLabelSetting()
+        countDownLabelSetAndRun()
         componentIsEnabled(parameter: false)
-        runCountDownTimer()
         
         ////////////////////////
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(notification:)), name:NSNotification.Name.UIKeyboardWillShow, object: nil)
@@ -496,7 +499,8 @@ class EasyModeController: UIViewController {
         
         pauseBtnOutlet.isEnabled = parameter
         checkBtnOutlet.isEnabled = parameter
-
+        
+        scoreBoardBtnOutlet.isEnabled = parameter
     }
     
     //MARK: Realm相關操作

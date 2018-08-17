@@ -49,6 +49,7 @@ class HardModeController: UIViewController {
     @IBOutlet weak var timerLabel: UILabel!
     @IBOutlet weak var pauseBtnOutlet: UIButton!
     @IBOutlet weak var checkBtnOutlet: UIButton!
+     @IBOutlet weak var scoreBoardBtnOutlet: UIButton!
     @IBAction func checkBtn(_ sender: UIButton) {
         
         //如果inputArray是空的則不用清空,直接append
@@ -75,6 +76,7 @@ class HardModeController: UIViewController {
         
     }
     @IBAction func scoreBoardBtn(_ sender: UIButton) {
+        timer.invalidate()
         loadScore()
         createPauseViewAndScoreLabel()
     }
@@ -122,9 +124,9 @@ class HardModeController: UIViewController {
     }
     override func viewDidAppear(_ animated: Bool) {
         
-        countDownLabelSetting()
+        countDownLabelSetAndRun()
         componentIsEnabled(parameter: false)
-        runCountDownTimer()
+        
         
     }
     override func didReceiveMemoryWarning() {
@@ -220,9 +222,8 @@ class HardModeController: UIViewController {
         timerLabel.text = "0.0"
         counter = 0
         timer.invalidate()
-        countDownLabelSetting()
+        countDownLabelSetAndRun()
         componentIsEnabled(parameter: false)
-        runCountDownTimer()
         
     }
     // MARK: 系統提示
@@ -277,8 +278,7 @@ class HardModeController: UIViewController {
             style: .default,
             handler: {
                 (action: UIAlertAction!) -> Void in
-                
-                self.runCountDownTimer()
+                self.countDownLabelSetAndRun()
         })
         alertController.addAction(okAction)
         
@@ -294,9 +294,8 @@ class HardModeController: UIViewController {
     {
         pauseView_pauseBtn.removeFromSuperview()
         pauseView.removeFromSuperview()
-        countDownLabelSetting()
+        countDownLabelSetAndRun()
         componentIsEnabled(parameter: false)
-        runCountDownTimer()
         
         
     }
@@ -343,7 +342,7 @@ class HardModeController: UIViewController {
         }
     }
     // MARK: 手動加入UIFrame
-    func countDownLabelSetting()
+    func countDownLabelSetAndRun()
     {
         let countDownFrame = CGRect(x:0,
                                     y:0,
@@ -356,6 +355,8 @@ class HardModeController: UIViewController {
         countDownLabel.font = countDownLabel.font.withSize(250.0)
         countDownLabel.text = "3"
         self.view.addSubview(countDownLabel)
+        //////////////////////////
+        runCountDownTimer()
     }
     func createPauseView(X x :CGFloat,Y y :CGFloat,Width width :CGFloat,Height height :CGFloat){
         let frame = CGRect(x:x,y:y,width:width,height:height)
@@ -423,6 +424,8 @@ class HardModeController: UIViewController {
     @objc func cancelScoreBoard()
     {
         pauseView.removeFromSuperview()
+        countDownLabelSetAndRun()
+        
     }
     
     // MARK: 鍵盤事件處理
@@ -488,6 +491,7 @@ class HardModeController: UIViewController {
         pauseBtnOutlet.isEnabled = parameter
         checkBtnOutlet.isEnabled = parameter
         
+        scoreBoardBtnOutlet.isEnabled = parameter
     }
     //MArk: Realm相關操作
     func addScore(gameScore: String)
