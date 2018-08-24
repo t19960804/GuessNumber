@@ -35,9 +35,10 @@ class EasyModeController: UIViewController {
     /////////////////////////////
     var countDownLabel = UILabel()
     var keyBoardNeedLayout: Bool = true
-    var userName = String()
+    
     let device = UIDevice.current
-    let email = (Auth.auth().currentUser?.email)!
+    //let email = (Auth.auth().currentUser?.email)!
+    let emailFromFaceBook = String()
     let realm = try! Realm()
     var currentUser = User()
     var allScore: Results<Score>?
@@ -427,6 +428,7 @@ class EasyModeController: UIViewController {
     {
         pauseView.removeFromSuperview()
         countDownLabelSetAndRun()
+        componentIsEnabled(parameter: false)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -441,7 +443,7 @@ class EasyModeController: UIViewController {
         
     }
     @objc func keyboardWillShow(notification: NSNotification) {
-        print("show")
+        
         if let userInfo = notification.userInfo,
             let value = userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue,
             let duration = userInfo[UIKeyboardAnimationDurationUserInfoKey] as? Double,

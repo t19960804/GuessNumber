@@ -35,7 +35,7 @@ class HardModeController: UIViewController {
     
     let device = UIDevice.current
     var keyBoardNeedLayout: Bool = true
-    var userName =  String()
+    
     var currentUser = User()
     let realm = try! Realm()
     var allScore: Results<Score>?
@@ -425,12 +425,12 @@ class HardModeController: UIViewController {
     {
         pauseView.removeFromSuperview()
         countDownLabelSetAndRun()
-        
+        componentIsEnabled(parameter: false)
     }
     
     // MARK: 鍵盤事件處理
     @objc func keyboardWillShow(notification: NSNotification) {
-        print("show")
+        
         if let userInfo = notification.userInfo,
             let value = userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue,
             let duration = userInfo[UIKeyboardAnimationDurationUserInfoKey] as? Double,

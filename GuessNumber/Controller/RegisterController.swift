@@ -40,6 +40,7 @@ class RegisterController: UIViewController {
             
         else
         {
+                //FireBase驗證後建立
                 Auth.auth().createUser(withEmail: userNameTextField.text!, password: passwordTextField.text!) { (result, error) in
                     if error == nil
                     {
@@ -71,9 +72,7 @@ class RegisterController: UIViewController {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
     }
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
+   
     func showAlert(title: String, message: String)
     {
         // 建立一個提示框
@@ -112,6 +111,7 @@ class RegisterController: UIViewController {
         }
     
     }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "RegisterToViewController"
         {

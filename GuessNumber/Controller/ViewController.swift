@@ -20,6 +20,7 @@ class ViewController: UIViewController{
     var cancelBtn = UIButton()
     var regulation = UILabel()
     var userNameFromLogIn = String()
+    
     let realm = try! Realm()
     var allUserFromRealm: Results<User>?
     var realUser = User()
@@ -60,6 +61,7 @@ class ViewController: UIViewController{
     }
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         print("userName:\(userNameFromLogIn)")
         
         
@@ -115,14 +117,15 @@ class ViewController: UIViewController{
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "gotoEasyMode"
         {
+
             let destination = segue.destination as! EasyModeController
-            destination.userName = userNameFromLogIn
+            
             destination.currentUser = loadUser(userName: userNameFromLogIn)
         }
         else
         {
             let destination = segue.destination as! HardModeController
-            destination.userName = userNameFromLogIn
+            
             destination.currentUser = loadUser(userName: userNameFromLogIn)
         }
     }

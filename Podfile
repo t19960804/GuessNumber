@@ -11,6 +11,9 @@ target 'GuessNumber' do
 	pod'Firebase/Database'
 	pod 'SVProgressHUD'
 	pod 'RealmSwift'
+	pod 'FBSDKCoreKit'
+	pod 'FBSDKShareKit'
+	pod 'FBSDKLoginKit'
 	
 
 
