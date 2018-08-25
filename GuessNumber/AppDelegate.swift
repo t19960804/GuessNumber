@@ -10,8 +10,33 @@ import UIKit
 import Firebase
 import RealmSwift
 import FBSDKCoreKit
+import GoogleSignIn
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
+    
+//    func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
+//        if error != nil
+//        {
+//            print("Log In Fail:",error)
+//            return
+//        }
+//        else
+//        {
+//            print("Log In Success:",user.profile.email!)
+//        }
+//        //建立user在FireBase
+//        guard let idToken = user.authentication.idToken else {fatalError("idToken is nil")}
+//        guard let accessTokens  = user.authentication.accessToken else {fatalError("accessTokens is nil")}
+//        let credential = GoogleAuthProvider.credential(withIDToken: idToken, accessToken: accessTokens)
+//        Auth.auth().signInAndRetrieveData(with: credential) { (user, error) in
+//            if error != nil
+//            {
+//                print("Sign In Fail:\(error)")
+//            }
+//            print("GoogleUser:\(user)")
+//        }
+//    }
+    
 
     var window: UIWindow?
 
@@ -23,13 +48,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FirebaseApp.configure()
         FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
         
+        
+        // Initialize sign-in
+        GIDSignIn.sharedInstance().clientID = FirebaseApp.app()?.options.clientID
+        
+        
         return true
     }
 
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
         let handled = FBSDKApplicationDelegate.sharedInstance().application(app, open: url, sourceApplication: options[UIApplicationOpenURLOptionsKey.sourceApplication] as! String, annotation: options[UIApplicationOpenURLOptionsKey.sourceApplication])
+
         return handled
     }
+    
     ///////////////////////////////////////////////
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

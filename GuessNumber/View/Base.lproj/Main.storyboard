@@ -24,22 +24,14 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="v5E-dv-nm3" userLabel="TopView">
-                                <rect key="frame" x="0.0" y="20" width="414" height="286"/>
+                                <rect key="frame" x="0.0" y="20" width="414" height="199"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Log   In" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nnY-xU-wgM">
-                                        <rect key="frame" x="128.66666666666663" y="118.33333333333334" width="157.33333333333337" height="50"/>
+                                        <rect key="frame" x="129" y="74.666666666666671" width="157.33333333333337" height="50"/>
                                         <fontDescription key="fontDescription" name="Jua-Regular" family="Jua" pointSize="50"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LCS-C1-aBB">
-                                        <rect key="frame" x="175" y="232" width="64" height="64"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <state key="normal" image="facebook-logo (2)"/>
-                                        <connections>
-                                            <action selector="logInWithFaceBookBtn:" destination="erB-t5-Y3C" eventType="touchUpInside" id="O2X-IH-hNH"/>
-                                        </connections>
-                                    </button>
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="nnY-xU-wgM" firstAttribute="centerY" secondItem="v5E-dv-nm3" secondAttribute="centerY" id="0kB-P6-Nvc"/>
@@ -47,10 +39,10 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="N5y-eB-mYU" userLabel="MidView">
-                                <rect key="frame" x="0.0" y="306" width="414" height="188"/>
+                                <rect key="frame" x="0.0" y="219" width="414" height="275"/>
                                 <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="sny-o7-4Zz">
-                                        <rect key="frame" x="82.333333333333314" y="49" width="250" height="90"/>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="sny-o7-4Zz">
+                                        <rect key="frame" x="82.333333333333314" y="49" width="250" height="177"/>
                                         <subviews>
                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="UserName" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="eg5-wt-VJT">
                                                 <rect key="frame" x="0.0" y="0.0" width="250" height="30"/>
@@ -67,7 +59,7 @@
                                                 </userDefinedRuntimeAttributes>
                                             </textField>
                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="RCj-L9-WM0">
-                                                <rect key="frame" x="0.0" y="60" width="250" height="30"/>
+                                                <rect key="frame" x="0.0" y="45" width="250" height="30"/>
                                                 <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
@@ -80,6 +72,24 @@
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                             </textField>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LCS-C1-aBB">
+                                                <rect key="frame" x="0.0" y="90" width="250" height="36"/>
+                                                <color key="backgroundColor" red="0.50747610723977465" green="0.65080506690196727" blue="0.93060437828151099" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                                <state key="normal" title="FaceBook登入"/>
+                                                <connections>
+                                                    <action selector="logInWithFaceBookBtn:" destination="erB-t5-Y3C" eventType="touchUpInside" id="O2X-IH-hNH"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="99E-NO-Zjm">
+                                                <rect key="frame" x="0.0" y="141" width="250" height="36"/>
+                                                <color key="backgroundColor" red="0.85640545696171411" green="0.49028467920189561" blue="0.16806924178350471" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                                <state key="normal" title="Gmail登入"/>
+                                                <connections>
+                                                    <action selector="logInWithGoogleBtn:" destination="erB-t5-Y3C" eventType="touchUpInside" id="yOB-cv-pLt"/>
+                                                </connections>
+                                            </button>
                                         </subviews>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="250" id="RRw-t8-5Qt"/>
@@ -144,6 +154,8 @@
                         <viewLayoutGuide key="safeArea" id="c1p-aC-Y3j"/>
                     </view>
                     <connections>
+                        <outlet property="btnOutletOfFaceBook" destination="LCS-C1-aBB" id="aGZ-qU-mPE"/>
+                        <outlet property="btnOutletOfGoogle" destination="99E-NO-Zjm" id="hjz-GK-9ms"/>
                         <outlet property="passwordTextField" destination="RCj-L9-WM0" id="oca-Hg-QpO"/>
                         <outlet property="userNameTextField" destination="eg5-wt-VJT" id="QOd-Af-B8Q"/>
                         <segue destination="BYZ-38-t0r" kind="presentation" identifier="logInToViewController" id="sn5-Xw-rqi"/>
@@ -172,7 +184,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Register" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Mc-z0-P8h">
-                                <rect key="frame" x="115.66666666666667" y="124" width="183.66666666666663" height="50"/>
+                                <rect key="frame" x="115.99999999999999" y="124" width="183.66666666666663" height="50"/>
                                 <fontDescription key="fontDescription" name="Jua-Regular" family="Jua" pointSize="50"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
@@ -246,7 +258,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Guess Number" textAlignment="natural" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fdd-pt-Hts">
-                                <rect key="frame" x="56" y="120" width="302.66666666666669" height="50"/>
+                                <rect key="frame" x="56.333333333333343" y="120" width="302.66666666666663" height="50"/>
                                 <fontDescription key="fontDescription" name="Jua-Regular" family="Jua" pointSize="50"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
@@ -348,7 +360,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="80" translatesAutoresizingMaskIntoConstraints="NO" id="cKs-jg-w4u">
-                                <rect key="frame" x="80.333333333333314" y="140" width="254" height="70.333333333333314"/>
+                                <rect key="frame" x="80.666666666666686" y="140" width="254" height="70.333333333333314"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aSV-xp-rBe">
                                         <rect key="frame" x="0.0" y="0.0" width="92" height="70.333333333333329"/>
@@ -377,7 +389,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="B" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zlb-vZ-uvJ">
-                                                <rect key="frame" x="42.999999999999972" y="0.0" width="39" height="70.333333333333329"/>
+                                                <rect key="frame" x="43.000000000000028" y="0.0" width="39" height="70.333333333333329"/>
                                                 <fontDescription key="fontDescription" name="Jua-Regular" family="Jua" pointSize="70"/>
                                                 <color key="textColor" red="0.8118592110382119" green="0.22799623117234574" blue="0.13648138339835303" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                 <nil key="highlightedColor"/>
@@ -387,7 +399,7 @@
                                 </subviews>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="m4z-Ru-O8D">
-                                <rect key="frame" x="157.66666666666666" y="245.33333333333337" width="99.333333333333343" height="80"/>
+                                <rect key="frame" x="158" y="245.33333333333337" width="99.333333333333314" height="80"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" alpha="0.45000000000000001" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="Timer" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TWd-BU-2vy">
                                         <rect key="frame" x="0.0" y="0.0" width="99.333333333333329" height="40"/>
@@ -396,7 +408,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0.0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eck-uo-xSG">
-                                        <rect key="frame" x="21.333333333333343" y="39.999999999999972" width="57" height="40"/>
+                                        <rect key="frame" x="21" y="39.999999999999972" width="57" height="40"/>
                                         <fontDescription key="fontDescription" name="Jua-Regular" family="Jua" pointSize="40"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
@@ -512,7 +524,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="80" translatesAutoresizingMaskIntoConstraints="NO" id="jbM-O9-4WM">
-                                <rect key="frame" x="80.333333333333314" y="140" width="254" height="70.333333333333314"/>
+                                <rect key="frame" x="80.666666666666686" y="140" width="254" height="70.333333333333314"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0z5-dl-eTe">
                                         <rect key="frame" x="0.0" y="0.0" width="92" height="70.333333333333329"/>
@@ -541,7 +553,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="B" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cSa-0E-80t">
-                                                <rect key="frame" x="42.999999999999972" y="0.0" width="39" height="70.333333333333329"/>
+                                                <rect key="frame" x="43.000000000000028" y="0.0" width="39" height="70.333333333333329"/>
                                                 <fontDescription key="fontDescription" name="Jua-Regular" family="Jua" pointSize="70"/>
                                                 <color key="textColor" red="0.81185921100000003" green="0.22799623120000001" blue="0.13648138339999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                 <nil key="highlightedColor"/>
@@ -551,7 +563,7 @@
                                 </subviews>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="ck8-wd-jSy">
-                                <rect key="frame" x="157.66666666666666" y="245.33333333333337" width="99.333333333333343" height="80"/>
+                                <rect key="frame" x="158" y="245.33333333333337" width="99.333333333333314" height="80"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" alpha="0.44999998807907104" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="Timer" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tbl-Mx-ZMI">
                                         <rect key="frame" x="0.0" y="0.0" width="99.333333333333329" height="40"/>
@@ -560,7 +572,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0.0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="juF-ch-nV2">
-                                        <rect key="frame" x="21.333333333333343" y="39.999999999999972" width="57" height="40"/>
+                                        <rect key="frame" x="21" y="39.999999999999972" width="57" height="40"/>
                                         <fontDescription key="fontDescription" name="Jua-Regular" family="Jua" pointSize="40"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
@@ -669,7 +681,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="facebook-logo (2)" width="64" height="64"/>
         <image name="newIcon2" width="500" height="500"/>
         <image name="pause2" width="32" height="32"/>
     </resources>

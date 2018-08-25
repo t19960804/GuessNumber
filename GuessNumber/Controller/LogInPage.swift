@@ -4,16 +4,21 @@ import Firebase
 import SVProgressHUD
 import FBSDKLoginKit
 import RealmSwift
+import GoogleSignIn
 
-class LogInPage: UIViewController {
+class LogInPage: UIViewController,GIDSignInUIDelegate,GIDSignInDelegate {
     let realm = try! Realm()
-    var emailFromFaceBook = String()
+    var emailFromSocialNetWork = String()
+    
+
     var allUserFromRealm: Results<User>?
     
     @IBOutlet weak var userNameTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
-
+    @IBOutlet weak var btnOutletOfFaceBook: UIButton!
+    @IBOutlet weak var btnOutletOfGoogle: UIButton!
     @IBAction func logInWithFaceBookBtn(_ sender: UIButton) {
+        //可以讀取用戶的基本資料和取得用戶email的權限
         FBSDKLoginManager().logIn(withReadPermissions: ["email","public_profile"], from: self) { (result, error) in
 
         if error != nil{
@@ -25,6 +30,13 @@ class LogInPage: UIViewController {
         }
         
     }
+    @IBAction func logInWithGoogleBtn(_ sender: UIButton) {
+        SVProgressHUD.show()
+       GIDSignIn.sharedInstance().signIn()
+        
+    }
+    
+    
     @IBAction func logInBtn(_ sender: UIButton) {
         SVProgressHUD.show()
         //有一個欄位是空的就跳警告
@@ -56,6 +68,11 @@ class LogInPage: UIViewController {
         super.viewDidLoad()
 //        userNameTextField.text = "a@a.com"
 //        passwordTextField.text = "aaaaaa"
+        btnOutletOfFaceBook.layer.cornerRadius = round(5.0)
+        btnOutletOfGoogle.layer.cornerRadius = round(5.0)
+        
+        GIDSignIn.sharedInstance().uiDelegate = self
+        GIDSignIn.sharedInstance().delegate = self
     }
 
     
@@ -96,7 +113,7 @@ class LogInPage: UIViewController {
         }
         else
         {
-            destination.userNameFromLogIn = emailFromFaceBook
+            destination.userNameFromLogIn = emailFromSocialNetWork
         }
 
         
@@ -106,14 +123,12 @@ class LogInPage: UIViewController {
         
     }
     //MARK: FaceBook處理
-
-    
     func logInWithFaceBook()
     {
-        
         //acess token是Facebook用來辨識你的身份的字串，辨識成功後就可以取用Facebook的資料
         
         guard let accessToken = FBSDKAccessToken.current().tokenString else{fatalError()}
+        //將token轉換為FireBase的憑證
         //credential像是登入金鑰，取得fbCredentials後，才能前往firebase
         let credentials = FacebookAuthProvider.credential(withAccessToken: accessToken)
         
@@ -134,15 +149,16 @@ class LogInPage: UIViewController {
             else{
                 guard let results = result as? NSDictionary else{fatalError("result as NSDictionary fail")}
                 //從回傳的結果取出Email
-                self.emailFromFaceBook = results.object(forKey: "email") as! String
+                self.emailFromSocialNetWork = results.object(forKey: "email") as! String
                 //確認Realm裡是否有該帳號
-                if self.checkFaceBookUserExist(email: self.emailFromFaceBook) == true
+                if self.checkSocialUserExist(email: self.emailFromSocialNetWork) == true
                 {
                     self.performSegue(withIdentifier: "logInToViewController", sender: self)
                 }
                 else
                 {
-                    self.createFaceBookUser(email: self.emailFromFaceBook)
+
+                    self.createSocialUser(email: self.emailFromSocialNetWork)
                     //不加在它獲得email之後才跳轉,會最後才觸發
                     self.performSegue(withIdentifier: "logInToViewController", sender: self)
                 }
@@ -150,7 +166,44 @@ class LogInPage: UIViewController {
             }
         }
     }
-    func createFaceBookUser(email: String){
+    //MARK: Google處理
+    func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
+        if error != nil
+        {
+            print("Log In Fail:",error)
+            return
+        }
+        else
+        {
+            self.emailFromSocialNetWork = user.profile.email!
+            print("Log In Success:",user.profile.email!)
+        }
+        //建立user在FireBase
+        guard let idToken = user.authentication.idToken else {fatalError("idToken is nil")}
+        guard let accessTokens  = user.authentication.accessToken else {fatalError("accessTokens is nil")}
+        let credential = GoogleAuthProvider.credential(withIDToken: idToken, accessToken: accessTokens)
+        Auth.auth().signInAndRetrieveData(with: credential) { (user, error) in
+            if error != nil
+            {
+                print("Sign In Fail:\(error)")
+            }
+            //確認Realm裡是否有該帳號
+            else if self.checkSocialUserExist(email: self.emailFromSocialNetWork) == true
+            {
+                SVProgressHUD.dismiss()
+                self.performSegue(withIdentifier: "logInToViewController", sender: self)
+            }
+            else
+            {
+                SVProgressHUD.dismiss()
+                self.createSocialUser(email: self.emailFromSocialNetWork)
+                //不加在它獲得email之後才跳轉,會最後才觸發
+                self.performSegue(withIdentifier: "logInToViewController", sender: self)
+            }
+        }
+    }
+    //MARK: Realm相關處理
+    func createSocialUser(email: String){
         let user = User()
         user.userName = email
         do{
@@ -161,7 +214,7 @@ class LogInPage: UIViewController {
             print("Add User Fail")
         }
     }
-    func checkFaceBookUserExist(email: String) -> Bool
+    func checkSocialUserExist(email: String) -> Bool
     {
         //將所有儲存在Realm的資料撈出來比對
         allUserFromRealm = realm.objects(User.self)
@@ -170,8 +223,7 @@ class LogInPage: UIViewController {
             if email == user.userName
             {
                 return true
-                
-                
+               
             }
             
             

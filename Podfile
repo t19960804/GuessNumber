@@ -14,7 +14,8 @@ target 'GuessNumber' do
 	pod 'FBSDKCoreKit'
 	pod 'FBSDKShareKit'
 	pod 'FBSDKLoginKit'
-	
+	pod 'GoogleSignIn'
+
 
 
   # Pods for GuessNumber
