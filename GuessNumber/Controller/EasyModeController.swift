@@ -8,8 +8,6 @@
 
 import UIKit
 import GameKit
-import CountdownLabel
-import Firebase
 import RealmSwift
 
 class EasyModeController: UIViewController {
@@ -20,10 +18,12 @@ class EasyModeController: UIViewController {
     var numberArray : [Int] = [1,2,3,4]
     var randomArray : [Int] = []
     var inputArray : [Int] = []
+    //純加入
     var textFieldsArray = [UITextField]()
+    //加入設定後
+    var settedTextFieldsArray = [UITextField]()
     var right : Int = 0
     var wrong : Int = 0
-    var showScore: String = ""
     var counter  = Float()
     var minuteCount = 0
     /////////////////////////////
@@ -32,6 +32,8 @@ class EasyModeController: UIViewController {
     var pauseView_scoreLabel = UILabel()
     var pauseView_timeLabel = UILabel()
     var pauseView = UIView()
+    let scoreTableView = UITableView()
+
     /////////////////////////////
     var countDownLabel = UILabel()
     var keyBoardNeedLayout: Bool = true
@@ -42,6 +44,7 @@ class EasyModeController: UIViewController {
     let realm = try! Realm()
     var currentUser = User()
     var allScore: Results<Score>?
+    var withinFiveScore = [String]()
     /////////////////////////////
     @IBOutlet weak var rightCount: UILabel!
     @IBOutlet weak var wrongCount: UILabel!
@@ -60,22 +63,13 @@ class EasyModeController: UIViewController {
         //每次check前先將 right &  wrong計數器歸0
         if inputArray.isEmpty
         {
-            right = 0
-            wrong = 0
-            inputArrayAppend()
-            loopCheck()
-            
-
+            checkAnserHandler()
         }
         else
             
         {
             inputArray.removeAll()
-            right = 0
-            wrong = 0
-            inputArrayAppend()
-            loopCheck()
-            
+            checkAnserHandler()
         }
        
     }
@@ -83,21 +77,16 @@ class EasyModeController: UIViewController {
     @IBAction func pauseBtn(_ sender: UIButton) {
         //遊戲計時停止
         timer.invalidate()
-        if device.orientation.isLandscape{
-            
-            createPauseViewAndButton(X: 0, Y: 0, Width: self.view.frame.width, Height: self.view.frame.height)
-            
-        }
-        else{
-            createPauseViewAndButton(X: 0, Y: 20, Width: self.view.frame.width, Height: self.view.frame.height)
+        createPauseViewAndButton()
 
-        }
+        
     }
     @IBAction func scoreBoardBtn(_ sender: UIButton) {
         timer.invalidate()
-        loadScore()
         createPauseViewAndScoreLabel()
+
         
+
     }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -108,12 +97,10 @@ class EasyModeController: UIViewController {
         textFieldsArray.append(inputNo2)
         textFieldsArray.append(inputNo3)
         textFieldsArray.append(inputNo4)
-        inputNo1.delegate = self
-        inputNo2.delegate = self
-        inputNo3.delegate = self
-        inputNo4.delegate = self
-        
-        
+        textFieldSetting()
+        loadScore()
+        scoreTableView.delegate  = self
+        scoreTableView.dataSource = self
         
         
     }
@@ -125,11 +112,14 @@ class EasyModeController: UIViewController {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
     }
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        
-    }
     //MARK: 遊戲規則處理
+    func checkAnserHandler()
+    {
+        right = 0
+        wrong = 0
+        inputArrayAppend()
+        loopCheck()
+    }
     //產生不重複亂數
     func noRepeatNumbers()
     {
@@ -169,12 +159,12 @@ class EasyModeController: UIViewController {
     //將textField的數字加入陣列
     func inputArrayAppend()
     {
-        for i in 0...textFieldsArray.count - 1
+        for i in 0...settedTextFieldsArray.count - 1
         {
-            if (textFieldsArray[i].text != "")
+            if (settedTextFieldsArray[i].text != "")
             {
             //加入使用者輸入數字
-            inputArray.append(Int(textFieldsArray[i].text!)!)
+            inputArray.append(Int(settedTextFieldsArray[i].text!)!)
             }
             else{
                 
@@ -209,9 +199,9 @@ class EasyModeController: UIViewController {
         wrongCount.text = "0"
         numberArray = [1,2,3,4]
         noRepeatNumbers()
-        for i in 0...textFieldsArray.count - 1
+        for i in 0...settedTextFieldsArray.count - 1
         {
-            textFieldsArray[i].text = ""
+            settedTextFieldsArray[i].text = ""
         }
         timerLabel.text = "0.0"
         counter = 00.0
@@ -290,8 +280,11 @@ class EasyModeController: UIViewController {
     //點擊"繼續"按鈕後事件
     @objc func playButton()
     {
-        pauseView_pauseBtn.removeFromSuperview()
-        pauseView.removeFromSuperview()
+        
+            self.pauseView_pauseBtn.removeFromSuperview()
+            self.pauseView.removeFromSuperview()
+        
+        
         countDownLabelSetAndRun()
         //元件無法使用
         componentIsEnabled(parameter: false)
@@ -356,77 +349,98 @@ class EasyModeController: UIViewController {
         countDownLabel.font = countDownLabel.font.withSize(250.0)
         countDownLabel.text = "3"
         self.view.addSubview(countDownLabel)
-        ////////////////////////////////
 
         runCountDownTimer()
     }
     //MARK: 自訂元件
-    func createPauseView(X x :CGFloat,Y y :CGFloat,Width width :CGFloat,Height height :CGFloat){
-        let frame = CGRect(x:x,y:y,width:width,height:height)
-        pauseView = UIView(frame: frame)
+    //先把View加入,才能設定Constraints
+    func createPauseView(){
+        
         pauseView.backgroundColor = UIColor.black
-        pauseView.alpha = 0.5
-        ////////////////////////////////
+        pauseView.alpha = 0.7
         self.view.addSubview(pauseView)
         ////////////////////////////////
+        pauseView.translatesAutoresizingMaskIntoConstraints = false
+        let leading = NSLayoutConstraint(item: pauseView, attribute: .leading, relatedBy: .equal, toItem: self.view, attribute: .leading, multiplier: 1, constant: 0)
+        let trailing = NSLayoutConstraint(item: pauseView, attribute: .trailing, relatedBy: .equal, toItem: self.view, attribute: .trailing, multiplier: 1, constant: 0)
+        let top = NSLayoutConstraint(item: pauseView, attribute: .top, relatedBy: .equal, toItem: self.view, attribute: .top, multiplier: 1, constant: 0)
+        let bottom = NSLayoutConstraint(item: pauseView, attribute: .bottom, relatedBy: .equal, toItem: self.view, attribute: .bottom, multiplier: 1, constant: 0)
+        NSLayoutConstraint.activate([leading,trailing,top,bottom])
+        
+        
+        
     }
-    func createPauseViewAndButton(X x :CGFloat,Y y :CGFloat,Width width :CGFloat,Height height :CGFloat)
+    func createPauseViewAndButton()
     {
-        createPauseView(X: x, Y: y, Width: width, Height: height)
+        createPauseView()
         let btnImage = UIImage(named: "playbutton.png")
-        
-
-        
-        let btnFrame = CGRect(x:0  ,
-                              y:0  ,
-                              width:self.view.frame.width,
-                              height:self.view.frame.height)
-        
         pauseView_pauseBtn = UIButton(type: .custom)
         pauseView_pauseBtn.setImage(btnImage, for: .normal)
-        pauseView_pauseBtn.frame = btnFrame
         pauseView_pauseBtn.addTarget(self, action: #selector(self.playButton), for: .touchUpInside)
         ////////////////////////////////
         pauseView.addSubview(pauseView_pauseBtn)
-        ////////////////////////////////
+        pauseView_pauseBtn.translatesAutoresizingMaskIntoConstraints = false
+        let verticalInCenter = NSLayoutConstraint(item: pauseView_pauseBtn, attribute: NSLayoutConstraint.Attribute.centerY, relatedBy: NSLayoutConstraint.Relation.equal, toItem: pauseView, attribute: NSLayoutConstraint.Attribute.centerY, multiplier: 1, constant: 0)
+        let horizontalInCenter = NSLayoutConstraint(item: pauseView_pauseBtn, attribute: NSLayoutConstraint.Attribute.centerX, relatedBy: NSLayoutConstraint.Relation.equal, toItem: pauseView, attribute: NSLayoutConstraint.Attribute.centerX, multiplier: 1, constant: 0)
+        NSLayoutConstraint(item: pauseView_pauseBtn, attribute: NSLayoutConstraint.Attribute.height, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: 300).isActive = true
+        NSLayoutConstraint(item: pauseView_pauseBtn, attribute: NSLayoutConstraint.Attribute.width, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: 300).isActive = true
+        NSLayoutConstraint.activate([verticalInCenter,horizontalInCenter])
     }
     func createPauseViewAndScoreLabel()
     {
-        createPauseView(X: 0, Y: 20, Width: self.view.frame.width, Height: self.view.frame.height)
+        createPauseView()
         /////////////////////////////////
         let cancelBtnImage = UIImage(named: "cancel.png")
-        let cancelBtnframe = CGRect(x:self.view.frame.width - 60,
-                                    y:40,
-                                    width:(cancelBtnImage?.size.width)!,
-                                    height:(cancelBtnImage?.size.height)!)
         pauseView_cancelBtn = UIButton(type: .custom)
         pauseView_cancelBtn.setImage(cancelBtnImage, for: .normal)
-        pauseView_cancelBtn.frame = cancelBtnframe
         pauseView_cancelBtn.addTarget(self, action: #selector(self.cancelScoreBoard), for: .touchUpInside)
         pauseView.addSubview(pauseView_cancelBtn)
-        /////////////////////////////////
-        let timerLabelFrame = CGRect(x: self.view.frame.width / 2 - 125, y: 70, width: 250, height: 100)
+        pauseView_cancelBtn.translatesAutoresizingMaskIntoConstraints = false
+        let trailing = NSLayoutConstraint(item: pauseView_cancelBtn, attribute: .trailing, relatedBy: .equal, toItem: pauseView, attribute: .trailing, multiplier: 1, constant: -20)
+        let top = NSLayoutConstraint(item: pauseView_cancelBtn, attribute: .top, relatedBy: .equal, toItem: pauseView, attribute: .top, multiplier: 1, constant: 20)
+        NSLayoutConstraint(item: pauseView_cancelBtn, attribute: NSLayoutConstraint.Attribute.height, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: 50).isActive = true
+        NSLayoutConstraint(item: pauseView_cancelBtn, attribute: NSLayoutConstraint.Attribute.width, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: 50).isActive = true
+        NSLayoutConstraint.activate([trailing,top])
+
+        setScoreTableView()
+
+    }
+    func setTheBestTime(){
         pauseView_timeLabel.text = "最佳時間"
         pauseView_timeLabel.textColor = UIColor.white
         pauseView_timeLabel.textAlignment = .center
         pauseView_timeLabel.font = pauseView_timeLabel.font.withSize(40.0)
-        pauseView_timeLabel.frame = timerLabelFrame
         pauseView.addSubview(pauseView_timeLabel)
-        /////////////////////////////////
-        let regulationFrame = CGRect(x: 60, y: 70, width: self.view.frame.width - 120, height: self.view.frame.height - 140)
-        pauseView_scoreLabel.text = showScore
-        pauseView_scoreLabel.font = pauseView_scoreLabel.font.withSize(25.0)
-        //不限制行數
-        pauseView_scoreLabel.numberOfLines = 0
-        pauseView_scoreLabel.textAlignment = .center
-        pauseView_scoreLabel.textColor = UIColor.white
-        pauseView_scoreLabel.frame = regulationFrame
-        pauseView.addSubview(pauseView_scoreLabel)
+        
+        pauseView_timeLabel.translatesAutoresizingMaskIntoConstraints = false
+        let horizontalInCenter = NSLayoutConstraint(item: pauseView_timeLabel, attribute: NSLayoutConstraint.Attribute.centerX, relatedBy: NSLayoutConstraint.Relation.equal, toItem: pauseView, attribute: NSLayoutConstraint.Attribute.centerX, multiplier: 1, constant: 0)
+        let top = NSLayoutConstraint(item: pauseView_timeLabel, attribute: .top, relatedBy: .equal, toItem: pauseView, attribute: .top, multiplier: 1, constant: 30)
+        let bottom = NSLayoutConstraint(item: pauseView_timeLabel, attribute: .bottom, relatedBy: .equal, toItem: scoreTableView, attribute: .top, multiplier: 1, constant: 30)
+        NSLayoutConstraint(item: pauseView_timeLabel, attribute: NSLayoutConstraint.Attribute.width, relatedBy: NSLayoutConstraint.Relation.equal, toItem: pauseView_timeLabel, attribute: NSLayoutConstraint.Attribute.height, multiplier: 1 , constant: 250).isActive = true
+        NSLayoutConstraint.activate([horizontalInCenter,top,bottom])
+    }
+    func setScoreTableView(){
+
+        scoreTableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
+        scoreTableView.backgroundColor = UIColor.black
+        scoreTableView.alpha = 0.5
+        scoreTableView.separatorStyle = .singleLine
+        pauseView.addSubview(scoreTableView)
+        //////////////////////////////////
+        scoreTableView.translatesAutoresizingMaskIntoConstraints = false
+
+        let verticalInCenter = NSLayoutConstraint(item: scoreTableView, attribute: NSLayoutConstraint.Attribute.centerX, relatedBy: NSLayoutConstraint.Relation.equal, toItem: pauseView, attribute: NSLayoutConstraint.Attribute.centerX, multiplier: 1, constant: 0)
+        let horizontalInCenter = NSLayoutConstraint(item: scoreTableView, attribute: NSLayoutConstraint.Attribute.centerY, relatedBy: NSLayoutConstraint.Relation.equal, toItem: pauseView, attribute: NSLayoutConstraint.Attribute.centerY, multiplier: 1, constant: 0)
+        NSLayoutConstraint(item: scoreTableView, attribute: NSLayoutConstraint.Attribute.width, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: 400).isActive = true
+        NSLayoutConstraint(item: scoreTableView, attribute: NSLayoutConstraint.Attribute.height, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: 400).isActive = true
+        NSLayoutConstraint.activate([verticalInCenter,horizontalInCenter])
+        setTheBestTime()
         
     }
     @objc func cancelScoreBoard()
     {
-        pauseView.removeFromSuperview()
+        
+        self.pauseView.removeFromSuperview()
         countDownLabelSetAndRun()
         componentIsEnabled(parameter: false)
     }
@@ -437,17 +451,17 @@ class EasyModeController: UIViewController {
         componentIsEnabled(parameter: false)
         
         ////////////////////////
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(notification:)), name:NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(notification:)), name:NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(notification:)), name:UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(notification:)), name:UIResponder.keyboardWillHideNotification, object: nil)
 
         
     }
     @objc func keyboardWillShow(notification: NSNotification) {
         
         if let userInfo = notification.userInfo,
-            let value = userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue,
-            let duration = userInfo[UIKeyboardAnimationDurationUserInfoKey] as? Double,
-            let curve = userInfo[UIKeyboardAnimationCurveUserInfoKey] as? UInt {
+            let value = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue,
+            let duration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double,
+            let curve = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? UInt {
             
             let frame = value.cgRectValue
             let intersection = frame.intersection(self.view.frame)
@@ -456,7 +470,7 @@ class EasyModeController: UIViewController {
             
             if keyBoardNeedLayout {
                 UIView.animate(withDuration: duration, delay: 0.0,
-                               options: UIViewAnimationOptions(rawValue: curve),
+                               options: UIView.AnimationOptions(rawValue: curve),
                                animations: {
                                 self.view.frame = CGRect(x:0,y:-deltaY / 2,width:self.view.bounds.width,height:self.view.bounds.height)
                                 self.keyBoardNeedLayout = false
@@ -470,9 +484,9 @@ class EasyModeController: UIViewController {
     @objc func keyboardWillHide(notification: NSNotification) {
         
         if let userInfo = notification.userInfo,
-            let value = userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue,
-            let duration = userInfo[UIKeyboardAnimationDurationUserInfoKey] as? Double,
-            let curve = userInfo[UIKeyboardAnimationCurveUserInfoKey] as? UInt {
+            let value = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue,
+            let duration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double,
+            let curve = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? UInt {
             
             let frame = value.cgRectValue
             let intersection = frame.intersection(self.view.frame)
@@ -480,7 +494,7 @@ class EasyModeController: UIViewController {
             let deltaY = intersection.height
             
             UIView.animate(withDuration: duration, delay: 0.0,
-                           options: UIViewAnimationOptions(rawValue: curve),
+                           options: UIView.AnimationOptions(rawValue: curve),
                            animations: {
                             self.view.frame = CGRect(x:0,y:deltaY / 2,width:self.view.bounds.width,height:self.view.bounds.height)
                             self.keyBoardNeedLayout = true
@@ -490,7 +504,13 @@ class EasyModeController: UIViewController {
         }
     }
     
-    
+    func textFieldSetting()
+    {
+        settedTextFieldsArray = textFieldsArray.map { (eachTextField) -> UITextField in
+            eachTextField.keyboardType = .numberPad
+            return eachTextField
+        }
+    }
     // MARK: 元件失效
     func componentIsEnabled(parameter: Bool)
     {
@@ -522,17 +542,17 @@ class EasyModeController: UIViewController {
         }
        
     }
-    
     func loadScore()
     {
-        showScore = ""
         allScore = currentUser.scores.filter("mode CONTAINS[cd] %@", "簡單模式").sorted(byKeyPath: "score", ascending: true)
-        
-        for (index,eachScore) in allScore!.enumerated(){
-            showScore = showScore + "第\(index+1)名 時間:\(eachScore.score)\n\n"
-            if index == 4
-            {
+        guard let scoreArray = allScore else {return}
+        for (index,eachScore) in scoreArray.enumerated()
+        {
+            if index == 5{
                 break
+            }else{
+                withinFiveScore.append(eachScore.score)
+                print("score:",eachScore.score)
             }
             
         }
@@ -540,10 +560,21 @@ class EasyModeController: UIViewController {
     
     
 }
-extension EasyModeController: UITextFieldDelegate{
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        let allowedCharacters = CharacterSet.decimalDigits
-        let characterSet = CharacterSet(charactersIn: string)
-        return allowedCharacters.isSuperset(of: characterSet)
+
+extension EasyModeController: UITableViewDataSource,UITableViewDelegate{
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return withinFiveScore.count
     }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = scoreTableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+        cell.textLabel?.text = "第\(indexPath.row + 1)名:\(withinFiveScore[indexPath.row])"
+        cell.textLabel?.textAlignment = .center
+        cell.textLabel?.textColor = UIColor.white
+        cell.textLabel?.font = UIFont(name: "Avenir", size: 30)
+        cell.backgroundColor = UIColor.black.withAlphaComponent(0.7)
+        return cell
+    }
+    
+    
 }

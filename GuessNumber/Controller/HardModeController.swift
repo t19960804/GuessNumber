@@ -18,7 +18,10 @@ class HardModeController: UIViewController {
     var numberArray : [Int] = [1,2,3,4]
     var randomArray : [Int] = []
     var inputArray : [Int] = []
+    //純加入
     var textFieldsArray = [UITextField]()
+    //加入設定後
+    var settedTextFieldsArray = [UITextField]()
     var right : Int = 0
     var wrong : Int = 0
     var showScore: String = ""
@@ -54,24 +57,12 @@ class HardModeController: UIViewController {
         
         //如果inputArray是空的則不用清空,直接append
         //每次check前先將 right &  wrong計數器歸0
-        if inputArray.isEmpty
-        {
-            right = 0
-            wrong = 0
-            inputArrayAppend()
-            loopCheck()
-            
-            
+        if inputArray.isEmpty{
+            checkAnserHandler()
         }
-        else
-            
-        {
+        else{
             inputArray.removeAll()
-            right = 0
-            wrong = 0
-            inputArrayAppend()
-            loopCheck()
-            
+            checkAnserHandler()
         }
         
     }
@@ -102,22 +93,16 @@ class HardModeController: UIViewController {
         textFieldsArray.append(inputNo2)
         textFieldsArray.append(inputNo3)
         textFieldsArray.append(inputNo4)
-        inputNo1.delegate = self
-        inputNo2.delegate = self
-        inputNo3.delegate = self
-        inputNo4.delegate = self
+        textFieldSetting()
+        
         
         //当键盘弹起的时候会向系统发出一个通知，
         //这个时候需要注册一个监听器响应该通知self
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(notification:)), name:NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(notification:)), name:UIResponder.keyboardWillShowNotification, object: nil)
         //当键盘收起的时候会向系统发出一个通知，
         //这个时候需要注册另外一个监听器响应该通知
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(notification:)), name:NSNotification.Name.UIKeyboardWillHide, object: nil)
-        
-        
-        
-       
-        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(notification:)), name:UIResponder.keyboardWillHideNotification, object: nil)
+     
     }
     deinit {
         NotificationCenter.default.removeObserver(self)
@@ -129,12 +114,15 @@ class HardModeController: UIViewController {
         
         
     }
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        
-    }
    
     // MARK: 遊戲規則處理
+    func checkAnserHandler()
+    {
+        right = 0
+        wrong = 0
+        inputArrayAppend()
+        loopCheck()
+    }
     //產生不重複亂數
     func RepeatNumbers()
     {
@@ -175,12 +163,12 @@ class HardModeController: UIViewController {
     //將textField的數字加入陣列
     func inputArrayAppend()
     {
-        for i in 0...textFieldsArray.count - 1
+        for i in 0...settedTextFieldsArray.count - 1
         {
-            if (textFieldsArray[i].text != "")
+            if (settedTextFieldsArray[i].text != "")
             {
                 //加入使用者輸入數字
-                inputArray.append(Int(textFieldsArray[i].text!)!)
+                inputArray.append(Int(settedTextFieldsArray[i].text!)!)
             }
             else{
                 
@@ -215,9 +203,9 @@ class HardModeController: UIViewController {
         wrongCount.text = "0"
         numberArray = [1,2,3,4]
         RepeatNumbers()
-        for i in 0...textFieldsArray.count - 1
+        for i in 0...settedTextFieldsArray.count - 1
         {
-            textFieldsArray[i].text = ""
+            settedTextFieldsArray[i].text = ""
         }
         timerLabel.text = "0.0"
         counter = 0
@@ -432,9 +420,9 @@ class HardModeController: UIViewController {
     @objc func keyboardWillShow(notification: NSNotification) {
         
         if let userInfo = notification.userInfo,
-            let value = userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue,
-            let duration = userInfo[UIKeyboardAnimationDurationUserInfoKey] as? Double,
-            let curve = userInfo[UIKeyboardAnimationCurveUserInfoKey] as? UInt {
+            let value = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue,
+            let duration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double,
+            let curve = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? UInt {
             
             let frame = value.cgRectValue
             let intersection = frame.intersection(self.view.frame)
@@ -443,7 +431,7 @@ class HardModeController: UIViewController {
             
             if keyBoardNeedLayout {
                 UIView.animate(withDuration: duration, delay: 0.0,
-                                           options: UIViewAnimationOptions(rawValue: curve),
+                                           options: UIView.AnimationOptions(rawValue: curve),
                                            animations: {
                                             self.view.frame = CGRect(x:0,y:-deltaY / 2,width:self.view.bounds.width,height:self.view.bounds.height)
                                             self.keyBoardNeedLayout = false
@@ -457,9 +445,9 @@ class HardModeController: UIViewController {
     @objc func keyboardWillHide(notification: NSNotification) {
        
         if let userInfo = notification.userInfo,
-            let value = userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue,
-            let duration = userInfo[UIKeyboardAnimationDurationUserInfoKey] as? Double,
-            let curve = userInfo[UIKeyboardAnimationCurveUserInfoKey] as? UInt {
+            let value = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue,
+            let duration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double,
+            let curve = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? UInt {
             
             let frame = value.cgRectValue
             let intersection = frame.intersection(self.view.frame)
@@ -467,13 +455,20 @@ class HardModeController: UIViewController {
             let deltaY = intersection.height
             
             UIView.animate(withDuration: duration, delay: 0.0,
-                                       options: UIViewAnimationOptions(rawValue: curve),
+                                       options: UIView.AnimationOptions(rawValue: curve),
                                        animations: {
                                         self.view.frame = CGRect(x:0,y:deltaY / 2,width:self.view.bounds.width,height:self.view.bounds.height)
                                         self.keyBoardNeedLayout = true
                                         self.view.layoutIfNeeded()
             }, completion: nil)
             
+        }
+    }
+    func textFieldSetting()
+    {
+        settedTextFieldsArray = textFieldsArray.map { (eachTextField) -> UITextField in
+            eachTextField.keyboardType = .numberPad
+            return eachTextField
         }
     }
     //點擊背景可收回鍵盤
@@ -524,10 +519,4 @@ class HardModeController: UIViewController {
         }
     }
 }
-extension HardModeController: UITextFieldDelegate{
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        let allowedCharacters = CharacterSet.decimalDigits
-        let characterSet = CharacterSet(charactersIn: string)
-        return allowedCharacters.isSuperset(of: characterSet)
-    }
-}
+

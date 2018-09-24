@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import CountdownLabel
 import Firebase
 import RealmSwift
 class ViewController: UIViewController{
@@ -16,6 +15,7 @@ class ViewController: UIViewController{
     @IBOutlet weak var exitBtn: UIButton!
     @IBOutlet weak var regulationBtn: UIButton!
     var easyModelController = EasyModeController()
+    
     var pauseView = UIView()
     var cancelBtn = UIButton()
     var regulation = UILabel()
@@ -50,7 +50,7 @@ class ViewController: UIViewController{
         regulation.font = regulation.font.withSize(30.0)
         //不限制行數
         regulation.numberOfLines = 0
-        //regulation.lineBreakMode = .byWordWrapping
+        
         //////////////////////////////////////////
         regulation.textAlignment = .center
         regulation.textColor = UIColor.white
@@ -70,8 +70,6 @@ class ViewController: UIViewController{
    
     @objc func cancelRegulation()
     {
-        cancelBtn.removeFromSuperview()
-        regulation.removeFromSuperview()
         pauseView.removeFromSuperview()
     }
     func showAlert()

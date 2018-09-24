@@ -5,12 +5,14 @@
 //  Created by t19960804 on 2018/6/2.
 //  Copyright © 2018年 t19960804. All rights reserved.
 //
-
+//id - ca-app-pub-5941469490008558~1993597310
 import UIKit
 import Firebase
 import RealmSwift
 import FBSDKCoreKit
 import GoogleSignIn
+import GoogleMobileAds
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
@@ -41,7 +43,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         print(Realm.Configuration.defaultConfiguration.fileURL!)
         // Override point for customization after application launch.
         //加入FireBase的設定檔
@@ -51,13 +53,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // Initialize sign-in
         GIDSignIn.sharedInstance().clientID = FirebaseApp.app()?.options.clientID
-        
+        //廣告
+        GADMobileAds.configure(withApplicationID: "ca-app-pub-5941469490008558~1993597310")
         
         return true
     }
 
-    func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
-        let handled = FBSDKApplicationDelegate.sharedInstance().application(app, open: url, sourceApplication: options[UIApplicationOpenURLOptionsKey.sourceApplication] as! String, annotation: options[UIApplicationOpenURLOptionsKey.sourceApplication])
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+        let handled = FBSDKApplicationDelegate.sharedInstance().application(app, open: url, sourceApplication: options[UIApplication.OpenURLOptionsKey.sourceApplication] as! String, annotation: options[UIApplication.OpenURLOptionsKey.sourceApplication])
 
         return handled
     }

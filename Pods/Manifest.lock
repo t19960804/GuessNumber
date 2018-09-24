@@ -5,7 +5,6 @@ PODS:
   - Bolts/AppLinks (1.9.0):
     - Bolts/Tasks
   - Bolts/Tasks (1.9.0)
-  - CountdownLabel (3.0.0)
   - FBSDKCoreKit (4.33.0):
     - Bolts (~> 1.7)
   - FBSDKLoginKit (4.33.0):
@@ -40,6 +39,7 @@ PODS:
     - leveldb-library (~> 1.18)
   - FirebaseInstanceID (3.0.0):
     - FirebaseCore (~> 5.0)
+  - Google-Mobile-Ads-SDK (7.31.0)
   - GoogleSignIn (4.1.2):
     - "GoogleToolboxForMac/NSDictionary+URLArguments (~> 2.1)"
     - "GoogleToolboxForMac/NSString+URLArguments (~> 2.1)"
@@ -68,21 +68,21 @@ PODS:
     - nanopb/encode (= 0.3.8)
   - nanopb/decode (0.3.8)
   - nanopb/encode (0.3.8)
-  - Realm (3.6.0):
-    - Realm/Headers (= 3.6.0)
-  - Realm/Headers (3.6.0)
-  - RealmSwift (3.6.0):
-    - Realm (= 3.6.0)
+  - Realm (3.10.0):
+    - Realm/Headers (= 3.10.0)
+  - Realm/Headers (3.10.0)
+  - RealmSwift (3.10.0):
+    - Realm (= 3.10.0)
   - SVProgressHUD (2.2.5)
 
 DEPENDENCIES:
-  - CountdownLabel
   - FBSDKCoreKit
   - FBSDKLoginKit
   - FBSDKShareKit
   - Firebase
   - Firebase/Auth
   - Firebase/Database
+  - Google-Mobile-Ads-SDK
   - GoogleSignIn
   - RealmSwift
   - SVProgressHUD
@@ -90,7 +90,6 @@ DEPENDENCIES:
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - Bolts
-    - CountdownLabel
     - FBSDKCoreKit
     - FBSDKLoginKit
     - FBSDKShareKit
@@ -100,6 +99,7 @@ SPEC REPOS:
     - FirebaseCore
     - FirebaseDatabase
     - FirebaseInstanceID
+    - Google-Mobile-Ads-SDK
     - GoogleSignIn
     - GoogleToolboxForMac
     - GTMOAuth2
@@ -112,7 +112,6 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   Bolts: ac6567323eac61e203f6a9763667d0f711be34c8
-  CountdownLabel: 4534a68892b1deb73fda18702dfdc2c8444cec08
   FBSDKCoreKit: 572b047a7e029bc44542bcf8a59414e7ff2b543e
   FBSDKLoginKit: 88cb456349cfb3b554427ce4f8b43729d85dfb40
   FBSDKShareKit: 1869cb24db2cea90666a50cb9d568deb38e2d16e
@@ -122,16 +121,17 @@ SPEC CHECKSUMS:
   FirebaseCore: b81044df1044c0857a0737c6324678b72d4f7f00
   FirebaseDatabase: 482bad9c2abd422bb2321194fb8c937e67426a89
   FirebaseInstanceID: 83e0040351565df711a5db3d8ebe5ea21aca998a
+  Google-Mobile-Ads-SDK: 6e529e748b45507a2ca904e0b5a52669ba3920c4
   GoogleSignIn: d9ef55b10f0aa401a5de2747f59b725e4b9732ac
   GoogleToolboxForMac: 91c824d21e85b31c2aae9bb011c5027c9b4e738f
   GTMOAuth2: c77fe325e4acd453837e72d91e3b5f13116857b2
   GTMSessionFetcher: 5fa5b80fd20e439ef5f545fb2cb3ca6c6714caa2
   leveldb-library: 08cba283675b7ed2d99629a4bc5fd052cd2bb6a5
   nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
-  Realm: 08b464b462d4f31bbd4ba5f5a1c8722ef0a700b7
-  RealmSwift: 973e1499c44ab571f894c2c908e2db450be280c3
+  Realm: 85ab9e4f779d66f6e9ffeb118dc25b7f130c96ac
+  RealmSwift: 69121c8b86d0ae005fb779efdb10e606732e1c74
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
 
-PODFILE CHECKSUM: f53194a03cbc72554b7a6b07e797d83f7c11a8ae
+PODFILE CHECKSUM: 2c69294c81db51dcf417b150ddd3e15b273b02a0
 
 COCOAPODS: 1.5.3

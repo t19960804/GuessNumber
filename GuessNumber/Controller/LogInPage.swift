@@ -5,6 +5,7 @@ import SVProgressHUD
 import FBSDKLoginKit
 import RealmSwift
 import GoogleSignIn
+import GoogleMobileAds
 
 class LogInPage: UIViewController,GIDSignInUIDelegate,GIDSignInDelegate {
     let realm = try! Realm()
@@ -17,6 +18,9 @@ class LogInPage: UIViewController,GIDSignInUIDelegate,GIDSignInDelegate {
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var btnOutletOfFaceBook: UIButton!
     @IBOutlet weak var btnOutletOfGoogle: UIButton!
+    @IBOutlet weak var adsBanner: GADBannerView!
+    
+    
     @IBAction func logInWithFaceBookBtn(_ sender: UIButton) {
         //可以讀取用戶的基本資料和取得用戶email的權限
         FBSDKLoginManager().logIn(withReadPermissions: ["email","public_profile"], from: self) { (result, error) in
@@ -30,11 +34,7 @@ class LogInPage: UIViewController,GIDSignInUIDelegate,GIDSignInDelegate {
         }
         
     }
-    @IBAction func logInWithGoogleBtn(_ sender: UIButton) {
-        SVProgressHUD.show()
-       GIDSignIn.sharedInstance().signIn()
-        
-    }
+    @IBAction func logInWithGoogleBtn(_ sender: UIButton) {GIDSignIn.sharedInstance().signIn()}
     
     
     @IBAction func logInBtn(_ sender: UIButton) {
@@ -42,11 +42,11 @@ class LogInPage: UIViewController,GIDSignInUIDelegate,GIDSignInDelegate {
         //有一個欄位是空的就跳警告
         if userNameTextField.text == "" || passwordTextField.text == ""{
             SVProgressHUD.dismiss()
-            showAlert(title: "尚有欄位未填", message: "請繼續輸入")
+            AlertController.showBasicAlert(viewController: self, title: "尚有欄位未填", message: "請繼續輸入")
         }
         else if (passwordTextField.text?.count)! < 6{
                 SVProgressHUD.dismiss()
-                showAlert(title: "密碼不足六位數", message: "請繼續輸入")
+            AlertController.showBasicAlert(viewController: self, title: "密碼不足六位數", message: "請繼續輸入")
         }
         else{
                 Auth.auth().signIn(withEmail: userNameTextField.text!, password: passwordTextField.text!) { (result, error) in
@@ -57,7 +57,7 @@ class LogInPage: UIViewController,GIDSignInUIDelegate,GIDSignInDelegate {
                     else{
                         SVProgressHUD.dismiss()
                         print("error:\(error!)\n")
-                        self.showAlert(title: "帳號密碼有誤", message: "請重新輸入")
+                        AlertController.showBasicAlert(viewController: self, title: "帳號密碼有誤", message: "請重新輸入")
                     }
                 }
         }
@@ -73,49 +73,31 @@ class LogInPage: UIViewController,GIDSignInUIDelegate,GIDSignInDelegate {
         
         GIDSignIn.sharedInstance().uiDelegate = self
         GIDSignIn.sharedInstance().delegate = self
+        showAds()
     }
 
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
     }
-    func showAlert(title: String,message: String)
-    {
-        // 建立一個提示框
-        let alertController = UIAlertController(
-            title: "\(title)",
-            message: "\(message)",
-            preferredStyle: .alert)
-        
-        // 建立[確認]按鈕
-        let okAction = UIAlertAction(
-            title: "知道了",
-            style: .default,
-            handler: nil)
-        alertController.addAction(okAction)
-        
-        
-        // 顯示提示框
-        self.present(
-            alertController,
-            animated: true,
-            completion: nil)
-        
-    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
-        let destination = segue.destination as! ViewController
-        
-        if userNameTextField.text != ""
+        if segue.identifier == "logInToViewController"
         {
-            destination.userNameFromLogIn = userNameTextField.text!
+            let destination = segue.destination as! ViewController
+            
+            if userNameTextField.text != ""
+            {
+                destination.userNameFromLogIn = userNameTextField.text!
+                
+            }
+            else
+            {
+                destination.userNameFromLogIn = emailFromSocialNetWork
+            }
 
         }
-        else
-        {
-            destination.userNameFromLogIn = emailFromSocialNetWork
-        }
-
+        
         
         
         
@@ -230,4 +212,16 @@ class LogInPage: UIViewController,GIDSignInUIDelegate,GIDSignInDelegate {
         }
         return false
     }
+    func showAds()
+    {
+        //官網:ca-app-pub-3940256099942544/2934735716
+        //自己:ca-app-pub-5941469490008558/7651326092
+        let request = GADRequest()
+        adsBanner.adUnitID = "ca-app-pub-5941469490008558/7651326092"
+        adsBanner.rootViewController = self
+        //request.testDevices = [ kGADSimulatorID ]
+        adsBanner.load(request)
+        
+    }
 }
+

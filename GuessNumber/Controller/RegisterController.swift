@@ -26,7 +26,7 @@ class RegisterController: UIViewController {
         if userNameTextField.text == "" || passwordTextField.text == ""
         {
             SVProgressHUD.dismiss()
-            showAlert(title: "尚有欄位未填", message: "請繼續輸入")
+            AlertController.showBasicAlert(viewController: self, title: "尚有欄位未填", message: "請繼續輸入")
 
         }
         else if (passwordTextField.text?.count)! < 6
@@ -34,7 +34,7 @@ class RegisterController: UIViewController {
             
             
             SVProgressHUD.dismiss()
-            showAlert(title: "密碼不足六位數", message: "請繼續輸入")
+            AlertController.showBasicAlert(viewController: self, title: "密碼不足六位數", message: "請繼續輸入")
                 
         }
             
@@ -53,13 +53,15 @@ class RegisterController: UIViewController {
                     {
                         print("Register error:\(error!)\n")
                         SVProgressHUD.dismiss()
-                        self.showAlert(title: "帳號已被使用", message: "請重新輸入")
+                        //self.showAlert(title: "帳號已被使用", message: "請重新輸入")
+                        AlertController.showBasicAlert(viewController: self, title: "帳號已被使用", message: "請重新輸入")
                         
                     }
                     else{
                         print("Format Error:\(error!)")
                         SVProgressHUD.dismiss()
-                        self.showAlert(title: "帳號格式錯誤", message: "請重新輸入")
+                        //self.showAlert(title: "帳號格式錯誤", message: "請重新輸入")
+                        AlertController.showBasicAlert(viewController: self, title: "帳號格式錯誤", message: "請重新輸入")
                     }
                 }
         }
@@ -73,30 +75,7 @@ class RegisterController: UIViewController {
         self.view.endEditing(true)
     }
    
-    func showAlert(title: String, message: String)
-    {
-        // 建立一個提示框
-        let alertController = UIAlertController(
-            title: "\(title)",
-            message: "\(message)",
-            preferredStyle: .alert)
-        
-        // 建立[確認]按鈕
-        let okAction = UIAlertAction(
-            title: "知道了",
-            style: .default,
-            handler: nil)
-        alertController.addAction(okAction)
-        
-        
-        // 顯示提示框
-        self.present(
-            alertController,
-            animated: true,
-            completion: nil)
-        
-    }
-
+    
     func addUser(userName: String)
    {
     

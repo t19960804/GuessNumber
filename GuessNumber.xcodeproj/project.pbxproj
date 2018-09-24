@@ -14,6 +14,7 @@
 		0B13CEFA20C2876500A5F70D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0B13CEF820C2876500A5F70D /* LaunchScreen.storyboard */; };
 		0B13CF0520C2876500A5F70D /* GuessNumberTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B13CF0420C2876500A5F70D /* GuessNumberTests.swift */; };
 		0B13CF1020C2876500A5F70D /* GuessNumberUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B13CF0F20C2876500A5F70D /* GuessNumberUITests.swift */; };
+		0B184EEA214F5EE6001483B9 /* AlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B184EE9214F5EE6001483B9 /* AlertController.swift */; };
 		0B356FE6210D9DD100906892 /* LogInPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B356FE5210D9DD100906892 /* LogInPage.swift */; };
 		0B356FEA210DA30200906892 /* RegisterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B356FE9210DA30200906892 /* RegisterController.swift */; };
 		0B356FEC210DB33A00906892 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0B356FEB210DB33900906892 /* GoogleService-Info.plist */; };
@@ -58,6 +59,7 @@
 		0B13CF0B20C2876500A5F70D /* GuessNumberUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GuessNumberUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0B13CF0F20C2876500A5F70D /* GuessNumberUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuessNumberUITests.swift; sourceTree = "<group>"; };
 		0B13CF1120C2876500A5F70D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0B184EE9214F5EE6001483B9 /* AlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertController.swift; sourceTree = "<group>"; };
 		0B356FE5210D9DD100906892 /* LogInPage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogInPage.swift; sourceTree = "<group>"; };
 		0B356FE9210DA30200906892 /* RegisterController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterController.swift; sourceTree = "<group>"; };
 		0B356FEB210DB33900906892 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -112,6 +114,7 @@
 			children = (
 				0B356FED210EC54000906892 /* User.swift */,
 				0B546207211E98880061CC9A /* Score.swift */,
+				0B184EE9214F5EE6001483B9 /* AlertController.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -290,6 +293,7 @@
 				TargetAttributes = {
 					0B13CEEB20C2876300A5F70D = {
 						CreatedOnToolsVersion = 9.4;
+						LastSwiftMigration = 1000;
 						SystemCapabilities = {
 							com.apple.Push = {
 								enabled = 0;
@@ -298,10 +302,12 @@
 					};
 					0B13CEFF20C2876500A5F70D = {
 						CreatedOnToolsVersion = 9.4;
+						LastSwiftMigration = 1000;
 						TestTargetID = 0B13CEEB20C2876300A5F70D;
 					};
 					0B13CF0A20C2876500A5F70D = {
 						CreatedOnToolsVersion = 9.4;
+						LastSwiftMigration = 1000;
 						TestTargetID = 0B13CEEB20C2876300A5F70D;
 					};
 				};
@@ -382,7 +388,6 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-GuessNumber/Pods-GuessNumber-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Bolts/Bolts.framework",
-				"${BUILT_PRODUCTS_DIR}/CountdownLabel/CountdownLabel.framework",
 				"${BUILT_PRODUCTS_DIR}/FBSDKCoreKit/FBSDKCoreKit.framework",
 				"${BUILT_PRODUCTS_DIR}/FBSDKLoginKit/FBSDKLoginKit.framework",
 				"${BUILT_PRODUCTS_DIR}/FBSDKShareKit/FBSDKShareKit.framework",
@@ -398,7 +403,6 @@
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Bolts.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CountdownLabel.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKCoreKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKLoginKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKShareKit.framework",
@@ -478,6 +482,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0B356FE6210D9DD100906892 /* LogInPage.swift in Sources */,
+				0B184EEA214F5EE6001483B9 /* AlertController.swift in Sources */,
 				0B356FEE210EC54000906892 /* User.swift in Sources */,
 				0B546208211E98880061CC9A /* Score.swift in Sources */,
 				0B13CEF220C2876300A5F70D /* ViewController.swift in Sources */,
@@ -670,7 +675,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "fcacc5f7-b1e6-4cfc-bf54-1eba5b850150";
 				PROVISIONING_PROFILE_SPECIFIER = GuessNumber_AppStore;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -692,7 +697,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "fcacc5f7-b1e6-4cfc-bf54-1eba5b850150";
 				PROVISIONING_PROFILE_SPECIFIER = GuessNumber_AppStore;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
@@ -712,7 +717,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = mySwift.GuessNumberTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GuessNumber.app/GuessNumber";
 			};
@@ -733,7 +738,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = mySwift.GuessNumberTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GuessNumber.app/GuessNumber";
 			};
@@ -753,7 +758,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = mySwift.GuessNumberUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = GuessNumber;
 			};
@@ -773,7 +778,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = mySwift.GuessNumberUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = GuessNumber;
 			};
