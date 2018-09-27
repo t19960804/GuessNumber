@@ -73,7 +73,7 @@ class LogInPage: UIViewController,GIDSignInUIDelegate,GIDSignInDelegate {
         
         GIDSignIn.sharedInstance().uiDelegate = self
         GIDSignIn.sharedInstance().delegate = self
-        showAds()
+        //showAds()
     }
 
     
@@ -212,16 +212,16 @@ class LogInPage: UIViewController,GIDSignInUIDelegate,GIDSignInDelegate {
         }
         return false
     }
-    func showAds()
-    {
-        //官網:ca-app-pub-3940256099942544/2934735716
-        //自己:ca-app-pub-5941469490008558/7651326092
-        let request = GADRequest()
-        adsBanner.adUnitID = "ca-app-pub-5941469490008558/7651326092"
-        adsBanner.rootViewController = self
-        //request.testDevices = [ kGADSimulatorID ]
-        adsBanner.load(request)
-        
-    }
+//    func showAds()
+//    {
+//        //官網:ca-app-pub-3940256099942544/2934735716
+//        //自己:ca-app-pub-5941469490008558/7651326092
+//        let request = GADRequest()
+//        adsBanner.adUnitID = "ca-app-pub-5941469490008558/7651326092"
+//        adsBanner.rootViewController = self
+//        //request.testDevices = [ kGADSimulatorID ]
+//        adsBanner.load(request)
+//
+//    }
 }
 

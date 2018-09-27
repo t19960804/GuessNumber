@@ -27,13 +27,60 @@ class EasyModeController: UIViewController {
     var counter  = Float()
     var minuteCount = 0
     /////////////////////////////
-    var pauseView_pauseBtn = UIButton()
-    var pauseView_cancelBtn = UIButton()
     var pauseView_scoreLabel = UILabel()
     var pauseView_timeLabel = UILabel()
-    var pauseView = UIView()
     let scoreTableView = UITableView()
-
+    
+    //自訂元件
+    let newPauseView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = UIColor.black
+        view.alpha = 0.7
+        return view
+    }()
+    let newPauseBtn: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        let buttonImage = UIImage(named: "playbutton.png")
+        button.setImage(buttonImage, for: .normal)
+        return button
+    }()
+    let newCancelBtn: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        let buttomImage = UIImage(named: "cancel.png")
+        button.setImage(buttomImage, for: .normal)
+        return button
+    }()
+    let newBestTimeLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "最佳時間"
+        label.textColor = UIColor.white
+        //label.backgroundColor = UIColor.red
+        label.textAlignment = .center
+        label.font = label.font.withSize(40.0)
+        return label
+    }()
+    let newScoreTableView: UITableView = {
+        let tableView = UITableView()
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
+        tableView.backgroundColor = UIColor.black
+        tableView.alpha = 0.5
+        tableView.separatorStyle = .singleLine
+        return tableView
+    }()
+    let newCountDownLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textAlignment = .center
+        label.textColor = UIColor(red: 1.0, green: 188/255, blue: 0.0, alpha: 1.0)
+        label.font = label.font.withSize(250.0)
+        label.text = "3"
+        return label
+    }()
     /////////////////////////////
     var countDownLabel = UILabel()
     var keyBoardNeedLayout: Bool = true
@@ -77,13 +124,18 @@ class EasyModeController: UIViewController {
     @IBAction func pauseBtn(_ sender: UIButton) {
         //遊戲計時停止
         timer.invalidate()
-        createPauseViewAndButton()
-
+        self.view.addSubview(newPauseView)
+        self.newPauseView.addSubview(newPauseBtn)
+        setUpConstraints_Pause()
         
     }
     @IBAction func scoreBoardBtn(_ sender: UIButton) {
         timer.invalidate()
-        createPauseViewAndScoreLabel()
+        self.view.addSubview(newPauseView)
+        self.newPauseView.addSubview(newCancelBtn)
+        self.newPauseView.addSubview(newBestTimeLabel)
+        self.newPauseView.addSubview(newScoreTableView)
+        setUpConstraints_ScoreBoard()
 
         
 
@@ -99,8 +151,8 @@ class EasyModeController: UIViewController {
         textFieldsArray.append(inputNo4)
         textFieldSetting()
         loadScore()
-        scoreTableView.delegate  = self
-        scoreTableView.dataSource = self
+        newScoreTableView.delegate  = self
+        newScoreTableView.dataSource = self
         
         
     }
@@ -112,7 +164,7 @@ class EasyModeController: UIViewController {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
     }
-    //MARK: 遊戲規則處理
+    //MARK: - 遊戲規則處理
     func checkAnserHandler()
     {
         right = 0
@@ -210,7 +262,7 @@ class EasyModeController: UIViewController {
         componentIsEnabled(parameter: false)
         
     }
-    // MARK: 系統提示
+    // MARK:- 系統提示
     func simpleHint() {
         // 建立一個提示框
         let alertController = UIAlertController(
@@ -280,41 +332,38 @@ class EasyModeController: UIViewController {
     //點擊"繼續"按鈕後事件
     @objc func playButton()
     {
-        
-            self.pauseView_pauseBtn.removeFromSuperview()
-            self.pauseView.removeFromSuperview()
-        
-        
+        self.newPauseView.removeFromSuperview()
         countDownLabelSetAndRun()
-        //元件無法使用
         componentIsEnabled(parameter: false)
         
 
     }
-    // MARK: 計時處理
+    // MARK: - 計時處理
     func runGameTimer()
     {
         //開始計時
         timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(UpdateTimer), userInfo: nil, repeats: true)
     }
     func runCountDownTimer() {
+        newCountDownLabel.text = "3"
         countDowntimer = Timer.scheduledTimer(timeInterval: 1, target: self,   selector: (#selector(self.countDown)), userInfo: nil, repeats: true)
        
         
     }
     @objc func countDown() {
-        
+        print("seconds:\(seconds)")
         seconds -= 1     //This will decrement(count down)the seconds.
-        countDownLabel.text = "\(seconds)" //This will update the label.
+        newCountDownLabel.text = "\(seconds)" //This will update the label.
         if (seconds == 0)
         {
-            countDowntimer.invalidate()
-            countDownLabel.removeFromSuperview()
             componentIsEnabled(parameter: true)
+            countDowntimer.invalidate()
+            newCountDownLabel.removeFromSuperview()
             runGameTimer()
             seconds = 3
             
         }
+
     }
     //計時器累加並顯示
     @objc func UpdateTimer() {
@@ -338,109 +387,52 @@ class EasyModeController: UIViewController {
     }
     func countDownLabelSetAndRun()
     {
-        let countDownFrame = CGRect(x:0,
-                                    y:0,
-                                    width:self.view.frame.width,
-                                    height:self.view.frame.height)
-        countDownLabel.frame = countDownFrame
-        countDownLabel.textAlignment = .center
-        
-        countDownLabel.textColor = UIColor(red: 1.0, green: 188/255, blue: 0.0, alpha: 1.0)
-        countDownLabel.font = countDownLabel.font.withSize(250.0)
-        countDownLabel.text = "3"
-        self.view.addSubview(countDownLabel)
-
+        self.view.addSubview(newCountDownLabel)
+        newCountDownLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        newCountDownLabel.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
         runCountDownTimer()
     }
-    //MARK: 自訂元件
-    //先把View加入,才能設定Constraints
-    func createPauseView(){
-        
-        pauseView.backgroundColor = UIColor.black
-        pauseView.alpha = 0.7
-        self.view.addSubview(pauseView)
-        ////////////////////////////////
-        pauseView.translatesAutoresizingMaskIntoConstraints = false
-        let leading = NSLayoutConstraint(item: pauseView, attribute: .leading, relatedBy: .equal, toItem: self.view, attribute: .leading, multiplier: 1, constant: 0)
-        let trailing = NSLayoutConstraint(item: pauseView, attribute: .trailing, relatedBy: .equal, toItem: self.view, attribute: .trailing, multiplier: 1, constant: 0)
-        let top = NSLayoutConstraint(item: pauseView, attribute: .top, relatedBy: .equal, toItem: self.view, attribute: .top, multiplier: 1, constant: 0)
-        let bottom = NSLayoutConstraint(item: pauseView, attribute: .bottom, relatedBy: .equal, toItem: self.view, attribute: .bottom, multiplier: 1, constant: 0)
-        NSLayoutConstraint.activate([leading,trailing,top,bottom])
-        
-        
-        
-    }
-    func createPauseViewAndButton()
+    //設定Constraint
+    func setUpConstraints_Pause()
     {
-        createPauseView()
-        let btnImage = UIImage(named: "playbutton.png")
-        pauseView_pauseBtn = UIButton(type: .custom)
-        pauseView_pauseBtn.setImage(btnImage, for: .normal)
-        pauseView_pauseBtn.addTarget(self, action: #selector(self.playButton), for: .touchUpInside)
-        ////////////////////////////////
-        pauseView.addSubview(pauseView_pauseBtn)
-        pauseView_pauseBtn.translatesAutoresizingMaskIntoConstraints = false
-        let verticalInCenter = NSLayoutConstraint(item: pauseView_pauseBtn, attribute: NSLayoutConstraint.Attribute.centerY, relatedBy: NSLayoutConstraint.Relation.equal, toItem: pauseView, attribute: NSLayoutConstraint.Attribute.centerY, multiplier: 1, constant: 0)
-        let horizontalInCenter = NSLayoutConstraint(item: pauseView_pauseBtn, attribute: NSLayoutConstraint.Attribute.centerX, relatedBy: NSLayoutConstraint.Relation.equal, toItem: pauseView, attribute: NSLayoutConstraint.Attribute.centerX, multiplier: 1, constant: 0)
-        NSLayoutConstraint(item: pauseView_pauseBtn, attribute: NSLayoutConstraint.Attribute.height, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: 300).isActive = true
-        NSLayoutConstraint(item: pauseView_pauseBtn, attribute: NSLayoutConstraint.Attribute.width, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: 300).isActive = true
-        NSLayoutConstraint.activate([verticalInCenter,horizontalInCenter])
+        newPauseView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0).isActive = true
+        newPauseView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0).isActive = true
+        newPauseView.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: 0).isActive = true
+        newPauseView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 0).isActive = true
+        
+        newPauseBtn.centerXAnchor.constraint(equalTo: newPauseView.centerXAnchor).isActive = true
+        newPauseBtn.centerYAnchor.constraint(equalTo: newPauseView.centerYAnchor).isActive = true
+        newPauseBtn.addTarget(self, action: #selector(self.playButton), for: .touchUpInside)
     }
-    func createPauseViewAndScoreLabel()
+    func setUpConstraints_ScoreBoard()
     {
-        createPauseView()
-        /////////////////////////////////
-        let cancelBtnImage = UIImage(named: "cancel.png")
-        pauseView_cancelBtn = UIButton(type: .custom)
-        pauseView_cancelBtn.setImage(cancelBtnImage, for: .normal)
-        pauseView_cancelBtn.addTarget(self, action: #selector(self.cancelScoreBoard), for: .touchUpInside)
-        pauseView.addSubview(pauseView_cancelBtn)
-        pauseView_cancelBtn.translatesAutoresizingMaskIntoConstraints = false
-        let trailing = NSLayoutConstraint(item: pauseView_cancelBtn, attribute: .trailing, relatedBy: .equal, toItem: pauseView, attribute: .trailing, multiplier: 1, constant: -20)
-        let top = NSLayoutConstraint(item: pauseView_cancelBtn, attribute: .top, relatedBy: .equal, toItem: pauseView, attribute: .top, multiplier: 1, constant: 20)
-        NSLayoutConstraint(item: pauseView_cancelBtn, attribute: NSLayoutConstraint.Attribute.height, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: 50).isActive = true
-        NSLayoutConstraint(item: pauseView_cancelBtn, attribute: NSLayoutConstraint.Attribute.width, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: 50).isActive = true
-        NSLayoutConstraint.activate([trailing,top])
-
-        setScoreTableView()
-
-    }
-    func setTheBestTime(){
-        pauseView_timeLabel.text = "最佳時間"
-        pauseView_timeLabel.textColor = UIColor.white
-        pauseView_timeLabel.textAlignment = .center
-        pauseView_timeLabel.font = pauseView_timeLabel.font.withSize(40.0)
-        pauseView.addSubview(pauseView_timeLabel)
+        newPauseView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0).isActive = true
+        newPauseView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0).isActive = true
+        newPauseView.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: 0).isActive = true
+        newPauseView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 0).isActive = true
         
-        pauseView_timeLabel.translatesAutoresizingMaskIntoConstraints = false
-        let horizontalInCenter = NSLayoutConstraint(item: pauseView_timeLabel, attribute: NSLayoutConstraint.Attribute.centerX, relatedBy: NSLayoutConstraint.Relation.equal, toItem: pauseView, attribute: NSLayoutConstraint.Attribute.centerX, multiplier: 1, constant: 0)
-        let top = NSLayoutConstraint(item: pauseView_timeLabel, attribute: .top, relatedBy: .equal, toItem: pauseView, attribute: .top, multiplier: 1, constant: 30)
-        let bottom = NSLayoutConstraint(item: pauseView_timeLabel, attribute: .bottom, relatedBy: .equal, toItem: scoreTableView, attribute: .top, multiplier: 1, constant: 30)
-        NSLayoutConstraint(item: pauseView_timeLabel, attribute: NSLayoutConstraint.Attribute.width, relatedBy: NSLayoutConstraint.Relation.equal, toItem: pauseView_timeLabel, attribute: NSLayoutConstraint.Attribute.height, multiplier: 1 , constant: 250).isActive = true
-        NSLayoutConstraint.activate([horizontalInCenter,top,bottom])
-    }
-    func setScoreTableView(){
-
-        scoreTableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
-        scoreTableView.backgroundColor = UIColor.black
-        scoreTableView.alpha = 0.5
-        scoreTableView.separatorStyle = .singleLine
-        pauseView.addSubview(scoreTableView)
-        //////////////////////////////////
-        scoreTableView.translatesAutoresizingMaskIntoConstraints = false
-
-        let verticalInCenter = NSLayoutConstraint(item: scoreTableView, attribute: NSLayoutConstraint.Attribute.centerX, relatedBy: NSLayoutConstraint.Relation.equal, toItem: pauseView, attribute: NSLayoutConstraint.Attribute.centerX, multiplier: 1, constant: 0)
-        let horizontalInCenter = NSLayoutConstraint(item: scoreTableView, attribute: NSLayoutConstraint.Attribute.centerY, relatedBy: NSLayoutConstraint.Relation.equal, toItem: pauseView, attribute: NSLayoutConstraint.Attribute.centerY, multiplier: 1, constant: 0)
-        NSLayoutConstraint(item: scoreTableView, attribute: NSLayoutConstraint.Attribute.width, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: 400).isActive = true
-        NSLayoutConstraint(item: scoreTableView, attribute: NSLayoutConstraint.Attribute.height, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: 400).isActive = true
-        NSLayoutConstraint.activate([verticalInCenter,horizontalInCenter])
-        setTheBestTime()
+        newCancelBtn.topAnchor.constraint(equalTo: newPauseView.topAnchor, constant: 20).isActive = true
+        newCancelBtn.rightAnchor.constraint(equalTo: newPauseView.rightAnchor, constant: -20).isActive = true
+        newCancelBtn.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 50.0 / 414.0).isActive = true
+        newCancelBtn.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier: 50.0 / 736.0).isActive = true
+        newCancelBtn.addTarget(self, action: #selector(self.cancelScoreBoard), for: .touchUpInside)
         
+        newBestTimeLabel.centerXAnchor.constraint(equalTo: newPauseView.centerXAnchor).isActive = true
+        newBestTimeLabel.bottomAnchor.constraint(equalTo: newScoreTableView.topAnchor, constant: 0).isActive = true
+        newBestTimeLabel.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 250.0 / 414.0).isActive = true
+        newBestTimeLabel.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier: 100.0 / 736.0).isActive = true
+        
+        newScoreTableView.centerXAnchor.constraint(equalTo: newPauseView.centerXAnchor).isActive = true
+        newScoreTableView.centerYAnchor.constraint(equalTo: newPauseView.centerYAnchor).isActive = true
+        newScoreTableView.widthAnchor.constraint(equalTo: self.newPauseView.widthAnchor).isActive = true
+        newScoreTableView.heightAnchor.constraint(equalTo: self.newPauseView.heightAnchor, multiplier: 400.0 / 736.0).isActive = true
+
+
     }
+    
     @objc func cancelScoreBoard()
     {
-        
-        self.pauseView.removeFromSuperview()
+        self.newPauseView.removeFromSuperview()
         countDownLabelSetAndRun()
         componentIsEnabled(parameter: false)
     }
@@ -511,21 +503,19 @@ class EasyModeController: UIViewController {
             return eachTextField
         }
     }
-    // MARK: 元件失效
+    // MARK: - 元件失效
     func componentIsEnabled(parameter: Bool)
     {
         inputNo1.isEnabled = parameter
         inputNo2.isEnabled = parameter
         inputNo3.isEnabled = parameter
         inputNo4.isEnabled = parameter
-        
         pauseBtnOutlet.isEnabled = parameter
         checkBtnOutlet.isEnabled = parameter
-        
         scoreBoardBtnOutlet.isEnabled = parameter
     }
     
-    //MARK: Realm相關操作
+    //MARK: - Realm相關操作
     func addScore(gameScore: String)
     {
         let newScore = Score()
@@ -552,7 +542,6 @@ class EasyModeController: UIViewController {
                 break
             }else{
                 withinFiveScore.append(eachScore.score)
-                print("score:",eachScore.score)
             }
             
         }
@@ -560,14 +549,14 @@ class EasyModeController: UIViewController {
     
     
 }
-
+//MARK: - Extension
 extension EasyModeController: UITableViewDataSource,UITableViewDelegate{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return withinFiveScore.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = scoreTableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+        let cell = newScoreTableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         cell.textLabel?.text = "第\(indexPath.row + 1)名:\(withinFiveScore[indexPath.row])"
         cell.textLabel?.textAlignment = .center
         cell.textLabel?.textColor = UIColor.white

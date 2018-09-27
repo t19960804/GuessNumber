@@ -317,6 +317,7 @@ class HardModeController: UIViewController {
         
     }
     @objc func countDown() {
+        print("seconds:\(seconds)")
         seconds -= 1     //This will decrement(count down)the seconds.
         countDownLabel.text = "\(seconds)" //This will update the label.
         if (seconds == 0)
