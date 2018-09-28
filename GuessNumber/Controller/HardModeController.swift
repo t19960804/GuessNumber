@@ -18,6 +18,7 @@ class HardModeController: UIViewController {
     var numberArray : [Int] = [1,2,3,4]
     var randomArray : [Int] = []
     var inputArray : [Int] = []
+    var withinFiveScore = [String]()
     //純加入
     var textFieldsArray = [UITextField]()
     //加入設定後
@@ -28,12 +29,57 @@ class HardModeController: UIViewController {
     var counter  = Float()
     var minuteCount = 0
     /////////////////////////////
-    var pauseView_pauseBtn = UIButton()
-    var pauseView_cancelBtn = UIButton()
-    var pauseView_scoreLabel = UILabel()
-    var pauseView_timeLabel = UILabel()
-    var pauseView = UIView()
+    
     /////////////////////////////
+    //MARK: - 自訂元件
+    let newPauseView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = UIColor.black
+        view.alpha = 0.7
+        return view
+    }()
+    let newPauseBtn: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        let buttonImage = UIImage(named: "playbutton.png")
+        button.setImage(buttonImage, for: .normal)
+        return button
+    }()
+    let newCancelBtn: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        let buttomImage = UIImage(named: "cancel.png")
+        button.setImage(buttomImage, for: .normal)
+        return button
+    }()
+    let newBestTimeLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "最佳時間"
+        label.textColor = UIColor.white
+        label.textAlignment = .center
+        label.font = label.font.withSize(40.0)
+        return label
+    }()
+    let newScoreTableView: UITableView = {
+        let tableView = UITableView()
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
+        tableView.backgroundColor = UIColor.black
+        tableView.alpha = 0.5
+        tableView.separatorStyle = .singleLine
+        return tableView
+    }()
+    let newCountDownLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textAlignment = .center
+        label.textColor = UIColor(red: 1.0, green: 188/255, blue: 0.0, alpha: 1.0)
+        label.font = label.font.withSize(250.0)
+        label.text = "3"
+        return label
+    }()
     var countDownLabel = UILabel()
     
     let device = UIDevice.current
@@ -69,20 +115,19 @@ class HardModeController: UIViewController {
     @IBAction func scoreBoardBtn(_ sender: UIButton) {
         timer.invalidate()
         loadScore()
-        createPauseViewAndScoreLabel()
+        self.view.addSubview(newPauseView)
+        newPauseView.addSubview(newCancelBtn)
+        newPauseView.addSubview(newScoreTableView)
+        newPauseView.addSubview(newBestTimeLabel)
+        setUpConstraints_ScoreBoard()
     }
     
     @IBAction func pauseBtn(_ sender: UIButton) {
         //遊戲計時停止
         timer.invalidate()
-        if device.orientation.isLandscape{
-            
-            createPauseViewAndButton(X: 0, Y: 0, Width: self.view.frame.width, Height: self.view.frame.height)
-        }
-        else{
-            createPauseViewAndButton(X: 0, Y: 20, Width: self.view.frame.width, Height: self.view.frame.height)
-            
-        }
+        self.view.addSubview(newPauseView)
+        newPauseView.addSubview(newPauseBtn)
+        setUpConstraints_Pause()
     }
     
     override func viewDidLoad() {
@@ -95,7 +140,8 @@ class HardModeController: UIViewController {
         textFieldsArray.append(inputNo4)
         textFieldSetting()
         
-        
+        newScoreTableView.delegate  = self
+        newScoreTableView.dataSource = self
         //当键盘弹起的时候会向系统发出一个通知，
         //这个时候需要注册一个监听器响应该通知self
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(notification:)), name:UIResponder.keyboardWillShowNotification, object: nil)
@@ -108,7 +154,7 @@ class HardModeController: UIViewController {
         NotificationCenter.default.removeObserver(self)
     }
     override func viewDidAppear(_ animated: Bool) {
-        
+        self.view.addSubview(newCountDownLabel)
         countDownLabelSetAndRun()
         componentIsEnabled(parameter: false)
         
@@ -280,8 +326,9 @@ class HardModeController: UIViewController {
     //點擊"繼續"按鈕後事件
     @objc func playButton()
     {
-        pauseView_pauseBtn.removeFromSuperview()
-        pauseView.removeFromSuperview()
+        self.newPauseBtn.removeFromSuperview()
+        self.newPauseView.removeFromSuperview()
+        
         countDownLabelSetAndRun()
         componentIsEnabled(parameter: false)
         
@@ -312,19 +359,19 @@ class HardModeController: UIViewController {
         timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(UpdateTimer), userInfo: nil, repeats: true)
     }
     func runCountDownTimer() {
+        newCountDownLabel.text = "3"
         countDowntimer = Timer.scheduledTimer(timeInterval: 1, target: self,   selector: (#selector(self.countDown)), userInfo: nil, repeats: true)
         
         
     }
     @objc func countDown() {
-        print("seconds:\(seconds)")
         seconds -= 1     //This will decrement(count down)the seconds.
-        countDownLabel.text = "\(seconds)" //This will update the label.
+        newCountDownLabel.text = "\(seconds)" //This will update the label.
         if (seconds == 0)
         {
             componentIsEnabled(parameter: true)
             countDowntimer.invalidate()
-            countDownLabel.removeFromSuperview()
+            self.newCountDownLabel.removeFromSuperview()
             runGameTimer()
             seconds = 3
             
@@ -333,86 +380,56 @@ class HardModeController: UIViewController {
     // MARK: 手動加入UIFrame
     func countDownLabelSetAndRun()
     {
-        let countDownFrame = CGRect(x:0,
-                                    y:0,
-                                    width:self.view.frame.width,
-                                    height:self.view.frame.height)
-        countDownLabel.frame = countDownFrame
-        countDownLabel.textAlignment = .center
-        
-        countDownLabel.textColor = UIColor(red: 1.0, green: 188/255, blue: 0.0, alpha: 1.0)
-        countDownLabel.font = countDownLabel.font.withSize(250.0)
-        countDownLabel.text = "3"
-        self.view.addSubview(countDownLabel)
-        //////////////////////////
+        self.view.addSubview(newCountDownLabel)
+        newCountDownLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        newCountDownLabel.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
         runCountDownTimer()
     }
-    func createPauseView(X x :CGFloat,Y y :CGFloat,Width width :CGFloat,Height height :CGFloat){
-        let frame = CGRect(x:x,y:y,width:width,height:height)
-        pauseView = UIView(frame: frame)
-        pauseView.backgroundColor = UIColor.black
-        pauseView.alpha = 0.5
-        ////////////////////////////////
-        self.view.addSubview(pauseView)
-        ////////////////////////////////
-    }
-    func createPauseViewAndButton(X x :CGFloat,Y y :CGFloat,Width width :CGFloat,Height height :CGFloat)
+    //MARK: - 設定Constraint
+    func setUpConstraints_Pause()
     {
-        createPauseView(X: 0, Y: 20, Width: self.view.frame.width, Height: self.view.frame.height)
-        let btnImage = UIImage(named: "playbutton.png")
-       
-        let btnFrame = CGRect(x:0  ,
-                              y:0  ,
-                              width:self.view.frame.width,
-                              height:self.view.frame.height)
+        newPauseView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0).isActive = true
+        newPauseView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0).isActive = true
+        newPauseView.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: 0).isActive = true
+        newPauseView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 0).isActive = true
         
-        pauseView_pauseBtn = UIButton(type: .custom)
-        pauseView_pauseBtn.setImage(btnImage, for: .normal)
-        pauseView_pauseBtn.frame = btnFrame
-        pauseView_pauseBtn.addTarget(self, action: #selector(self.playButton), for: .touchUpInside)
-        ////////////////////////////////
-        pauseView.addSubview(pauseView_pauseBtn)
-        ////////////////////////////////
+        newPauseBtn.centerXAnchor.constraint(equalTo: newPauseView.centerXAnchor).isActive = true
+        newPauseBtn.centerYAnchor.constraint(equalTo: newPauseView.centerYAnchor).isActive = true
+        newPauseBtn.addTarget(self, action: #selector(self.playButton), for: .touchUpInside)
     }
-    func createPauseViewAndScoreLabel()
+    func setUpConstraints_ScoreBoard()
     {
-        createPauseView(X: 0, Y: 20, Width: self.view.frame.width, Height: self.view.frame.height)
-        /////////////////////////////////
-        let cancelBtnImage = UIImage(named: "cancel.png")
-        let cancelBtnframe = CGRect(x:self.view.frame.width - 60,
-                                    y:40,
-                                    width:(cancelBtnImage?.size.width)!,
-                                    height:(cancelBtnImage?.size.height)!)
-        pauseView_cancelBtn = UIButton(type: .custom)
-        pauseView_cancelBtn.setImage(cancelBtnImage, for: .normal)
-        pauseView_cancelBtn.frame = cancelBtnframe
-        pauseView_cancelBtn.addTarget(self, action: #selector(self.cancelScoreBoard), for: .touchUpInside)
-        pauseView.addSubview(pauseView_cancelBtn)
-        /////////////////////////////////
-        let timerLabelFrame = CGRect(x: self.view.frame.width / 2 - 125, y: 70, width: 250, height: 100)
-        pauseView_timeLabel.text = "最佳時間"
-        pauseView_timeLabel.textColor = UIColor.white
-        pauseView_timeLabel.textAlignment = .center
-        pauseView_timeLabel.font = pauseView_timeLabel.font.withSize(40.0)
-        pauseView_timeLabel.frame = timerLabelFrame
-        pauseView.addSubview(pauseView_timeLabel)
-        /////////////////////////////////
-        pauseView_scoreLabel.text = showScore
-        pauseView_scoreLabel.font = pauseView_scoreLabel.font.withSize(25.0)
-        //不限制行數
-        pauseView_scoreLabel.numberOfLines = 0
+        newPauseView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0).isActive = true
+        newPauseView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0).isActive = true
+        newPauseView.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: 0).isActive = true
+        newPauseView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 0).isActive = true
 
-        pauseView_scoreLabel.textAlignment = .center
-        pauseView_scoreLabel.textColor = UIColor.white
-        //regulation.backgroundColor = UIColor.red
-        let regulationFrame = CGRect(x: 60, y: 70, width: self.view.frame.width - 120, height: self.view.frame.height - 140)
-        pauseView_scoreLabel.frame = regulationFrame
-        pauseView.addSubview(pauseView_scoreLabel)
-        
+        newCancelBtn.topAnchor.constraint(equalTo: newPauseView.topAnchor, constant: 20).isActive = true
+        newCancelBtn.rightAnchor.constraint(equalTo: newPauseView.rightAnchor, constant: -20).isActive = true
+        newCancelBtn.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 50.0 / 414.0).isActive = true
+        newCancelBtn.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier: 50.0 / 736.0).isActive = true
+        newCancelBtn.addTarget(self, action: #selector(self.cancelScoreBoard), for: .touchUpInside)
+
+        newBestTimeLabel.centerXAnchor.constraint(equalTo: newPauseView.centerXAnchor).isActive = true
+        newBestTimeLabel.bottomAnchor.constraint(equalTo: newScoreTableView.topAnchor, constant: 0).isActive = true
+        newBestTimeLabel.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 250.0 / 414.0).isActive = true
+        newBestTimeLabel.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier: 100.0 / 736.0).isActive = true
+
+        newScoreTableView.centerXAnchor.constraint(equalTo: newPauseView.centerXAnchor).isActive = true
+        newScoreTableView.centerYAnchor.constraint(equalTo: newPauseView.centerYAnchor).isActive = true
+        newScoreTableView.widthAnchor.constraint(equalTo: self.newPauseView.widthAnchor).isActive = true
+        newScoreTableView.heightAnchor.constraint(equalTo: self.newPauseView.heightAnchor, multiplier: 400.0 / 736.0).isActive = true
+
+
     }
+    
+    
     @objc func cancelScoreBoard()
     {
-        pauseView.removeFromSuperview()
+        self.newCancelBtn.removeFromSuperview()
+        self.newBestTimeLabel.removeFromSuperview()
+        self.newScoreTableView.removeFromSuperview()
+        self.newPauseView.removeFromSuperview()
         countDownLabelSetAndRun()
         componentIsEnabled(parameter: false)
     }
@@ -511,13 +528,31 @@ class HardModeController: UIViewController {
         allScore = currentUser.scores.filter("mode CONTAINS[cd] %@", "困難模式").sorted(byKeyPath: "score", ascending: true)
         for (index,eachScore) in allScore!.enumerated()
         {
-            showScore = showScore + "第\(index+1)名 時間:\(eachScore.score)\n\n"
-            if index == 4
-            {
+            if index == 5{
                 break
+            }else{
+                withinFiveScore.append(eachScore.score)
             }
             
         }
     }
 }
 
+//MARK: - Extension
+extension HardModeController: UITableViewDataSource,UITableViewDelegate{
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return withinFiveScore.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = newScoreTableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+        cell.textLabel?.text = "第\(indexPath.row + 1)名:\(withinFiveScore[indexPath.row])"
+        cell.textLabel?.textAlignment = .center
+        cell.textLabel?.textColor = UIColor.white
+        cell.textLabel?.font = UIFont(name: "Avenir", size: 30)
+        cell.backgroundColor = UIColor.black.withAlphaComponent(0.7)
+        return cell
+    }
+    
+    
+}

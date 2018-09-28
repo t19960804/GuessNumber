@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
-    <device id="retina3_5" orientation="portrait">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+    <device id="ipad9_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -15,19 +15,21 @@
             <objects>
                 <viewController id="01J-lp-oVM" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="idea" translatesAutoresizingMaskIntoConstraints="NO" id="qYa-cJ-umx">
-                                <rect key="frame" x="22" y="108" width="276" height="264"/>
+                                <rect key="frame" x="96" y="21" width="576" height="982"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="qYa-cJ-umx" secondAttribute="height" multiplier="240:409" id="YI0-dj-TWq"/>
+                                </constraints>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" red="0.42352941179999998" green="0.60784313729999995" blue="0.91764705879999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="qYa-cJ-umx" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="NMi-yf-YJ5"/>
-                            <constraint firstItem="qYa-cJ-umx" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="88" id="Uv0-3M-3JQ"/>
-                            <constraint firstItem="qYa-cJ-umx" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="e53-XV-hxr"/>
-                            <constraint firstItem="qYa-cJ-umx" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="22" id="gQN-Xz-lnf"/>
+                            <constraint firstItem="qYa-cJ-umx" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="a9p-AJ-nbO"/>
+                            <constraint firstItem="qYa-cJ-umx" firstAttribute="width" secondItem="Ze5-6b-2t3" secondAttribute="width" multiplier="0.75" id="e6O-7U-uq6"/>
+                            <constraint firstItem="qYa-cJ-umx" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="uNV-oN-nuQ"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
@@ -38,6 +40,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="idea" width="512" height="512"/>
+        <image name="idea" width="409.60000610351562" height="409.60000610351562"/>
     </resources>
 </document>

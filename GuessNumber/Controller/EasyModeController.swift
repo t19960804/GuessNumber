@@ -26,12 +26,8 @@ class EasyModeController: UIViewController {
     var wrong : Int = 0
     var counter  = Float()
     var minuteCount = 0
-    /////////////////////////////
-    var pauseView_scoreLabel = UILabel()
-    var pauseView_timeLabel = UILabel()
-    let scoreTableView = UITableView()
     
-    //自訂元件
+    //MARK: - 自訂元件
     let newPauseView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -58,7 +54,6 @@ class EasyModeController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "最佳時間"
         label.textColor = UIColor.white
-        //label.backgroundColor = UIColor.red
         label.textAlignment = .center
         label.font = label.font.withSize(40.0)
         return label
@@ -84,9 +79,7 @@ class EasyModeController: UIViewController {
     /////////////////////////////
     var countDownLabel = UILabel()
     var keyBoardNeedLayout: Bool = true
-    
     let device = UIDevice.current
-    //let email = (Auth.auth().currentUser?.email)!
     let emailFromFaceBook = String()
     let realm = try! Realm()
     var currentUser = User()
@@ -159,7 +152,13 @@ class EasyModeController: UIViewController {
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
-    
+    override func viewWillAppear(_ animated: Bool) {
+        checkBtnOutlet.titleLabel?.sizeToFit()
+        checkBtnOutlet.titleLabel?.numberOfLines = 0
+        checkBtnOutlet.titleLabel?.adjustsFontSizeToFitWidth = true
+        checkBtnOutlet.titleLabel?.textAlignment = .right
+        checkBtnOutlet.titleLabel?.lineBreakMode = NSLineBreakMode.byClipping
+    }
     //點擊背景可收回鍵盤
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
@@ -332,6 +331,7 @@ class EasyModeController: UIViewController {
     //點擊"繼續"按鈕後事件
     @objc func playButton()
     {
+        self.newPauseBtn.removeFromSuperview()
         self.newPauseView.removeFromSuperview()
         countDownLabelSetAndRun()
         componentIsEnabled(parameter: false)
@@ -358,7 +358,7 @@ class EasyModeController: UIViewController {
         {
             componentIsEnabled(parameter: true)
             countDowntimer.invalidate()
-            newCountDownLabel.removeFromSuperview()
+            self.newCountDownLabel.removeFromSuperview()
             runGameTimer()
             seconds = 3
             
@@ -392,7 +392,7 @@ class EasyModeController: UIViewController {
         newCountDownLabel.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
         runCountDownTimer()
     }
-    //設定Constraint
+    //MARK: - 設定Constraint
     func setUpConstraints_Pause()
     {
         newPauseView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0).isActive = true
@@ -432,6 +432,9 @@ class EasyModeController: UIViewController {
     
     @objc func cancelScoreBoard()
     {
+        self.newCancelBtn.removeFromSuperview()
+        self.newBestTimeLabel.removeFromSuperview()
+        self.newScoreTableView.removeFromSuperview()
         self.newPauseView.removeFromSuperview()
         countDownLabelSetAndRun()
         componentIsEnabled(parameter: false)
