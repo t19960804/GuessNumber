@@ -15,15 +15,11 @@ class EasyModeController: UIViewController {
     var timer = Timer()
     var countDowntimer = Timer()
     /////////////////////////////
-    var numberArray : [Int] = [1,2,3,4]
-    var randomArray : [Int] = []
-    var inputArray : [Int] = []
     //純加入
     var textFieldsArray = [UITextField]()
     //加入設定後
     var settedTextFieldsArray = [UITextField]()
-    var right : Int = 0
-    var wrong : Int = 0
+    
     var counter  = Float()
     var minuteCount = 0
     
@@ -85,6 +81,7 @@ class EasyModeController: UIViewController {
     var currentUser = User()
     var allScore: Results<Score>?
     var withinFiveScore = [String]()
+    var regulationHandle = RegulationHandle()
     /////////////////////////////
     @IBOutlet weak var rightCount: UILabel!
     @IBOutlet weak var wrongCount: UILabel!
@@ -101,14 +98,14 @@ class EasyModeController: UIViewController {
         
         //如果inputArray是空的則不用清空,直接append
         //每次check前先將 right &  wrong計數器歸0
-        if inputArray.isEmpty
+        if regulationHandle.inputArray.isEmpty
         {
             checkAnserHandler()
         }
         else
             
         {
-            inputArray.removeAll()
+            regulationHandle.inputArray.removeAll()
             checkAnserHandler()
         }
        
@@ -136,8 +133,8 @@ class EasyModeController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        noRepeatNumbers()
-        
+        //noRepeatNumbers()
+        regulationHandle.noRepeatNumbers()
         textFieldsArray.append(inputNo1)
         textFieldsArray.append(inputNo2)
         textFieldsArray.append(inputNo3)
@@ -152,13 +149,6 @@ class EasyModeController: UIViewController {
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
-    override func viewWillAppear(_ animated: Bool) {
-        checkBtnOutlet.titleLabel?.sizeToFit()
-        checkBtnOutlet.titleLabel?.numberOfLines = 0
-        checkBtnOutlet.titleLabel?.adjustsFontSizeToFitWidth = true
-        checkBtnOutlet.titleLabel?.textAlignment = .right
-        checkBtnOutlet.titleLabel?.lineBreakMode = NSLineBreakMode.byClipping
-    }
     //點擊背景可收回鍵盤
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
@@ -166,56 +156,21 @@ class EasyModeController: UIViewController {
     //MARK: - 遊戲規則處理
     func checkAnserHandler()
     {
-        right = 0
-        wrong = 0
-        inputArrayAppend()
-        loopCheck()
+        regulationHandle.right = 0
+        regulationHandle.wrong = 0
+        addUserInputToArray()
+        checkNumberIsCorrect()
     }
-    //產生不重複亂數
-    func noRepeatNumbers()
-    {
-        
-        for i in  0...numberArray.count - 1
-            {
-                let randomNumber = GKRandomSource.sharedRandom().nextInt(upperBound: numberArray.count)
-                randomArray.append(numberArray[randomNumber])
-                numberArray.remove(at: randomNumber)
-                print("random:",randomArray[i])
-                
-            }
-        }
-    func checkEachNumber(Index index : Int )
-    {
-        //兩個陣列裡對應到的index相比較
-        if inputArray[index] == randomArray[index]
-        {
-            right += 1
-            rightCount.text = String(right)
-            wrongCount.text = String(wrong)
-           if right == 4
-           {
-                    simpleHint()
-                    timer.invalidate()
-            }
-            
-        }
-        else
-        {
-            wrong += 1
-            rightCount.text = String(right)
-            wrongCount.text = String(wrong)
-            
-        }
-    }
+    
     //將textField的數字加入陣列
-    func inputArrayAppend()
+    func addUserInputToArray()
     {
         for i in 0...settedTextFieldsArray.count - 1
         {
             if (settedTextFieldsArray[i].text != "")
             {
             //加入使用者輸入數字
-            inputArray.append(Int(settedTextFieldsArray[i].text!)!)
+            regulationHandle.inputArray.append(Int(settedTextFieldsArray[i].text!)!)
             }
             else{
                 
@@ -224,37 +179,44 @@ class EasyModeController: UIViewController {
             
         }
     }
-    //檢查陣列裡每個index
-    func loopCheck()
+    
+    func checkNumberIsCorrect()
     {
-        if (inputArray.count == 4)
+        //如果四個輸入框都有值
+        if (regulationHandle.inputArray.count == 4)
         {
-            for i in 0...inputArray.count - 1
+            regulationHandle.checkNumberIsCorrect()
+            if regulationHandle.right == 4
             {
-                
-                checkEachNumber(Index: i)
+                rightCount.text = String(regulationHandle.right)
+                wrongCount.text = String(regulationHandle.wrong)
+                simpleHint()
+                timer.invalidate()
+            }else{
+                rightCount.text = String(regulationHandle.right)
+                wrongCount.text = String(regulationHandle.wrong)
+                return
             }
         }
+        //有一個值沒有就顯示提示
         else
         {
             textNilHint()
-            
         }
     }
     //重新產生亂數,並且清空textField / randomArray / inputArray
     func resumeGame()
     {
-        randomArray.removeAll()
-        inputArray.removeAll()
+
+        regulationHandle.resumeArrays()
         rightCount.text = "0"
         wrongCount.text = "0"
-        numberArray = [1,2,3,4]
-        noRepeatNumbers()
+        timerLabel.text = "0.0"
+
         for i in 0...settedTextFieldsArray.count - 1
         {
             settedTextFieldsArray[i].text = ""
         }
-        timerLabel.text = "0.0"
         counter = 00.0
         timer.invalidate()
         countDownLabelSetAndRun()
@@ -316,8 +278,7 @@ class EasyModeController: UIViewController {
             style: .default,
             handler: {
                 (action: UIAlertAction!) -> Void in
-                
-                self.runCountDownTimer()
+                self.countDownLabelSetAndRun()
         })
         alertController.addAction(okAction)
         
@@ -351,7 +312,6 @@ class EasyModeController: UIViewController {
         
     }
     @objc func countDown() {
-        print("seconds:\(seconds)")
         seconds -= 1     //This will decrement(count down)the seconds.
         newCountDownLabel.text = "\(seconds)" //This will update the label.
         if (seconds == 0)
