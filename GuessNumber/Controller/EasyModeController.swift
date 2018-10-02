@@ -12,17 +12,14 @@ import RealmSwift
 
 class EasyModeController: UIViewController {
     var seconds  = 3
-    var timer = Timer()
-    var countDowntimer = Timer()
-    /////////////////////////////
+    var gameTimer = Timer()
+    var countDownTimer = Timer()
     //純加入
     var textFieldsArray = [UITextField]()
     //加入設定後
     var settedTextFieldsArray = [UITextField]()
     
-    var counter  = Float()
-    var minuteCount = 0
-    
+
     //MARK: - 自訂元件
     let newPauseView: UIView = {
         let view = UIView()
@@ -73,15 +70,14 @@ class EasyModeController: UIViewController {
         return label
     }()
     /////////////////////////////
-    var countDownLabel = UILabel()
     var keyBoardNeedLayout: Bool = true
-    let device = UIDevice.current
     let emailFromFaceBook = String()
     let realm = try! Realm()
     var currentUser = User()
     var allScore: Results<Score>?
     var withinFiveScore = [String]()
     var regulationHandle = RegulationHandle()
+    var timerHandle = TimerHandle()
     /////////////////////////////
     @IBOutlet weak var rightCount: UILabel!
     @IBOutlet weak var wrongCount: UILabel!
@@ -98,13 +94,9 @@ class EasyModeController: UIViewController {
         
         //如果inputArray是空的則不用清空,直接append
         //每次check前先將 right &  wrong計數器歸0
-        if regulationHandle.inputArray.isEmpty
-        {
+        if regulationHandle.inputArray.isEmpty{
             checkAnserHandler()
-        }
-        else
-            
-        {
+        }else{
             regulationHandle.inputArray.removeAll()
             checkAnserHandler()
         }
@@ -112,28 +104,23 @@ class EasyModeController: UIViewController {
     }
     
     @IBAction func pauseBtn(_ sender: UIButton) {
-        //遊戲計時停止
-        timer.invalidate()
+        gameTimer.invalidate()
         self.view.addSubview(newPauseView)
         self.newPauseView.addSubview(newPauseBtn)
         setUpConstraints_Pause()
         
     }
     @IBAction func scoreBoardBtn(_ sender: UIButton) {
-        timer.invalidate()
+        gameTimer.invalidate()
         self.view.addSubview(newPauseView)
         self.newPauseView.addSubview(newCancelBtn)
         self.newPauseView.addSubview(newBestTimeLabel)
         self.newPauseView.addSubview(newScoreTableView)
         setUpConstraints_ScoreBoard()
-
-        
-
     }
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //noRepeatNumbers()
         regulationHandle.noRepeatNumbers()
         textFieldsArray.append(inputNo1)
         textFieldsArray.append(inputNo2)
@@ -159,7 +146,7 @@ class EasyModeController: UIViewController {
         regulationHandle.right = 0
         regulationHandle.wrong = 0
         addUserInputToArray()
-        checkNumberIsCorrect()
+        updateRightAndWrong()
     }
     
     //將textField的數字加入陣列
@@ -180,7 +167,7 @@ class EasyModeController: UIViewController {
         }
     }
     
-    func checkNumberIsCorrect()
+    func updateRightAndWrong()
     {
         //如果四個輸入框都有值
         if (regulationHandle.inputArray.count == 4)
@@ -191,7 +178,7 @@ class EasyModeController: UIViewController {
                 rightCount.text = String(regulationHandle.right)
                 wrongCount.text = String(regulationHandle.wrong)
                 simpleHint()
-                timer.invalidate()
+                gameTimer.invalidate()
             }else{
                 rightCount.text = String(regulationHandle.right)
                 wrongCount.text = String(regulationHandle.wrong)
@@ -217,8 +204,8 @@ class EasyModeController: UIViewController {
         {
             settedTextFieldsArray[i].text = ""
         }
-        counter = 00.0
-        timer.invalidate()
+        timerHandle.counter = 00.0
+        gameTimer.invalidate()
         countDownLabelSetAndRun()
         componentIsEnabled(parameter: false)
         
@@ -265,7 +252,7 @@ class EasyModeController: UIViewController {
     }
     func  textNilHint()
     {
-        self.timer.invalidate()
+        gameTimer.invalidate()
         // 建立一個提示框
         let alertController = UIAlertController(
             title: "請輸入數字!!!",
@@ -303,13 +290,10 @@ class EasyModeController: UIViewController {
     func runGameTimer()
     {
         //開始計時
-        timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(UpdateTimer), userInfo: nil, repeats: true)
+        gameTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(UpdateTimer), userInfo: nil, repeats: true)
     }
     func runCountDownTimer() {
-        newCountDownLabel.text = "3"
-        countDowntimer = Timer.scheduledTimer(timeInterval: 1, target: self,   selector: (#selector(self.countDown)), userInfo: nil, repeats: true)
-       
-        
+        countDownTimer = Timer.scheduledTimer(timeInterval: 1, target: self,   selector: (#selector(self.countDown)), userInfo: nil, repeats: true)
     }
     @objc func countDown() {
         seconds -= 1     //This will decrement(count down)the seconds.
@@ -317,39 +301,24 @@ class EasyModeController: UIViewController {
         if (seconds == 0)
         {
             componentIsEnabled(parameter: true)
-            countDowntimer.invalidate()
+            countDownTimer.invalidate()
             self.newCountDownLabel.removeFromSuperview()
             runGameTimer()
             seconds = 3
-            
-        }
 
+        }
+        
     }
     //計時器累加並顯示
     @objc func UpdateTimer() {
-        
-        counter = counter + 00.1
-        if counter <= 9.9
-        {
-            timerLabel.text = "\(minuteCount)分 0\(String(format: "%.1f", counter))秒"
-        }
-        else if counter >= 59.9
-        {
-            minuteCount = minuteCount + 1
-            counter = 00.0
-            timerLabel.text = "\(minuteCount)分 \(String(format: "%.1f", counter))秒"
-        }
-        else
-        {
-            timerLabel.text = "\(minuteCount)分 \(String(format: "%.1f", counter))秒"
-        }
-        
+        timerLabel.text = timerHandle.UpdateTimer()
     }
     func countDownLabelSetAndRun()
     {
         self.view.addSubview(newCountDownLabel)
         newCountDownLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
         newCountDownLabel.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
+        newCountDownLabel.text = "3"
         runCountDownTimer()
     }
     //MARK: - 設定Constraint

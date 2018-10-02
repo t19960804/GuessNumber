@@ -104,7 +104,7 @@ class LogInPage: UIViewController,GIDSignInUIDelegate,GIDSignInDelegate {
         
         
     }
-    //MARK: FaceBook處理
+    //MARK: - FaceBook處理
     func logInWithFaceBook()
     {
         //acess token是Facebook用來辨識你的身份的字串，辨識成功後就可以取用Facebook的資料
@@ -148,7 +148,7 @@ class LogInPage: UIViewController,GIDSignInUIDelegate,GIDSignInDelegate {
             }
         }
     }
-    //MARK: Google處理
+    //MARK: - Google處理
     func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
         if error != nil
         {
