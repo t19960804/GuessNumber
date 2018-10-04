@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0B0DFEAE2165BA080053AC62 /* CustomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B0DFEAD2165BA080053AC62 /* CustomView.swift */; };
 		0B13CEF020C2876300A5F70D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B13CEEF20C2876300A5F70D /* AppDelegate.swift */; };
 		0B13CEF220C2876300A5F70D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B13CEF120C2876300A5F70D /* ViewController.swift */; };
 		0B13CEF520C2876300A5F70D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0B13CEF320C2876300A5F70D /* Main.storyboard */; };
@@ -48,6 +49,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0B0DFEAD2165BA080053AC62 /* CustomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomView.swift; sourceTree = "<group>"; };
 		0B13CEEC20C2876300A5F70D /* GuessNumber.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GuessNumber.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0B13CEEF20C2876300A5F70D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0B13CEF120C2876300A5F70D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -121,6 +123,7 @@
 				0B184EE9214F5EE6001483B9 /* AlertController.swift */,
 				0B15D24C2160EF5F008F096C /* RegulationHandle.swift */,
 				0B15D27C216357B7008F096C /* TimerHandle.swift */,
+				0B0DFEAD2165BA080053AC62 /* CustomView.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -128,8 +131,8 @@
 		0B047056210D7955002B5931 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				0B356FE5210D9DD100906892 /* LogInPage.swift */,
 				0B356FE9210DA30200906892 /* RegisterController.swift */,
+				0B356FE5210D9DD100906892 /* LogInPage.swift */,
 				0B13CEF120C2876300A5F70D /* ViewController.swift */,
 				0BE6280720D4A39100EA4726 /* HardModeController.swift */,
 				0BE6280520CB8BF900EA4726 /* EasyModeController.swift */,
@@ -496,6 +499,7 @@
 				0B356FEA210DA30200906892 /* RegisterController.swift in Sources */,
 				0B13CEF020C2876300A5F70D /* AppDelegate.swift in Sources */,
 				0BE6280620CB8BF900EA4726 /* EasyModeController.swift in Sources */,
+				0B0DFEAE2165BA080053AC62 /* CustomView.swift in Sources */,
 				0BE6280820D4A39100EA4726 /* HardModeController.swift in Sources */,
 				0B15D24D2160EF5F008F096C /* RegulationHandle.swift in Sources */,
 			);

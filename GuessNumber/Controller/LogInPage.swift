@@ -66,8 +66,8 @@ class LogInPage: UIViewController,GIDSignInUIDelegate,GIDSignInDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        userNameTextField.text = "a@a.com"
-//        passwordTextField.text = "aaaaaa"
+        userNameTextField.text = "h@h.com"
+        passwordTextField.text = "hhhhhh"
         btnOutletOfFaceBook.layer.cornerRadius = round(5.0)
         btnOutletOfGoogle.layer.cornerRadius = round(5.0)
         

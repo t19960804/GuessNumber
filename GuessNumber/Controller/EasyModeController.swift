@@ -11,64 +11,16 @@ import GameKit
 import RealmSwift
 
 class EasyModeController: UIViewController {
-    var seconds  = 3
-    var gameTimer = Timer()
-    var countDownTimer = Timer()
+    private var seconds  = 3
+    private var gameTimer = Timer()
+    private var countDownTimer = Timer()
     //純加入
-    var textFieldsArray = [UITextField]()
+    private var textFieldsArray = [UITextField]()
     //加入設定後
-    var settedTextFieldsArray = [UITextField]()
-    
+    private var settedTextFieldsArray = [UITextField]()
+    private var customView = CustomView()
 
-    //MARK: - 自訂元件
-    let newPauseView: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = UIColor.black
-        view.alpha = 0.7
-        return view
-    }()
-    let newPauseBtn: UIButton = {
-        let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        let buttonImage = UIImage(named: "playbutton.png")
-        button.setImage(buttonImage, for: .normal)
-        return button
-    }()
-    let newCancelBtn: UIButton = {
-        let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        let buttomImage = UIImage(named: "cancel.png")
-        button.setImage(buttomImage, for: .normal)
-        return button
-    }()
-    let newBestTimeLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "最佳時間"
-        label.textColor = UIColor.white
-        label.textAlignment = .center
-        label.font = label.font.withSize(40.0)
-        return label
-    }()
-    let newScoreTableView: UITableView = {
-        let tableView = UITableView()
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
-        tableView.backgroundColor = UIColor.black
-        tableView.alpha = 0.5
-        tableView.separatorStyle = .singleLine
-        return tableView
-    }()
-    let newCountDownLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textAlignment = .center
-        label.textColor = UIColor(red: 1.0, green: 188/255, blue: 0.0, alpha: 1.0)
-        label.font = label.font.withSize(250.0)
-        label.text = "3"
-        return label
-    }()
+   
     /////////////////////////////
     var keyBoardNeedLayout: Bool = true
     let emailFromFaceBook = String()
@@ -105,19 +57,15 @@ class EasyModeController: UIViewController {
     
     @IBAction func pauseBtn(_ sender: UIButton) {
         gameTimer.invalidate()
-        self.view.addSubview(newPauseView)
-        self.newPauseView.addSubview(newPauseBtn)
         setUpConstraints_Pause()
-        
     }
     @IBAction func scoreBoardBtn(_ sender: UIButton) {
+        loadScore()
         gameTimer.invalidate()
-        self.view.addSubview(newPauseView)
-        self.newPauseView.addSubview(newCancelBtn)
-        self.newPauseView.addSubview(newBestTimeLabel)
-        self.newPauseView.addSubview(newScoreTableView)
         setUpConstraints_ScoreBoard()
-    }
+        }
+        
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -127,9 +75,9 @@ class EasyModeController: UIViewController {
         textFieldsArray.append(inputNo3)
         textFieldsArray.append(inputNo4)
         textFieldSetting()
-        loadScore()
-        newScoreTableView.delegate  = self
-        newScoreTableView.dataSource = self
+        
+        customView.newScoreTableView.delegate  = self
+        customView.newScoreTableView.dataSource = self
         
         
     }
@@ -279,8 +227,7 @@ class EasyModeController: UIViewController {
     //點擊"繼續"按鈕後事件
     @objc func playButton()
     {
-        self.newPauseBtn.removeFromSuperview()
-        self.newPauseView.removeFromSuperview()
+        customView.removeConstraints_Pause()
         countDownLabelSetAndRun()
         componentIsEnabled(parameter: false)
         
@@ -297,12 +244,12 @@ class EasyModeController: UIViewController {
     }
     @objc func countDown() {
         seconds -= 1     //This will decrement(count down)the seconds.
-        newCountDownLabel.text = "\(seconds)" //This will update the label.
+        customView.newCountDownLabel.text = "\(seconds)" //This will update the label.
         if (seconds == 0)
         {
             componentIsEnabled(parameter: true)
             countDownTimer.invalidate()
-            self.newCountDownLabel.removeFromSuperview()
+            customView.removeConstraints_CountDownLabel()
             runGameTimer()
             seconds = 3
 
@@ -315,58 +262,39 @@ class EasyModeController: UIViewController {
     }
     func countDownLabelSetAndRun()
     {
-        self.view.addSubview(newCountDownLabel)
-        newCountDownLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        newCountDownLabel.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
-        newCountDownLabel.text = "3"
+        customView.setUpConstraints_CountDownLabel(view: self.view)
         runCountDownTimer()
     }
     //MARK: - 設定Constraint
     func setUpConstraints_Pause()
     {
-        newPauseView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0).isActive = true
-        newPauseView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0).isActive = true
-        newPauseView.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: 0).isActive = true
-        newPauseView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 0).isActive = true
-        
-        newPauseBtn.centerXAnchor.constraint(equalTo: newPauseView.centerXAnchor).isActive = true
-        newPauseBtn.centerYAnchor.constraint(equalTo: newPauseView.centerYAnchor).isActive = true
-        newPauseBtn.addTarget(self, action: #selector(self.playButton), for: .touchUpInside)
+        customView.setUpConstraints_Pause(view: self.view)
+        customView.newPauseBtn.addTarget(self, action: #selector(self.playButton), for: .touchUpInside)
     }
     func setUpConstraints_ScoreBoard()
     {
-        newPauseView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0).isActive = true
-        newPauseView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0).isActive = true
-        newPauseView.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: 0).isActive = true
-        newPauseView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 0).isActive = true
         
-        newCancelBtn.topAnchor.constraint(equalTo: newPauseView.topAnchor, constant: 20).isActive = true
-        newCancelBtn.rightAnchor.constraint(equalTo: newPauseView.rightAnchor, constant: -20).isActive = true
-        newCancelBtn.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 50.0 / 414.0).isActive = true
-        newCancelBtn.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier: 50.0 / 736.0).isActive = true
-        newCancelBtn.addTarget(self, action: #selector(self.cancelScoreBoard), for: .touchUpInside)
+        if withinFiveScore.isEmpty{
+            customView.setUpConstraints_ScoreBoard_NoScore(view: self.view)
+            customView.newCancelBtn.addTarget(self, action: #selector(self.cancelScoreBoard), for: .touchUpInside)
+        }else{
+            customView.setUpConstraints_ScoreBoard(view: self.view)
+            customView.newCancelBtn.addTarget(self, action: #selector(self.cancelScoreBoard), for: .touchUpInside)
+        }
         
-        newBestTimeLabel.centerXAnchor.constraint(equalTo: newPauseView.centerXAnchor).isActive = true
-        newBestTimeLabel.bottomAnchor.constraint(equalTo: newScoreTableView.topAnchor, constant: 0).isActive = true
-        newBestTimeLabel.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 250.0 / 414.0).isActive = true
-        newBestTimeLabel.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier: 100.0 / 736.0).isActive = true
-        
-        newScoreTableView.centerXAnchor.constraint(equalTo: newPauseView.centerXAnchor).isActive = true
-        newScoreTableView.centerYAnchor.constraint(equalTo: newPauseView.centerYAnchor).isActive = true
-        newScoreTableView.widthAnchor.constraint(equalTo: self.newPauseView.widthAnchor).isActive = true
-        newScoreTableView.heightAnchor.constraint(equalTo: self.newPauseView.heightAnchor, multiplier: 400.0 / 736.0).isActive = true
-
-
     }
-    
     @objc func cancelScoreBoard()
     {
-        self.newCancelBtn.removeFromSuperview()
-        self.newBestTimeLabel.removeFromSuperview()
-        self.newScoreTableView.removeFromSuperview()
-        self.newPauseView.removeFromSuperview()
-        countDownLabelSetAndRun()
-        componentIsEnabled(parameter: false)
+        if withinFiveScore.isEmpty{
+            customView.removeConstraints_ScoreBoard_NoScore()
+            countDownLabelSetAndRun()
+            componentIsEnabled(parameter: false)
+        }else{
+            customView.removeConstraints_ScoreBoard()
+            countDownLabelSetAndRun()
+            componentIsEnabled(parameter: false)
+        }
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -466,6 +394,19 @@ class EasyModeController: UIViewController {
     }
     func loadScore()
     {
+        //防止累加
+        if withinFiveScore.isEmpty{
+            getScoresFromRealm()
+
+        }else{
+            withinFiveScore.removeAll()
+            getScoresFromRealm()
+        }
+        
+        
+    }
+    func getScoresFromRealm()
+    {
         allScore = currentUser.scores.filter("mode CONTAINS[cd] %@", "簡單模式").sorted(byKeyPath: "score", ascending: true)
         guard let scoreArray = allScore else {return}
         for (index,eachScore) in scoreArray.enumerated()
@@ -479,7 +420,6 @@ class EasyModeController: UIViewController {
         }
     }
     
-    
 }
 //MARK: - Extension
 extension EasyModeController: UITableViewDataSource,UITableViewDelegate{
@@ -488,7 +428,7 @@ extension EasyModeController: UITableViewDataSource,UITableViewDelegate{
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = newScoreTableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+        let cell = customView.newScoreTableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         cell.textLabel?.text = "第\(indexPath.row + 1)名:\(withinFiveScore[indexPath.row])"
         cell.textLabel?.textAlignment = .center
         cell.textLabel?.textColor = UIColor.white

@@ -337,7 +337,7 @@
         <!--Easy Mode Controller-->
         <scene sceneID="WbS-cz-vnP">
             <objects>
-                <viewController id="NHK-Dl-kV5" customClass="EasyModeController" customModule="GuessNumber" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="easyMode" useStoryboardIdentifierAsRestorationIdentifier="YES" id="NHK-Dl-kV5" customClass="EasyModeController" customModule="GuessNumber" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Gol-Kv-162">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -514,19 +514,19 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="80" translatesAutoresizingMaskIntoConstraints="NO" id="jbM-O9-4WM">
-                                <rect key="frame" x="80" y="164" width="254" height="70.333333333333314"/>
+                                <rect key="frame" x="81.333333333333329" y="164" width="251.66666666666669" height="81.666666666666686"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0z5-dl-eTe">
-                                        <rect key="frame" x="0.0" y="0.0" width="92" height="70.333333333333329"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="84.666666666666671" height="81.666666666666671"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rQF-Z3-peB">
-                                                <rect key="frame" x="0.0" y="0.0" width="43" height="70.333333333333329"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="39" height="81.666666666666671"/>
                                                 <fontDescription key="fontDescription" name="Jua-Regular" family="Jua" pointSize="70"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="A" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5MY-wJ-5fT">
-                                                <rect key="frame" x="43" y="0.0" width="49" height="70.333333333333329"/>
+                                                <rect key="frame" x="39" y="0.0" width="45.666666666666657" height="81.666666666666671"/>
                                                 <fontDescription key="fontDescription" name="Jua-Regular" family="Jua" pointSize="70"/>
                                                 <color key="textColor" red="0.14117647058823529" green="0.7803921568627451" blue="0.30196078431372547" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                 <nil key="highlightedColor"/>
@@ -534,16 +534,16 @@
                                         </subviews>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Poc-m3-aeT">
-                                        <rect key="frame" x="172" y="0.0" width="82" height="70.333333333333329"/>
+                                        <rect key="frame" x="164.66666666666669" y="0.0" width="87" height="81.666666666666671"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tbt-GG-bxr">
-                                                <rect key="frame" x="0.0" y="0.0" width="43" height="70.333333333333329"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="39" height="81.666666666666671"/>
                                                 <fontDescription key="fontDescription" name="Jua-Regular" family="Jua" pointSize="70"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="B" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cSa-0E-80t">
-                                                <rect key="frame" x="43" y="0.0" width="39" height="70.333333333333329"/>
+                                                <rect key="frame" x="39" y="0.0" width="48" height="81.666666666666671"/>
                                                 <fontDescription key="fontDescription" name="Jua-Regular" family="Jua" pointSize="70"/>
                                                 <color key="textColor" red="0.90980392156862744" green="0.2627450980392157" blue="0.16078431372549018" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                 <nil key="highlightedColor"/>
@@ -553,16 +553,16 @@
                                 </subviews>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="ck8-wd-jSy">
-                                <rect key="frame" x="157.33333333333334" y="269.33333333333331" width="99.333333333333343" height="80"/>
+                                <rect key="frame" x="156.66666666666666" y="280.66666666666669" width="100.99999999999997" height="93.333333333333314"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" alpha="0.44999998807907104" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="Timer" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tbl-Mx-ZMI">
-                                        <rect key="frame" x="0.0" y="0.0" width="99.333333333333329" height="40"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="101" height="46.666666666666664"/>
                                         <fontDescription key="fontDescription" name="Jua-Regular" family="Jua" pointSize="40"/>
                                         <color key="textColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0.0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="juF-ch-nV2">
-                                        <rect key="frame" x="21.333333333333314" y="40" width="57" height="40"/>
+                                        <rect key="frame" x="22.666666666666682" y="46.666666666666629" width="55.666666666666657" height="46.666666666666657"/>
                                         <fontDescription key="fontDescription" name="Jua-Regular" family="Jua" pointSize="40"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
@@ -577,7 +577,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rbq-dW-Ziq">
-                                <rect key="frame" x="157" y="454" width="100" height="37"/>
+                                <rect key="frame" x="157" y="478.66666666666669" width="100" height="37.000000000000057"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="Rbq-dW-Ziq" secondAttribute="height" multiplier="100:37" id="aWB-2q-GOj"/>
                                 </constraints>
@@ -594,7 +594,7 @@
                                 </connections>
                             </button>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="60" translatesAutoresizingMaskIntoConstraints="NO" id="XEM-Vg-7gg">
-                                <rect key="frame" x="18" y="384.33333333333331" width="378" height="34.666666666666686"/>
+                                <rect key="frame" x="18" y="409" width="378" height="34.666666666666686"/>
                                 <subviews>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="F0U-id-5ot">
                                         <rect key="frame" x="0.0" y="0.0" width="49.666666666666664" height="34.666666666666664"/>
