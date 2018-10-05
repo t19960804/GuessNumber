@@ -76,12 +76,7 @@ struct CustomView{
     {
         view.addSubview(newPauseView)
         newPauseView.addSubview(newPauseBtn)
-        
-        newPauseView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0).isActive = true
-        newPauseView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0).isActive = true
-        newPauseView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 0).isActive = true
-        newPauseView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 0).isActive = true
-        
+        setUpConstraints_PauseView(view: view)
         newPauseBtn.centerXAnchor.constraint(equalTo: newPauseView.centerXAnchor).isActive = true
         newPauseBtn.centerYAnchor.constraint(equalTo: newPauseView.centerYAnchor).isActive = true
     }
@@ -90,17 +85,8 @@ struct CustomView{
         view.addSubview(newPauseView)
         newPauseView.addSubview(newCancelBtn)
         newPauseView.addSubview(newScoreEmptyLabel)
-        
-        
-        newPauseView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0).isActive = true
-        newPauseView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0).isActive = true
-        newPauseView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 0).isActive = true
-        newPauseView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 0).isActive = true
-        
-        newCancelBtn.topAnchor.constraint(equalTo: newPauseView.topAnchor, constant: 20).isActive = true
-        newCancelBtn.rightAnchor.constraint(equalTo: newPauseView.rightAnchor, constant: -20).isActive = true
-        newCancelBtn.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 50.0 / 414.0).isActive = true
-        newCancelBtn.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 50.0 / 736.0).isActive = true
+        setUpConstraints_PauseView(view: view)
+        setUpConstraints_CancelBtn(view: view)
         
         newScoreEmptyLabel.centerXAnchor.constraint(equalTo: newPauseView.centerXAnchor).isActive = true
         newScoreEmptyLabel.centerYAnchor.constraint(equalTo: newPauseView.centerYAnchor).isActive = true
@@ -112,16 +98,8 @@ struct CustomView{
         newPauseView.addSubview(newCancelBtn)
         newPauseView.addSubview(newScoreTableView)
         newPauseView.addSubview(newBestTimeLabel)
-        ///
-        newPauseView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0).isActive = true
-        newPauseView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0).isActive = true
-        newPauseView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 0).isActive = true
-        newPauseView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 0).isActive = true
-        ///
-        newCancelBtn.topAnchor.constraint(equalTo: newPauseView.topAnchor, constant: 20).isActive = true
-        newCancelBtn.rightAnchor.constraint(equalTo: newPauseView.rightAnchor, constant: -20).isActive = true
-        newCancelBtn.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 50.0 / 414.0).isActive = true
-        newCancelBtn.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 50.0 / 736.0).isActive = true
+        setUpConstraints_PauseView(view: view)
+        setUpConstraints_CancelBtn(view: view)
         ///
         newScoreTableView.centerXAnchor.constraint(equalTo: newPauseView.centerXAnchor).isActive = true
         newScoreTableView.centerYAnchor.constraint(equalTo: newPauseView.centerYAnchor).isActive = true
@@ -139,6 +117,19 @@ struct CustomView{
         newCountDownLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
         newCountDownLabel.text = "3"
         
+    }
+    //MARK: - 單一元件
+    func setUpConstraints_PauseView(view: UIView){
+        newPauseView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0).isActive = true
+        newPauseView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0).isActive = true
+        newPauseView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 0).isActive = true
+        newPauseView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 0).isActive = true
+    }
+    func setUpConstraints_CancelBtn(view: UIView){
+        newCancelBtn.topAnchor.constraint(equalTo: newPauseView.topAnchor, constant: 20).isActive = true
+        newCancelBtn.rightAnchor.constraint(equalTo: newPauseView.rightAnchor, constant: -20).isActive = true
+        newCancelBtn.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 50.0 / 414.0).isActive = true
+        newCancelBtn.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 50.0 / 736.0).isActive = true
     }
     //MARK: - 移除畫面處理
     func removeConstraints_Pause(){

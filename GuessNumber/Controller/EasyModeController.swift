@@ -18,18 +18,18 @@ class EasyModeController: UIViewController {
     private var textFieldsArray = [UITextField]()
     //加入設定後
     private var settedTextFieldsArray = [UITextField]()
-    private var customView = CustomView()
 
    
     /////////////////////////////
     var keyBoardNeedLayout: Bool = true
-    let emailFromFaceBook = String()
     let realm = try! Realm()
-    var currentUser = User()
     var allScore: Results<Score>?
     var withinFiveScore = [String]()
+    var currentUser = User()
     var regulationHandle = RegulationHandle()
     var timerHandle = TimerHandle()
+    private var customView = CustomView()
+
     /////////////////////////////
     @IBOutlet weak var rightCount: UILabel!
     @IBOutlet weak var wrongCount: UILabel!
@@ -84,6 +84,18 @@ class EasyModeController: UIViewController {
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        
+        countDownLabelSetAndRun()
+        componentIsEnabled(parameter: false)
+        
+        ////////////////////////
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(notification:)), name:UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(notification:)), name:UIResponder.keyboardWillHideNotification, object: nil)
+        
+        
+    }
     //點擊背景可收回鍵盤
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
@@ -117,11 +129,12 @@ class EasyModeController: UIViewController {
     
     func updateRightAndWrong()
     {
+
         //如果四個輸入框都有值
         if (regulationHandle.inputArray.count == 4)
         {
-            regulationHandle.checkNumberIsCorrect()
-            if regulationHandle.right == 4
+            
+            if regulationHandle.checkNumberIsCorrect().right == 4
             {
                 rightCount.text = String(regulationHandle.right)
                 wrongCount.text = String(regulationHandle.wrong)
@@ -133,17 +146,20 @@ class EasyModeController: UIViewController {
                 return
             }
         }
-        //有一個值沒有就顯示提示
+            //有一個值沒有就顯示提示
         else
         {
             textNilHint()
         }
+
     }
     //重新產生亂數,並且清空textField / randomArray / inputArray
     func resumeGame()
     {
 
         regulationHandle.resumeArrays()
+        regulationHandle.noRepeatNumbers()
+        //
         rightCount.text = "0"
         wrongCount.text = "0"
         timerLabel.text = "0.0"
@@ -297,17 +313,7 @@ class EasyModeController: UIViewController {
         
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        
-        countDownLabelSetAndRun()
-        componentIsEnabled(parameter: false)
-        
-        ////////////////////////
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(notification:)), name:UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(notification:)), name:UIResponder.keyboardWillHideNotification, object: nil)
-
-        
-    }
+   
     @objc func keyboardWillShow(notification: NSNotification) {
         
         if let userInfo = notification.userInfo,
@@ -397,10 +403,14 @@ class EasyModeController: UIViewController {
         //防止累加
         if withinFiveScore.isEmpty{
             getScoresFromRealm()
+            customView.newScoreTableView.reloadData()
+
 
         }else{
             withinFiveScore.removeAll()
             getScoresFromRealm()
+            customView.newScoreTableView.reloadData()
+
         }
         
         

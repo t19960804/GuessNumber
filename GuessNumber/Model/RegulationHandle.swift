@@ -15,6 +15,7 @@ struct RegulationHandle {
     var right : Int = 0
     var wrong : Int = 0
     
+    //不重複亂數
     mutating func noRepeatNumbers()
     {
         
@@ -23,6 +24,18 @@ struct RegulationHandle {
             let randomNumber = GKRandomSource.sharedRandom().nextInt(upperBound: numberArray.count)
             randomArray.append(numberArray[randomNumber])
             numberArray.remove(at: randomNumber)
+            print("random:",randomArray[i])
+            
+        }
+    }
+    //重複亂數
+    mutating func RepeatNumbers()
+    {
+        
+        for i in  0...numberArray.count - 1
+        {
+            let randomNumber = GKRandomSource.sharedRandom().nextInt(upperBound: numberArray.count)
+            randomArray.append(numberArray[randomNumber])
             print("random:",randomArray[i])
             
         }
@@ -40,19 +53,21 @@ struct RegulationHandle {
         randomArray.removeAll()
         inputArray.removeAll()
         numberArray = [1,2,3,4]
-        noRepeatNumbers()
+        //noRepeatNumbers()
     }
-    mutating func checkNumberIsCorrect(){
+
+    mutating func checkNumberIsCorrect() -> (right: Int,wrong: Int){
         
-            for i in 0...3
-            {
-                if checkEachNumber(Index: i) == true{
-                    right += 1
-                }else{
-                    wrong += 1
-                    
-                }
+        for i in 0...3
+        {
+            if checkEachNumber(Index: i) == true{
+                right += 1
+                
+            }else{
+                wrong += 1
             }
-        
+        }
+        return (right,wrong)
+
     }
 }

@@ -12,77 +12,19 @@ import RealmSwift
 class HardModeController: UIViewController {
 
     var seconds  = 3
-    var timer = Timer()
+    var gameTimer = Timer()
     var countDowntimer = Timer()
-    /////////////////////////////
-    var numberArray : [Int] = [1,2,3,4]
-    var randomArray : [Int] = []
-    var inputArray : [Int] = []
+    
     var withinFiveScore = [String]()
     //純加入
     var textFieldsArray = [UITextField]()
     //加入設定後
     var settedTextFieldsArray = [UITextField]()
-    var right : Int = 0
-    var wrong : Int = 0
     var showScore: String = ""
-    var counter  = Float()
-    var minuteCount = 0
     /////////////////////////////
-    
-    /////////////////////////////
-    //MARK: - 自訂元件
-    let newPauseView: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = UIColor.black
-        view.alpha = 0.7
-        return view
-    }()
-    let newPauseBtn: UIButton = {
-        let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        let buttonImage = UIImage(named: "playbutton.png")
-        button.setImage(buttonImage, for: .normal)
-        return button
-    }()
-    let newCancelBtn: UIButton = {
-        let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        let buttomImage = UIImage(named: "cancel.png")
-        button.setImage(buttomImage, for: .normal)
-        return button
-    }()
-    let newBestTimeLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "最佳時間"
-        label.textColor = UIColor.white
-        label.textAlignment = .center
-        label.font = label.font.withSize(40.0)
-        return label
-    }()
-    let newScoreTableView: UITableView = {
-        let tableView = UITableView()
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
-        tableView.backgroundColor = UIColor.black
-        tableView.alpha = 0.5
-        tableView.separatorStyle = .singleLine
-        return tableView
-    }()
-    let newCountDownLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textAlignment = .center
-        label.textColor = UIColor(red: 1.0, green: 188/255, blue: 0.0, alpha: 1.0)
-        label.font = label.font.withSize(250.0)
-        label.text = "3"
-        return label
-    }()
-    var countDownLabel = UILabel()
-    
-    let device = UIDevice.current
+    var timerHandle = TimerHandle()
+    var regulationHandle = RegulationHandle()
+    var customView = CustomView()
     var keyBoardNeedLayout: Bool = true
     
     var currentUser = User()
@@ -98,123 +40,77 @@ class HardModeController: UIViewController {
     @IBOutlet weak var timerLabel: UILabel!
     @IBOutlet weak var pauseBtnOutlet: UIButton!
     @IBOutlet weak var checkBtnOutlet: UIButton!
-     @IBOutlet weak var scoreBoardBtnOutlet: UIButton!
+    @IBOutlet weak var scoreBoardBtnOutlet: UIButton!
     @IBAction func checkBtn(_ sender: UIButton) {
         
         //如果inputArray是空的則不用清空,直接append
         //每次check前先將 right &  wrong計數器歸0
-        if inputArray.isEmpty{
+        if regulationHandle.inputArray.isEmpty{
             checkAnserHandler()
         }
         else{
-            inputArray.removeAll()
+            regulationHandle.inputArray.removeAll()
             checkAnserHandler()
         }
         
     }
     @IBAction func scoreBoardBtn(_ sender: UIButton) {
-        timer.invalidate()
         loadScore()
-        self.view.addSubview(newPauseView)
-        newPauseView.addSubview(newCancelBtn)
-        newPauseView.addSubview(newScoreTableView)
-        newPauseView.addSubview(newBestTimeLabel)
+        gameTimer.invalidate()
         setUpConstraints_ScoreBoard()
     }
     
     @IBAction func pauseBtn(_ sender: UIButton) {
         //遊戲計時停止
-        timer.invalidate()
-        self.view.addSubview(newPauseView)
-        newPauseView.addSubview(newPauseBtn)
+        gameTimer.invalidate()
         setUpConstraints_Pause()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        RepeatNumbers()
+        regulationHandle.RepeatNumbers()
         textFieldsArray.append(inputNo1)
         textFieldsArray.append(inputNo2)
         textFieldsArray.append(inputNo3)
         textFieldsArray.append(inputNo4)
         textFieldSetting()
         
-        newScoreTableView.delegate  = self
-        newScoreTableView.dataSource = self
-        //当键盘弹起的时候会向系统发出一个通知，
-        //这个时候需要注册一个监听器响应该通知self
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(notification:)), name:UIResponder.keyboardWillShowNotification, object: nil)
-        //当键盘收起的时候会向系统发出一个通知，
-        //这个时候需要注册另外一个监听器响应该通知
-        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(notification:)), name:UIResponder.keyboardWillHideNotification, object: nil)
-     
+        customView.newScoreTableView.delegate  = self
+        customView.newScoreTableView.dataSource = self
+        
     }
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
     override func viewDidAppear(_ animated: Bool) {
-        self.view.addSubview(newCountDownLabel)
         countDownLabelSetAndRun()
         componentIsEnabled(parameter: false)
         
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(notification:)), name:UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(notification:)), name:UIResponder.keyboardWillHideNotification, object: nil)
         
     }
    
     // MARK: 遊戲規則處理
     func checkAnserHandler()
     {
-        right = 0
-        wrong = 0
-        inputArrayAppend()
-        loopCheck()
+        regulationHandle.right = 0
+        regulationHandle.wrong = 0
+        addUserInputToArray()
+        updateRightAndWrong()
     }
-    //產生不重複亂數
-    func RepeatNumbers()
-    {
-        
-        for i in  0...numberArray.count - 1
-        {
-            let randomNumber = GKRandomSource.sharedRandom().nextInt(upperBound: numberArray.count)
-            randomArray.append(numberArray[randomNumber])
-            
-            print("random:",randomArray[i])
-            
-        }
-    }
-    func checkEachNumber(Index index : Int )
-    {
-        //兩個陣列裡對應到的index相比較
-        if inputArray[index] == randomArray[index]
-        {
-            right += 1
-            rightCount.text = String(right)
-            wrongCount.text = String(wrong)
-            if right == 4
-            {
-                simpleHint()
-                timer.invalidate()
-
-            }
-            
-        }
-        else
-        {
-            wrong += 1
-            rightCount.text = String(right)
-            wrongCount.text = String(wrong)
-            
-        }
-    }
+    
+    
     //將textField的數字加入陣列
-    func inputArrayAppend()
+    func addUserInputToArray()
     {
         for i in 0...settedTextFieldsArray.count - 1
         {
             if (settedTextFieldsArray[i].text != "")
             {
                 //加入使用者輸入數字
-                inputArray.append(Int(settedTextFieldsArray[i].text!)!)
+                regulationHandle.inputArray.append(Int(settedTextFieldsArray[i].text!)!)
             }
             else{
                 
@@ -223,39 +119,47 @@ class HardModeController: UIViewController {
             
         }
     }
-    //檢查陣列裡每個index
-    func loopCheck()
+    func updateRightAndWrong()
     {
-        if (inputArray.count == 4)
+        //如果四個輸入框都有值
+        if (regulationHandle.inputArray.count == 4)
         {
-            for i in 0...inputArray.count - 1
+            
+            if regulationHandle.checkNumberIsCorrect().right == 4
             {
-                
-                checkEachNumber(Index: i)
+                rightCount.text = String(regulationHandle.right)
+                wrongCount.text = String(regulationHandle.wrong)
+                simpleHint()
+                gameTimer.invalidate()
+            }else{
+                rightCount.text = String(regulationHandle.right)
+                wrongCount.text = String(regulationHandle.wrong)
+                return
             }
         }
+            //有一個值沒有就顯示提示
         else
         {
             textNilHint()
-            
         }
+        
     }
     //重新產生亂數,並且清空textField / randomArray / inputArray
     func resumeGame()
     {
-        randomArray.removeAll()
-        inputArray.removeAll()
+        regulationHandle.resumeArrays()
+        regulationHandle.RepeatNumbers()
+
         rightCount.text = "0"
         wrongCount.text = "0"
-        numberArray = [1,2,3,4]
-        RepeatNumbers()
+        timerLabel.text = "0.0"
+
         for i in 0...settedTextFieldsArray.count - 1
         {
             settedTextFieldsArray[i].text = ""
         }
-        timerLabel.text = "0.0"
-        counter = 0
-        timer.invalidate()
+        timerHandle.counter = 00.0
+        gameTimer.invalidate()
         countDownLabelSetAndRun()
         componentIsEnabled(parameter: false)
         
@@ -299,7 +203,7 @@ class HardModeController: UIViewController {
     }
     func  textNilHint()
     {
-        self.timer.invalidate()
+        gameTimer.invalidate()
         // 建立一個提示框
         let alertController = UIAlertController(
             title: "請輸入數字!!!",
@@ -326,9 +230,7 @@ class HardModeController: UIViewController {
     //點擊"繼續"按鈕後事件
     @objc func playButton()
     {
-        self.newPauseBtn.removeFromSuperview()
-        self.newPauseView.removeFromSuperview()
-        
+        customView.removeConstraints_Pause()
         countDownLabelSetAndRun()
         componentIsEnabled(parameter: false)
         
@@ -336,42 +238,26 @@ class HardModeController: UIViewController {
     }
     // MARK: 計時處理
     @objc func UpdateTimer() {
-        
-        counter = counter + 00.1
-        if counter <= 9.9
-        {
-            timerLabel.text = "\(minuteCount)分 0\(String(format: "%.1f", counter))秒"
-        }
-        else if counter >= 59.9
-        {
-            minuteCount = minuteCount + 1
-            counter = 00.0
-            timerLabel.text = "\(minuteCount)分 \(String(format: "%.1f", counter))秒"
-        }
-        else
-        {
-            timerLabel.text = "\(minuteCount)分 \(String(format: "%.1f", counter))秒"
-        }
+        timerLabel.text = timerHandle.UpdateTimer()
     }
     func runGameTimer()
     {
         //開始計時
-        timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(UpdateTimer), userInfo: nil, repeats: true)
+        gameTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(UpdateTimer), userInfo: nil, repeats: true)
     }
     func runCountDownTimer() {
-        newCountDownLabel.text = "3"
         countDowntimer = Timer.scheduledTimer(timeInterval: 1, target: self,   selector: (#selector(self.countDown)), userInfo: nil, repeats: true)
         
         
     }
     @objc func countDown() {
         seconds -= 1     //This will decrement(count down)the seconds.
-        newCountDownLabel.text = "\(seconds)" //This will update the label.
+        customView.newCountDownLabel.text = "\(seconds)" //This will update the label.
         if (seconds == 0)
         {
             componentIsEnabled(parameter: true)
             countDowntimer.invalidate()
-            self.newCountDownLabel.removeFromSuperview()
+            customView.removeConstraints_CountDownLabel()
             runGameTimer()
             seconds = 3
             
@@ -380,45 +266,24 @@ class HardModeController: UIViewController {
     // MARK: 手動加入UIFrame
     func countDownLabelSetAndRun()
     {
-        self.view.addSubview(newCountDownLabel)
-        newCountDownLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        newCountDownLabel.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
+        customView.setUpConstraints_CountDownLabel(view: self.view)
         runCountDownTimer()
     }
     //MARK: - 設定Constraint
     func setUpConstraints_Pause()
     {
-        newPauseView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0).isActive = true
-        newPauseView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0).isActive = true
-        newPauseView.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: 0).isActive = true
-        newPauseView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 0).isActive = true
-        
-        newPauseBtn.centerXAnchor.constraint(equalTo: newPauseView.centerXAnchor).isActive = true
-        newPauseBtn.centerYAnchor.constraint(equalTo: newPauseView.centerYAnchor).isActive = true
-        newPauseBtn.addTarget(self, action: #selector(self.playButton), for: .touchUpInside)
+        customView.setUpConstraints_Pause(view: self.view)
+        customView.newPauseBtn.addTarget(self, action: #selector(self.playButton), for: .touchUpInside)
     }
     func setUpConstraints_ScoreBoard()
     {
-        newPauseView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0).isActive = true
-        newPauseView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0).isActive = true
-        newPauseView.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: 0).isActive = true
-        newPauseView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 0).isActive = true
-
-        newCancelBtn.topAnchor.constraint(equalTo: newPauseView.topAnchor, constant: 20).isActive = true
-        newCancelBtn.rightAnchor.constraint(equalTo: newPauseView.rightAnchor, constant: -20).isActive = true
-        newCancelBtn.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 50.0 / 414.0).isActive = true
-        newCancelBtn.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier: 50.0 / 736.0).isActive = true
-        newCancelBtn.addTarget(self, action: #selector(self.cancelScoreBoard), for: .touchUpInside)
-
-        newBestTimeLabel.centerXAnchor.constraint(equalTo: newPauseView.centerXAnchor).isActive = true
-        newBestTimeLabel.bottomAnchor.constraint(equalTo: newScoreTableView.topAnchor, constant: 0).isActive = true
-        newBestTimeLabel.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 250.0 / 414.0).isActive = true
-        newBestTimeLabel.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier: 100.0 / 736.0).isActive = true
-
-        newScoreTableView.centerXAnchor.constraint(equalTo: newPauseView.centerXAnchor).isActive = true
-        newScoreTableView.centerYAnchor.constraint(equalTo: newPauseView.centerYAnchor).isActive = true
-        newScoreTableView.widthAnchor.constraint(equalTo: self.newPauseView.widthAnchor).isActive = true
-        newScoreTableView.heightAnchor.constraint(equalTo: self.newPauseView.heightAnchor, multiplier: 400.0 / 736.0).isActive = true
+        if withinFiveScore.isEmpty{
+            customView.setUpConstraints_ScoreBoard_NoScore(view: self.view)
+            customView.newCancelBtn.addTarget(self, action: #selector(self.cancelScoreBoard), for: .touchUpInside)
+        }else{
+            customView.setUpConstraints_ScoreBoard(view: self.view)
+            customView.newCancelBtn.addTarget(self, action: #selector(self.cancelScoreBoard), for: .touchUpInside)
+        }
 
 
     }
@@ -426,12 +291,15 @@ class HardModeController: UIViewController {
     
     @objc func cancelScoreBoard()
     {
-        self.newCancelBtn.removeFromSuperview()
-        self.newBestTimeLabel.removeFromSuperview()
-        self.newScoreTableView.removeFromSuperview()
-        self.newPauseView.removeFromSuperview()
-        countDownLabelSetAndRun()
-        componentIsEnabled(parameter: false)
+        if withinFiveScore.isEmpty{
+            customView.removeConstraints_ScoreBoard_NoScore()
+            countDownLabelSetAndRun()
+            componentIsEnabled(parameter: false)
+        }else{
+            customView.removeConstraints_ScoreBoard()
+            countDownLabelSetAndRun()
+            componentIsEnabled(parameter: false)
+        }
     }
     
     // MARK: 鍵盤事件處理
@@ -523,7 +391,22 @@ class HardModeController: UIViewController {
         }
         
     }
-    func loadScore(){
+    
+    func loadScore()
+    {
+        //防止累加
+        if withinFiveScore.isEmpty{
+            getScoresFromRealm()
+            customView.newScoreTableView.reloadData()
+        }else{
+            withinFiveScore.removeAll()
+            getScoresFromRealm()
+            customView.newScoreTableView.reloadData()
+        }
+        
+        
+    }
+    func getScoresFromRealm(){
         showScore = ""
         allScore = currentUser.scores.filter("mode CONTAINS[cd] %@", "困難模式").sorted(byKeyPath: "score", ascending: true)
         for (index,eachScore) in allScore!.enumerated()
@@ -545,7 +428,7 @@ extension HardModeController: UITableViewDataSource,UITableViewDelegate{
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = newScoreTableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+        let cell = customView.newScoreTableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         cell.textLabel?.text = "第\(indexPath.row + 1)名:\(withinFiveScore[indexPath.row])"
         cell.textLabel?.textAlignment = .center
         cell.textLabel?.textColor = UIColor.white
