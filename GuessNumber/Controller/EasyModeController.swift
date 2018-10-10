@@ -278,23 +278,23 @@ class EasyModeController: UIViewController {
     }
     func countDownLabelSetAndRun()
     {
-        customView.setUpConstraints_CountDownLabel(view: self.view)
+        customView.setUpConstraints_CountDownLabel(with: self.view)
         runCountDownTimer()
     }
     //MARK: - 設定Constraint
     func setUpConstraints_Pause()
     {
-        customView.setUpConstraints_Pause(view: self.view)
+        customView.setUpConstraints_Pause(with: self.view)
         customView.newPauseBtn.addTarget(self, action: #selector(self.playButton), for: .touchUpInside)
     }
     func setUpConstraints_ScoreBoard()
     {
         
         if withinFiveScore.isEmpty{
-            customView.setUpConstraints_ScoreBoard_NoScore(view: self.view)
+            customView.setUpConstraints_ScoreBoard_NoScore(with: self.view)
             customView.newCancelBtn.addTarget(self, action: #selector(self.cancelScoreBoard), for: .touchUpInside)
         }else{
-            customView.setUpConstraints_ScoreBoard(view: self.view)
+            customView.setUpConstraints_ScoreBoard(with: self.view)
             customView.newCancelBtn.addTarget(self, action: #selector(self.cancelScoreBoard), for: .touchUpInside)
         }
         
