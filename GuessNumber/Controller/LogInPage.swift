@@ -24,12 +24,16 @@ class LogInPage: UIViewController,GIDSignInUIDelegate,GIDSignInDelegate {
     @IBAction func logInWithFaceBookBtn(_ sender: UIButton) {
         //可以讀取用戶的基本資料和取得用戶email的權限
         FBSDKLoginManager().logIn(withReadPermissions: ["email","public_profile"], from: self) { (result, error) in
+            guard let result = result else{return}
+            if result.isCancelled{
+                return
+            }else if error != nil{
+                print("LogIn Fail")
+                return
+            }else{
+                self.logInWithFaceBook()
+            }
 
-        if error != nil{
-            print("LogIn Fail")
-            return
-        }
-        self.logInWithFaceBook()
         
         }
         
@@ -68,14 +72,26 @@ class LogInPage: UIViewController,GIDSignInUIDelegate,GIDSignInDelegate {
         super.viewDidLoad()
         userNameTextField.text = "h@h.com"
         passwordTextField.text = "hhhhhh"
-        btnOutletOfFaceBook.layer.cornerRadius = round(5.0)
-        btnOutletOfGoogle.layer.cornerRadius = round(5.0)
+        
+        buttonOutlet_Setting(with: btnOutletOfFaceBook)
+        buttonOutlet_Setting(with: btnOutletOfGoogle)
         
         GIDSignIn.sharedInstance().uiDelegate = self
         GIDSignIn.sharedInstance().delegate = self
         //showAds()
     }
-
+    //MARK: - 按鈕外觀處理
+    func buttonOutlet_Setting(with button: UIButton){
+        button.layer.cornerRadius = round(5.0)
+        button.layer.shadowColor = UIColor.black.cgColor
+        button.layer.shadowOpacity = 0.4
+        button.layer.shadowOffset = CGSize(width: 1.5, height: 1.5)
+        button.layer.shadowRadius = 5
+        
+        
+        
+        
+    }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
@@ -107,9 +123,10 @@ class LogInPage: UIViewController,GIDSignInUIDelegate,GIDSignInDelegate {
     //MARK: - FaceBook處理
     func logInWithFaceBook()
     {
-        //acess token是Facebook用來辨識你的身份的字串，辨識成功後就可以取用Facebook的資料
         
-        guard let accessToken = FBSDKAccessToken.current().tokenString else{fatalError()}
+            
+        //acess token是Facebook用來辨識你的身份的字串，辨識成功後就可以取用Facebook的資料
+        guard let accessToken = FBSDKAccessToken.current().tokenString else{return}
         //將token轉換為FireBase的憑證
         //credential像是登入金鑰，取得fbCredentials後，才能前往firebase
         let credentials = FacebookAuthProvider.credential(withAccessToken: accessToken)
@@ -120,6 +137,7 @@ class LogInPage: UIViewController,GIDSignInUIDelegate,GIDSignInDelegate {
             }
             
         }
+            
         
         //使用 Graph API可以擷取個人檔案資訊以提供社交元素
         //參數以"fields"為Key值

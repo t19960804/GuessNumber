@@ -27,6 +27,7 @@ class EasyModeController: UIViewController {
     var withinFiveScore = [String]()
     var currentUser = User()
     var regulationHandle = RegulationHandle()
+    
     var timerHandle = TimerHandle()
     private var customView = CustomView()
 
