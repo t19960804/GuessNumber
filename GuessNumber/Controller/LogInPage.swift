@@ -9,6 +9,7 @@ import GoogleMobileAds
 
 class LogInPage: UIViewController,GIDSignInUIDelegate,GIDSignInDelegate {
     let realm = try! Realm()
+
     var emailFromSocialNetWork = String()
     
 
@@ -57,6 +58,13 @@ class LogInPage: UIViewController,GIDSignInUIDelegate,GIDSignInDelegate {
                     if error == nil{
                         SVProgressHUD.dismiss()
                         self.performSegue(withIdentifier: "logInToViewController", sender: self)
+                    }
+                    else if error!.localizedDescription == ErrorHandle.Errors.internetDisconnect.rawValue{
+                        
+                        print("Internet error:\(error!)\n")
+                        SVProgressHUD.dismiss()
+                        AlertController.showBasicAlert(viewController: self, title: "網路錯誤", message: "請重新連線")
+                        
                     }
                     else{
                         SVProgressHUD.dismiss()

@@ -13,10 +13,9 @@ import RealmSwift
 
 class RegisterController: UIViewController {
     let realm = try! Realm()
-    let userNameWasUsed = "The email address is already in use by another account."
+    let errorHandle = ErrorHandle()
     var user = User()
     @IBOutlet weak var userNameTextField: UITextField!
-    
     @IBOutlet weak var passwordTextField: UITextField!
     @IBAction func cancelBtn(_ sender: UIBarButtonItem) {
         self.dismiss(animated: true, completion: nil)
@@ -42,25 +41,29 @@ class RegisterController: UIViewController {
         {
                 //FireBase驗證後建立
                 Auth.auth().createUser(withEmail: userNameTextField.text!, password: passwordTextField.text!) { (result, error) in
-                    if error == nil
-                    {
+                    
+                    if error == nil{
                         SVProgressHUD.dismiss()
                         self.performSegue(withIdentifier: "RegisterToViewController", sender: self)
                         self.addUser(userName: self.userNameTextField.text!)
                         print("Register Success")
                     }
-                    else if error!.localizedDescription == self.userNameWasUsed
-                    {
+                    else if error!.localizedDescription == ErrorHandle.Errors.userNameWasUsed.rawValue{
                         print("Register error:\(error!)\n")
                         SVProgressHUD.dismiss()
-                        //self.showAlert(title: "帳號已被使用", message: "請重新輸入")
                         AlertController.showBasicAlert(viewController: self, title: "帳號已被使用", message: "請重新輸入")
+                        
+                    }
+                    else if error!.localizedDescription == ErrorHandle.Errors.internetDisconnect.rawValue{
+                        
+                        print("Internet error:\(error!)\n")
+                        SVProgressHUD.dismiss()
+                        AlertController.showBasicAlert(viewController: self, title: "網路錯誤", message: "請重新連線")
                         
                     }
                     else{
                         print("Format Error:\(error!)")
                         SVProgressHUD.dismiss()
-                        //self.showAlert(title: "帳號格式錯誤", message: "請重新輸入")
                         AlertController.showBasicAlert(viewController: self, title: "帳號格式錯誤", message: "請重新輸入")
                     }
                 }
@@ -102,3 +105,5 @@ class RegisterController: UIViewController {
     }
 
 }
+
+
